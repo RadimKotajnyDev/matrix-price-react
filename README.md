@@ -1,70 +1,106 @@
-# Getting Started with Create React App
+# Price Matrixy
+Jedná se o tool pro úpravu tzv Price Matrixů.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Price matrix je sada "ruleSetů", které podle soustavy pravidel (rules) slouží pro cenotvorbu.
 
-## Available Scripts
+Každý ruleset obsahuje následující properties
 
-In the project directory, you can run:
+## Rule[] - kolekce pravidel (rules) viz níže
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+* PriceSelling - desetinné číslo
 
-### `npm test`
+* BookingFeeAbsolute - desetinné číslo
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+* BookingFeeRelative - desetinné číslo
 
-### `npm run build`
+* InsideCommission - desetinné číslo
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* Offer Code - string
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* Note - string
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* Priority - číslo
 
-### `npm run eject`
+### Rule má následující properties
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+* FieldId - položka kolekce fieldů - viz níže
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+* CompareOperatorId - položka kolekce operátorů - viz níže
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+* Value - string
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Fieldy jsou následující
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+* 1             PerformanceTime
 
-### Code Splitting
+* 2             PerformanceDate
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+* 3             PerformanceDayOfWeek
 
-### Analyzing the Bundle Size
+* 4             PriceBandCode
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+* 5             BookingDate
 
-### Making a Progressive Web App
+* 6             FaceValue
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### CompareOperatory následující
 
-### Deployment
+* 1             Equal
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+* 2             LessThanOrEqual
 
-### `npm run build` fails to minify
+* 3             LessThan
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+* 4             GreaterThanOrEqual
+
+* 5             GreaterThan
+
+* 6             NotEquals
+
+* 7             In
+
+
+
+
+
+## API operace, které budou prováděny nad price matrixy
+
+
+
+* GET pricematrix/{matrixId} – vratí kompletní price matrix (kolekce rulesetů) – vrací 200
+
+* POST pricematrix/{matrixId}/ruleset – vytvoření nového rulesetu – vrací 201
+
+* PUT pricematrix/{matrixId}/ruleset/{id} – update existujícího rulesetu – vrací 200
+
+* DELETE pricematrix/{matrixId}/ruleset/{id} – smazání rulesetu – vrací 204
+
+
+
+
+
+**matrixId bude existovat vždy**
+
+
+
+
+
+## Mapování CompareOperátorů podle Fieldu
+
+Field 1 – Operatory 2,4
+
+Field 2 – Operatory 1,2,3,4,5,6
+
+Field 3 – Operatory 1,2,4,6
+
+Field 4 – Operatory 1,6,7
+
+Field 5 – Operatory 1,2,3,4,5,6
+
+Field 6 – Operatory 1,2,3,4,5,6
