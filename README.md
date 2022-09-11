@@ -85,7 +85,7 @@ Každý ruleset obsahuje následující properties
 
 
 
-**matrixId bude existovat vždy**
+poznámka: **matrixId bude existovat vždy**
 
 
 

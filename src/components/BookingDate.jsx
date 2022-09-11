@@ -1,4 +1,4 @@
-const Field1 = () => {
+const BookingDate = () => {
     return (
         <div className="m-12 border-2 rounded-lg shadow-xl w-fit ml-auto mr-auto block px-5">
             <form className="max-w-lg m-5 p-2 ml-auto mr-auto block">
@@ -85,4 +85,4 @@ const Field1 = () => {
     );
 }
 
-export default Field1;
+export default BookingDate;

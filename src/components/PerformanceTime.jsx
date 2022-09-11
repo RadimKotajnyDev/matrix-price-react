@@ -1,10 +1,16 @@
-const Field4 = () => {
+const labelClass = "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2";
+// Tady můžeš zjednodušit psaní kódu tříd, když jsou stejné 😉
+
+const name = "Name of ticket"; //TODO: přidat operaci z API
+
+const PerformanceTime = () => {
     return (
         <div className="m-12 border-2 rounded-lg shadow-xl w-fit ml-auto mr-auto block px-5">
+            <h2 className="block uppercase text-gray-700 text-xl font-bold mt-2">{name}</h2>
             <form className="max-w-lg m-5 p-2 ml-auto mr-auto block">
                 <div className="flex flex-wrap -mx-3 mb-6">
                     <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        <label className={labelClass}
                                htmlFor="">
                             label
                         </label>
@@ -85,4 +91,4 @@ const Field4 = () => {
     );
 }
 
-export default Field4;
+export default PerformanceTime;
