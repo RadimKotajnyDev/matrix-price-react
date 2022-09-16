@@ -92,3 +92,20 @@ const PerformanceTime = () => {
 }
 
 export default PerformanceTime;
+
+
+CompareOperatory následující
+
+1             Equal
+
+2             LessThanOrEqual
+
+3             LessThan
+
+4             GreaterThanOrEqual
+
+5             GreaterThan
+
+6             NotEquals
+
+7             In

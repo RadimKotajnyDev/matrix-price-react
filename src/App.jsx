@@ -39,6 +39,12 @@ function App() {
         <div className="text-center mt-10 font-Inter text-3xl">
             <h1 className="underline underline-offset-8 decoration-1 font-normal">Price Matrix Forms</h1>
             <PerformanceTime />
+            <PerformanceDate />
+
+            <div className="mt-5">
+                    <input type="submit" value="submit"
+                           className="w-full cursor-pointer border-2 p-2 bg-slate-900 text-white rounded hover:opacity-75 duration-700"/>
+            </div>
         </div>
     );
 }
