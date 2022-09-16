@@ -27,7 +27,7 @@ Field 1 – Operatory 2,4
 
 const PerformanceTime = () => {
     return (
-        <div className="m-12 border-2 rounded-lg shadow-xl w-fit ml-auto mr-auto block px-5">
+        <div>
             <h2 className="block uppercase text-gray-700 text-xl font-bold mt-2">{name}</h2>
             <form className="max-w-lg m-5 p-2 ml-auto mr-auto block">
                 <div className="flex flex-wrap -mx-3 mb-2">

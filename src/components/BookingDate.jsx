@@ -2,7 +2,7 @@ const label = "Booking Date";
 
 const BookingDate = () => {
     return (
-        <div className="m-12 border-2 rounded-lg shadow-xl w-fit ml-auto mr-auto block px-5">
+        <div>
             <form className="max-w-lg m-5 p-2 ml-auto mr-auto block">
                 <div className="flex flex-wrap -mx-3 mb-2">
                     <div className="w-full px-3 mb-6 md:mb-0">
