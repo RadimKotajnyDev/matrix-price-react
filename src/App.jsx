@@ -39,7 +39,7 @@ function App() {
         <div className="text-center mt-10 font-Inter text-3xl">
             <h1 className="underline underline-offset-8 decoration-1 font-normal">Price Matrix Forms</h1>
 
-            <div className="m-12 border-2 border-black rounded-lg w-fit shadow-xl ml-auto mr-auto block px-5">
+            <div className="m-12 border-2 rounded-lg w-fit shadow-2xl ml-auto mr-auto block px-5">
             <PerformanceTime />
             <PerformanceDate />
             <PerformanceDayOfWeek />
@@ -47,7 +47,7 @@ function App() {
             <BookingDate />
             <FaceValue />
 
-                <div className="mt-5">
+                <div className="m-5">
                     <input type="submit" value="submit" className="w-full cursor-pointer border-2 p-2 bg-slate-900 text-white rounded hover:opacity-75 duration-700"/>
                 </div>
 
