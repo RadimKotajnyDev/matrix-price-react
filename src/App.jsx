@@ -6,10 +6,12 @@ import PriceBandCode from "./Fields/PriceBandCode";
 import BookingDate from "./Fields/BookingDate";
 import FaceValue from "./Fields/FaceValue";
 
+
+
+
+
 /*
 Rule[] - kolekce pravidel (rules) viz níže
-
- 
 
 PriceSelling - desetinné číslo
 
@@ -33,9 +35,20 @@ CompareOperatorId - položka kolekce operátorů - viz níže
 
 Value - string
 */
+
 const name = "Name of ticket"; //TODO: přidat operaci z API
 
 function App() {
+
+    /*
+    API
+    GET pricematrix/{matrixId} – vratí kompletní price matrix (kolekce rulesetů) – vrací 200
+    POST pricematrix/{matrixId}/ruleset – vytvoření nového rulesetu – vrací 201
+    PUT pricematrix/{matrixId}/ruleset/{id} – update existujícího rulesetu – vrací 200
+    DELETE pricematrix/{matrixId}/ruleset/{id} – smazání rulesetu – vrací 204
+    */
+    
+
     return (
         <div className="text-center mt-10 font-Inter text-3xl">
             <h1 className="underline underline-offset-8 decoration-1 font-normal">Price Matrix Forms</h1>
