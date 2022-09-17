@@ -1,7 +1,6 @@
 const labelClass = "block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2";
 // Tady můžeš zjednodušit psaní kódu tříd, když jsou stejné 😉
 
-const name = "Name of ticket"; //TODO: přidat operaci z API
 const label = "Perfomance Time";
 
 /*
@@ -28,7 +27,6 @@ Field 1 – Operatory 2,4
 const PerformanceTime = () => {
     return (
         <div>
-            <h2 className="block uppercase text-gray-700 text-xl font-bold mt-2">{name}</h2>
             <form className="max-w-lg m-5 p-2 ml-auto mr-auto block">
                 <div className="flex flex-wrap -mx-3 mb-2">
                     <div className="w-full px-3 mb-6 md:mb-0">
