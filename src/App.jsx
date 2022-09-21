@@ -7,9 +7,6 @@ import BookingDate from "./Fields/BookingDate";
 import FaceValue from "./Fields/FaceValue";
 
 
-
-
-
 /*
 Rule[] - kolekce pravidel (rules) viz níže
 
@@ -54,18 +51,7 @@ function App() {
             <h1 className="underline underline-offset-8 decoration-1 font-normal">Price Matrix Forms</h1>
             <div className="m-12 border-2 rounded-lg w-fit shadow-2xl ml-auto mr-auto block px-5">
                 <h2 className="block uppercase text-gray-700 text-xl font-bold mt-4">{name}</h2>
-
-                    <button className="m-5 w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase bg-blue-700 text-white rounded-xl hover:opacity-75 duration-700">
-                        GET
-                    </button>
-
-                    <button className="m-5 w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase bg-blue-700 text-white rounded-xl hover:opacity-75 duration-700">
-                        POST
-                    </button>
-
-                    <button className="m-5w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase bg-blue-700 text-white rounded-xl hover:opacity-75 duration-700">
-                        PUT
-                    </button>
+ 
 
                 <div className="grid md:grid-cols-3">
                     <PerformanceTime/>
@@ -78,7 +64,6 @@ function App() {
                 <div className="m-5">
                     <input type="submit" value="submit"
                            className="w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase bg-slate-900 text-white rounded-xl hover:opacity-75 duration-700"/>
-                    <button className="m-5 w-fit font-light cursor-pointer border-2 p-2 px-10 bg-red-900 text-white rounded-xl hover:opacity-75 duration-700">DELETE</button>
                 </div>
             </div>
         </div>
