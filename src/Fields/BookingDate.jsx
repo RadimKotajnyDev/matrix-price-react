@@ -15,7 +15,7 @@ const BookingDate = () => {
                         <div className="grid grid-cols-2">
                             <div className="relative">
                                 <select
-                                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 cursor-pointer"
                                     id="grid-state">
                                     <option>Equal</option>
                                     <option>LessThanOrEqual</option>
