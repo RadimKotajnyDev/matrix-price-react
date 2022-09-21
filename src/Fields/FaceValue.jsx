@@ -32,7 +32,7 @@ const FaceValue = () => {
                                 </div>
                             </div>
                             <input type="text"
-                                   className="relative w-1/2 border border-gray-400 text-gray-700 py-3 px-4 pr-8 rounded leading-tight outline-none bg-white focus:border-gray-500 hover:border-gray-500">
+                                   className="relative w-full border border-gray-400 text-gray-700 py-3 px-4 pr-8 rounded leading-tight outline-none bg-white focus:border-gray-500 hover:border-gray-500 ml-auto">
 
                             </input>
                         </div>

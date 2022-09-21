@@ -24,7 +24,7 @@ Field 1 – Operatory 2,4
 const PerformanceTime = () => {
     return (
         <div>
-            <form className="max-w-lg m-5 p-2 ">
+            <form className="max-w-lg m-5 p-2 ml-auto mr-auto block">
                 <div className="flex flex-wrap -mx-2 mb-2">
                     <div className="w-full px-3 mb-6 md:mb-0">
                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -49,8 +49,7 @@ const PerformanceTime = () => {
                                 </div>
                             </div>
                             <input type="text"
-                                   className="relative w-1/2 border border-gray-400 text-gray-700 py-3 px-4 pr-8 rounded leading-tight outline-none bg-white focus:border-gray-500 hover:border-gray-500">
-
+                                   className="relative w-full border border-gray-400 text-gray-700 py-3 px-4 pr-8 rounded leading-tight outline-none bg-white focus:border-gray-500 hover:border-gray-500 ml-auto">
                             </input>
                         </div>
                     </div>
