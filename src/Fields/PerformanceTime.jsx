@@ -24,13 +24,8 @@ Field 1 – Operatory 2,4
 const PerformanceTime = () => {
     return (
         <div>
-<<<<<<< HEAD
             <form className="max-w-lg m-5 p-2 ">
                 <div className="flex flex-wrap -mx-2 mb-2">
-=======
-            <form className="max-w-lg m-5 p-2 ml-auto mr-auto block">
-                <div className="flex flex-wrap -mx-3 mb-2">
->>>>>>> e36168dd86e3c558a2fb85ebc9225f3255bbcc10
                     <div className="w-full px-3 mb-6 md:mb-0">
                         <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                                htmlFor="grid-state">
