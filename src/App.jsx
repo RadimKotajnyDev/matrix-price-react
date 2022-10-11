@@ -1,11 +1,6 @@
 import "./App.css";
-import PerformanceTime from "./Fields/PerformanceTime";
-import PerformanceDate from "./Fields/PerformanceDate";
-import PerformanceDayOfWeek from "./Fields/PerformanceDayOfWeek";
-import PriceBandCode from "./Fields/PriceBandCode";
-import BookingDate from "./Fields/BookingDate";
-import FaceValue from "./Fields/FaceValue";
-
+import Field from "./Rules/Field";
+import Operator from "./Rules/Operator";
 
 /*
 Rule[] - kolekce pravidel (rules) viz níže
@@ -33,7 +28,7 @@ CompareOperatorId - položka kolekce operátorů - viz níže
 Value - string
 */
 
-const name = "Name of ticket"; //TODO: přidat operaci z API
+const Rules = "Rules"; //TODO: přidat operaci z API
 
 function App() {
 
@@ -44,22 +39,19 @@ function App() {
     PUT pricematrix/{matrixId}/ruleset/{id} – update existujícího rulesetu – vrací 200
     DELETE pricematrix/{matrixId}/ruleset/{id} – smazání rulesetu – vrací 204
     */
-    
+    /*
+        REUSABLE
+        <h2 className="block uppercase text-gray-700 text-xl font-bold mt-4">{name}</h2>
+    */
 
     return (
         <div className="text-center mt-10 font-Inter text-3xl">
             <h1 className="underline underline-offset-8 decoration-1 font-normal">Price Matrix Forms</h1>
             <div className="m-12 border-2 rounded-lg w-fit shadow-2xl ml-auto mr-auto block px-5">
-                <h2 className="block uppercase text-gray-700 text-xl font-bold mt-4">{name}</h2>
- 
-
-                <div className="grid md:grid-cols-3">
-                    <PerformanceTime/>
-                    <PerformanceDate/>
-                    <PerformanceDayOfWeek/>
-                    <PriceBandCode/>
-                    <BookingDate/>
-                    <FaceValue/>
+            <h2 className="block uppercase text-gray-700 text-xl font-bold mt-4">{Rules}</h2>
+                <div className="grid md:grid-cols-3 border-2 mt-5">
+                    <Field />
+                    <Operator />
                 </div>
                 <div className="m-5">
                     <input type="submit" value="submit"

@@ -1,8 +1,6 @@
-const label = "Booking Date";
+const label = "Operator";
 
-//TODO: improve width of string fields
-
-const BookingDate = () => {
+const PerformanceDate = () => {
     return (
         <div>
             <form className="max-w-lg m-5 p-2 ml-auto mr-auto block">
@@ -15,7 +13,7 @@ const BookingDate = () => {
                         <div className="grid grid-cols-2">
                             <div className="relative">
                                 <select
-                                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 cursor-pointer"
+                                    className="block appearance-none w-fit bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 cursor-pointer"
                                     id="grid-state">
                                     <option>Equal</option>
                                     <option>LessThanOrEqual</option>
@@ -23,9 +21,10 @@ const BookingDate = () => {
                                     <option>GreaterThanOrEqual</option>
                                     <option>GreaterThan</option>
                                     <option>NotEquals</option>
+                                    <option>In</option>
                                 </select>
                                 <div
-                                    className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    className="pointer-events-none absolute inset-y-0 -right-14 flex items-center px-2 text-gray-700">
                                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                          viewBox="0 0 20 20">
                                         <path
@@ -33,16 +32,13 @@ const BookingDate = () => {
                                     </svg>
                                 </div>
                             </div>
-                            <input type="text"
-                                   className="relative w-full border border-gray-400 text-gray-700 py-3 px-4 pr-8 rounded leading-tight outline-none bg-white focus:border-gray-500 hover:border-gray-500 ml-auto">
-
-                            </input>
                         </div>
                     </div>
                 </div>
+
             </form>
         </div>
     );
 }
 
-export default BookingDate;
+export default PerformanceDate;
