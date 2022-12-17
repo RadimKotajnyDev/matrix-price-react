@@ -1,6 +1,7 @@
 const label = "Operator";
 
-const PerformanceDate = () => {
+//TODO:  Check if IDs for "grid-state" are correct and can't be duplicated.
+const Operator = () => {
     return (
         <div>
             <form className="max-w-lg m-5 p-2 ml-auto mr-auto block">
@@ -23,8 +24,9 @@ const PerformanceDate = () => {
                                     <option>NotEquals</option>
                                     <option>In</option>
                                 </select>
+                                {/*TODO: fix ICON position */}
                                 <div
-                                    className="pointer-events-none absolute inset-y-0 -right-14 flex items-center px-2 text-gray-700">
+                                    className="pointer-events-none absolute inset-y-0 -right-[6vw] flex items-center px-2 text-gray-700">
                                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg"
                                          viewBox="0 0 20 20">
                                         <path
@@ -41,4 +43,4 @@ const PerformanceDate = () => {
     );
 }
 
-export default PerformanceDate;
+export default Operator;
