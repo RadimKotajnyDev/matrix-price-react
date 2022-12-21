@@ -17,16 +17,18 @@ function AddRule() {
 
 function RemoveRule() {
     return (
-        <></>
+        <>
+            {/* TODO: add remove algoritmus */}
+        </>
     );
 }
 
 const AddOrRemove = () => {
     return (
         <div className="grid grid-flow-row ml-[30vw]">
-            {/* TODO: fix position */}
-            <button onClick={RemoveRule} className={buttonClass}>-</button>
-            <button onClick={AddRule} className={buttonClass}>+</button>                
+            {/* FIXME: fix position */}
+            <button onClick={() => RemoveRule()} className={buttonClass}>-</button>
+            <button onClick={() => AddRule()} className={buttonClass}>+</button>                
         </div>
     );
 }
