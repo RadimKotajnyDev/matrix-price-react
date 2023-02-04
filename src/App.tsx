@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 //Icons (MIT License)
 import {AiOutlinePlus, AiOutlineMinus} from "react-icons/ai";
 import {GoChevronUp, GoChevronDown} from "react-icons/go";
@@ -31,7 +31,8 @@ export default function App() {
         {name: "In", id: 7},
     ];
 
-    const defaultOperators = []
+    let tmpArray: any = []
+    const defaultOperators: any = []
     defaultOperators.push(operatorOptions[1]);
     defaultOperators.push(operatorOptions[3]);
 
@@ -39,59 +40,55 @@ export default function App() {
     const [mappedOperatorArr, setMappedOperatorArr] = useState(defaultOperators);
 
     /** Mapping **/
-    // FIXME: mapping operators isn't working properly
-    function MapOperator(e: any) {
-        setFieldValue(parseInt(e.target.value));
-        switch (fieldValue) {
+    useEffect(() => {
+        //console.log(fieldValue)
+        let tmp = parseInt(String(fieldValue))
+        switch (tmp) {
             case 1:
-                setMappedOperatorArr([]);
-                mappedOperatorArr.push(operatorOptions[2-1]); //protože array začíná od 0 :(
-                mappedOperatorArr.push(operatorOptions[4-1]);
-                setMappedOperatorArr(mappedOperatorArr);
+                tmpArray = []
+                tmpArray.push(operatorOptions[2-1]) //array začíná od 0
+                tmpArray.push(operatorOptions[4-1])
+                setMappedOperatorArr(tmpArray);
                 break;
             case 2:
-                setMappedOperatorArr([]);
-                setMappedOperatorArr(operatorOptions);
-                mappedOperatorArr.pop();
-                setMappedOperatorArr(mappedOperatorArr);
+            case 5:
+            case 6:
+                tmpArray = []
+                tmpArray = [...operatorOptions]
+                tmpArray.pop();
+                setMappedOperatorArr(tmpArray);
                 break;
             case 3:
-                setMappedOperatorArr([]);
-                mappedOperatorArr.push(operatorOptions[1-1]);
-                mappedOperatorArr.push(operatorOptions[2-1]);
-                mappedOperatorArr.push(operatorOptions[4-1]);
-                mappedOperatorArr.push(operatorOptions[6-1]);
-                setMappedOperatorArr(mappedOperatorArr);
+                tmpArray = []
+                tmpArray.push(operatorOptions[1-1]);
+                tmpArray.push(operatorOptions[2-1]);
+                tmpArray.push(operatorOptions[4-1]);
+                tmpArray.push(operatorOptions[6-1]);
+                setMappedOperatorArr(tmpArray);
                 break;
             case 4:
-                setMappedOperatorArr([]);
-                mappedOperatorArr.push(operatorOptions[1-1]);
-                mappedOperatorArr.push(operatorOptions[6-1]);
-                mappedOperatorArr.push(operatorOptions[7-1]);
-                setMappedOperatorArr(mappedOperatorArr);
+                tmpArray = []
+                tmpArray.push(operatorOptions[1-1]);
+                tmpArray.push(operatorOptions[6-1]);
+                tmpArray.push(operatorOptions[7-1]);
+                setMappedOperatorArr(tmpArray);
                 break;
-            case 5:
-                setMappedOperatorArr(operatorOptions);
-                mappedOperatorArr.pop();
-                setMappedOperatorArr(mappedOperatorArr);
-                break;
-            case 6:
-                setMappedOperatorArr([]);
-                setMappedOperatorArr(operatorOptions);
-                mappedOperatorArr.pop();
-                setMappedOperatorArr(mappedOperatorArr);
-                break;
+                //poznámka: Case 5 a 6 je stejný jako case 2.
             default:
                 console.log("Map operator error");
                 console.log(fieldValue);
                 break;
         }
-    }
+    }, [fieldValue])
 
     // TODO? Function Submit
 
     function Reset() {
         window.location.reload()
+    }
+
+    function Submit(e: any) {
+        e.preventDefault()
     }
 
     //ADD + remove fields
@@ -130,7 +127,7 @@ export default function App() {
 
     //TODO: make this function working
     function PriorityUp(id: number, priority: number, number: number) {
-        if(myRuleset.length > 1) {
+        if (myRuleset.length > 1) {
             myRuleset[priority] = {id: id, priority: priority + 1, number: number};
             setMyRuleset(myRuleset);
         }
@@ -138,7 +135,7 @@ export default function App() {
 
 
     function PriorityDown() {
-        if(myRuleset.length > 1) {
+        if (myRuleset.length > 1) {
 
         }
     }
@@ -160,7 +157,8 @@ export default function App() {
                                 </button>
                             </div>
                             <div>
-                                <p className="block uppercase tracking-wide text-gray-700 text-xs font-bold ">Set ruleset priority</p>
+                                <p className="block uppercase tracking-wide text-gray-700 text-xs font-bold ">Set
+                                    ruleset priority</p>
                                 <button
                                     type="button"
                                     className="w-fit mr-5 my-2 h-fit rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white"
@@ -176,7 +174,7 @@ export default function App() {
                                     onClick={() => PriorityDown()}>
                                     <GoChevronDown size="30"/>
                                 </button>
-                                <hr className="my-2" />
+                                <hr className="my-2"/>
                                 <InputField label="note" htmlFor="" className="w-full"
                                             placeholder="write your note here"/>
                             </div>
@@ -190,7 +188,7 @@ export default function App() {
                                             <Field label="field"
                                                    options={fieldOptions}
                                                    value={item}
-                                                   onSelectChange={(e: any) => MapOperator(e)}
+                                                   onSelectChange={(e: any) => setFieldValue(e.target.value)}
                                                    onChange={(e: any) => handleChange(e.target.value, index)}
                                                    fieldValue={fieldValue}
                                             />
@@ -246,7 +244,7 @@ export default function App() {
             {/* submit and reset buttons*/}
             <div className="flex flex-row justify-center mt-5">
                 <div className="m-5">
-                    <button type="submit" value="submit"
+                    <button type="submit" value="submit" onClick={(e) => Submit(e)}
                             className="w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase bg-slate-900 text-white rounded-xl hover:opacity-75 duration-700">submit
                     </button>
                 </div>
