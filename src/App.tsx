@@ -41,8 +41,7 @@ export default function App() {
 
     /** Mapping **/
     useEffect(() => {
-        //console.log(fieldValue)
-        let tmp = parseInt(String(fieldValue))
+        let tmp = parseInt(String(fieldValue)) //todo: check if this can be written easier
         switch (tmp) {
             case 1:
                 tmpArray = []
@@ -80,8 +79,6 @@ export default function App() {
                 break;
         }
     }, [fieldValue])
-
-    // TODO? Function Submit
 
     function Reset() {
         window.location.reload()
@@ -133,7 +130,6 @@ export default function App() {
         }
     }
 
-
     function PriorityDown() {
         if (myRuleset.length > 1) {
 
@@ -161,16 +157,18 @@ export default function App() {
                                     ruleset priority</p>
                                 <button
                                     type="button"
-                                    className="w-fit mr-5 my-2 h-fit rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white"
+                                    className="w-fit mr-5 my-2 h-fit rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority up"
+                                    disabled={myRuleset.length <= 1}
                                     onClick={() => PriorityUp(id, priority, number)}>
                                     <GoChevronUp size="30"/>
                                 </button>
 
                                 <button
                                     type="button"
-                                    className="w-fit h-fit my-2 rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white"
+                                    className="w-fit h-fit my-2 rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority down"
+                                    disabled={myRuleset.length <= 1}
                                     onClick={() => PriorityDown()}>
                                     <GoChevronDown size="30"/>
                                 </button>
