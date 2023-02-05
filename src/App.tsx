@@ -130,9 +130,10 @@ export default function App() {
         }
     }
 
-    function PriorityDown() {
+    function PriorityDown(id: number, priority: number, number: number) {
         if (myRuleset.length > 1) {
-
+            myRuleset[priority] = {id: id, priority: priority - 1, number: number}
+            setMyRuleset(myRuleset);
         }
     }
 
@@ -159,7 +160,7 @@ export default function App() {
                                     type="button"
                                     className="w-fit mr-5 my-2 h-fit rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority up"
-                                    disabled={myRuleset.length <= 1}
+                                    disabled={myRuleset.length < 1}
                                     onClick={() => PriorityUp(id, priority, number)}>
                                     <GoChevronUp size="30"/>
                                 </button>
@@ -168,8 +169,8 @@ export default function App() {
                                     type="button"
                                     className="w-fit h-fit my-2 rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority down"
-                                    disabled={myRuleset.length <= 1}
-                                    onClick={() => PriorityDown()}>
+                                    disabled={myRuleset.length < 1}
+                                    onClick={() => PriorityDown(id, priority, number)}>
                                     <GoChevronDown size="30"/>
                                 </button>
                                 <hr className="my-2"/>
