@@ -74,7 +74,7 @@ export default function App() {
                 break;
                 //poznámka: Case 5 a 6 je stejný jako case 2.
             default:
-                console.log("Map operator error");
+                alert("Map operator error");
                 console.log(fieldValue);
                 break;
         }
@@ -88,18 +88,51 @@ export default function App() {
         e.preventDefault()
     }
 
-    //ADD + remove fields
-    const [field, setField] = useState(['']);
+    const fieldItems = [
+        {
+            id: 1, field: "", operator: "", value: ""
+        }
+    ];
 
+    //ADD + remove fields
+    const [field, setField] = useState(fieldItems);
+
+    /*
     const handleChange = (value: number, index: number) => {
         const newField: any = field.map((fieldItem: string, fieldIndex: number) => {
             return fieldIndex === index ? value : fieldItem
         })
         setField(newField)
     }
+    */
 
-    const addFields = () => {
-        setField([...field, ''])
+    const addField = () => {
+        field.push({id: field.length + 1, field: "", operator: "", value: ""})
+        setField([...field])
+    }
+
+    useEffect(() => {
+        console.log(field)
+    }, [field])
+
+    const rulesetsHandler = (id: number) => {
+        const filteredRulesets = myRuleset.filter((oneRuleset) => {
+            return oneRuleset.id !== id
+        })
+        setMyRuleset(filteredRulesets);
+    }
+    //FIXME: Possible fix: with every delete of field just sort IDs in Array's objects.
+    // That will remove duplicates.
+    const [counter, setCounter] = useState(0)
+    const deleteFieldHandler = (index: number) => {
+        field.map((oneField) => {
+            setCounter(counter + 1)
+            return oneField.id = counter;
+        })
+        const filteredFieldArray = field.filter((oneField) => {
+            return oneField.id !== index
+        })
+        setField(filteredFieldArray)
     }
 
     //Ruleset
@@ -113,13 +146,6 @@ export default function App() {
             number: Math.floor(Math.random() * 9000) + 1000,
         });
         setMyRuleset([...myRuleset]);
-    }
-
-    const rulesetsHandler = (id: number) => {
-        const filteredRulesets = myRuleset.filter((oneRuleset) => {
-            return oneRuleset.id !== id
-        })
-        setMyRuleset(filteredRulesets);
     }
 
     //TODO: make this function working
@@ -154,13 +180,13 @@ export default function App() {
                                 </button>
                             </div>
                             <div>
-                                <p className="block uppercase tracking-wide text-gray-700 text-xs font-bold ">Set
+                                <p className="block uppercase tracking-wide text-gray-700 text-xs font-bold ">Change
                                     ruleset priority</p>
                                 <button
                                     type="button"
                                     className="w-fit mr-5 my-2 h-fit rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority up"
-                                    disabled={myRuleset.length < 1}
+                                    disabled={myRuleset.length <= 1}
                                     onClick={() => PriorityUp(id, priority, number)}>
                                     <GoChevronUp size="30"/>
                                 </button>
@@ -169,7 +195,7 @@ export default function App() {
                                     type="button"
                                     className="w-fit h-fit my-2 rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority down"
-                                    disabled={myRuleset.length < 1}
+                                    disabled={myRuleset.length <= 1}
                                     onClick={() => PriorityDown(id, priority, number)}>
                                     <GoChevronDown size="30"/>
                                 </button>
@@ -179,38 +205,34 @@ export default function App() {
                             </div>
                             <div>
                                 {/* TODO: add/delete fieldset only on Ruleset's ID, not on every Ruleset!  */}
-                                {field.map((item, index) => {
-                                    return <div key={index}
+                                {field.map((index: { field: string; id: number; value: string; operator: string}) => {
+                                    //item: string
+                                    return <div key={index.id}
                                                 className="grid grid-flow-row md:grid-flow-col"
                                     >
-                                        <React.Fragment key={index}>
+                                        <React.Fragment key={index.id}>
                                             <Field label="field"
                                                    options={fieldOptions}
-                                                   value={item}
+                                                   value={index.field}
                                                    onSelectChange={(e: any) => setFieldValue(e.target.value)}
-                                                   onChange={(e: any) => handleChange(e.target.value, index)}
+                                                   //onChange={(e: any) => handleChange(e.target.value, index)}
                                                    fieldValue={fieldValue}
                                             />
 
                                             <Field label="operator"
                                                    options={mappedOperatorArr}
-                                                   value={item}
-                                                   onChange={(e: any) => handleChange(e.target.value, index)}
+                                                   value={index.operator}
+                                                   //onChange={(e: any) => handleChange(e.target.value, index)}
                                             />
 
                                             <InputField label="value"
                                                         htmlFor="grid-value"
-                                                        value={item}
-                                                        onChange={(e: any) => handleChange(e.target.value, index)}
+                                                        value={index.value}
+                                                        //onChange={(e: any) => handleChange(e.target.value, index)}
                                             />
 
                                             <button type="button"
-                                                    onClick={() => {
-                                                        const newArr = field.filter((i, j) => {
-                                                            return index !== j
-                                                        })
-                                                        setField(newArr)
-                                                    }}
+                                                    onClick={() => deleteFieldHandler(index.id)}
                                                     disabled={field.length <= 1}
                                                     className="disabled:opacity-75 duration-500"
                                             >
@@ -223,7 +245,7 @@ export default function App() {
                                     </div>
                                 })
                                 }
-                                <button type="button" onClick={addFields} className="float-right mt-0">
+                                <button type="button" onClick={() => addField()} className="float-right mt-0">
                                     <AiOutlinePlus size="45"
                                                    className="rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white "/>
                                 </button>
