@@ -45,8 +45,8 @@ export default function App() {
         switch (tmp) {
             case 1:
                 tmpArray = []
-                tmpArray.push(operatorOptions[2-1]) //array začíná od 0
-                tmpArray.push(operatorOptions[4-1])
+                tmpArray.push(operatorOptions[2 - 1]) //array začíná od 0
+                tmpArray.push(operatorOptions[4 - 1])
                 setMappedOperatorArr(tmpArray);
                 break;
             case 2:
@@ -59,20 +59,20 @@ export default function App() {
                 break;
             case 3:
                 tmpArray = []
-                tmpArray.push(operatorOptions[1-1]);
-                tmpArray.push(operatorOptions[2-1]);
-                tmpArray.push(operatorOptions[4-1]);
-                tmpArray.push(operatorOptions[6-1]);
+                tmpArray.push(operatorOptions[1 - 1]);
+                tmpArray.push(operatorOptions[2 - 1]);
+                tmpArray.push(operatorOptions[4 - 1]);
+                tmpArray.push(operatorOptions[6 - 1]);
                 setMappedOperatorArr(tmpArray);
                 break;
             case 4:
                 tmpArray = []
-                tmpArray.push(operatorOptions[1-1]);
-                tmpArray.push(operatorOptions[6-1]);
-                tmpArray.push(operatorOptions[7-1]);
+                tmpArray.push(operatorOptions[1 - 1]);
+                tmpArray.push(operatorOptions[6 - 1]);
+                tmpArray.push(operatorOptions[7 - 1]);
                 setMappedOperatorArr(tmpArray);
                 break;
-                //poznámka: Case 5 a 6 je stejný jako case 2.
+            //poznámka: Case 5 a 6 je stejný jako case 2.
             default:
                 alert("Map operator error");
                 console.log(fieldValue);
@@ -88,56 +88,55 @@ export default function App() {
         e.preventDefault()
     }
 
-    const fieldItems = [
+    //ADD + remove fields
+    const [field, setField] = useState([
         {
             id: 1, field: "", operator: "", value: ""
         }
-    ];
+    ]);
 
-    //ADD + remove fields
-    const [field, setField] = useState(fieldItems);
-
-    /*
-    const handleChange = (value: number, index: number) => {
-        const newField: any = field.map((fieldItem: string, fieldIndex: number) => {
-            return fieldIndex === index ? value : fieldItem
-        })
-        setField(newField)
-    }
-    */
-
-    const addField = () => {
-        field.push({id: field.length + 1, field: "", operator: "", value: ""})
-        setField([...field])
+    const addFieldHandler = () => {
+        setField(
+            field.map((item, i) => {
+                item.id = i + 1;
+                return {...item};
+            }))
+        setField([...field, {id: field.length + 1, field: "", operator: "", value: ""}])
     }
 
     useEffect(() => {
         console.log(field)
     }, [field])
 
-    const rulesetsHandler = (id: number) => {
+    const deleteFieldHandler = (id: number) => {
+        const filteredField = field.filter((filterField) => {
+            return filterField.id !== id;
+        });
+        setField(filteredField)
+        /*
+        setField(
+            field.map((item, i) => {
+                item.id = i + 1;
+                return {...item};
+            }))
+         */
+        /*
+        setField(
+            filteredField.map((item, i) => {
+                return { ...item, id: i + 1 };
+            })
+        ); */
+    };
+
+    // Ruleset
+    const [myRuleset, setMyRuleset] = useState(Rulesets);
+
+    const handleDeleteRuleset = (id: number) => {
         const filteredRulesets = myRuleset.filter((oneRuleset) => {
             return oneRuleset.id !== id
         })
         setMyRuleset(filteredRulesets);
     }
-    //FIXME: Possible fix: with every delete of field just sort IDs in Array's objects.
-    // That will remove duplicates.
-    const [counter, setCounter] = useState(0)
-    const deleteFieldHandler = (index: number) => {
-        field.map((oneField) => {
-            setCounter(counter + 1)
-            return oneField.id = counter;
-        })
-        const filteredFieldArray = field.filter((oneField) => {
-            return oneField.id !== index
-        })
-        setField(filteredFieldArray)
-    }
-
-    //Ruleset
-    const [myRuleset, setMyRuleset] = useState(Rulesets);
-
     const handleAddRuleset = () => {
         let lastRuleset = myRuleset.length
         myRuleset.push({
@@ -148,7 +147,7 @@ export default function App() {
         setMyRuleset([...myRuleset]);
     }
 
-    //TODO: make this function working
+//TODO: make this function working
     function PriorityUp(id: number, priority: number, number: number) {
         if (myRuleset.length > 1) {
             myRuleset[priority] = {id: id, priority: priority + 1, number: number};
@@ -174,7 +173,7 @@ export default function App() {
                             className="w-full mr-auto ml-auto px-5">
                             <div className="flex flex-col md:flex-row md:justify-between">
                                 <p className={rulesetClass}>Ruleset&nbsp;#{number}&nbsp;|&nbsp;Priority:&nbsp;#{priority}</p>
-                                <button onClick={() => rulesetsHandler(id)}
+                                <button onClick={() => handleDeleteRuleset(id)}
                                         className="cursor-pointer p-3 uppercase rounded-md text-white bg-slate-900 hover:opacity-75 duration-700 disabled:opacity-75"
                                         disabled={myRuleset.length <= 1}>Remove ruleset
                                 </button>
@@ -205,7 +204,7 @@ export default function App() {
                             </div>
                             <div>
                                 {/* TODO: add/delete fieldset only on Ruleset's ID, not on every Ruleset!  */}
-                                {field.map((index: { field: string; id: number; value: string; operator: string}) => {
+                                {field.map((index: { field: string; id: number; value: string; operator: string }) => {
                                     //item: string
                                     return <div key={index.id}
                                                 className="grid grid-flow-row md:grid-flow-col"
@@ -215,20 +214,20 @@ export default function App() {
                                                    options={fieldOptions}
                                                    value={index.field}
                                                    onSelectChange={(e: any) => setFieldValue(e.target.value)}
-                                                   //onChange={(e: any) => handleChange(e.target.value, index)}
+                                                //onChange={(e: any) => handleChange(e.target.value, index)}
                                                    fieldValue={fieldValue}
                                             />
 
                                             <Field label="operator"
                                                    options={mappedOperatorArr}
                                                    value={index.operator}
-                                                   //onChange={(e: any) => handleChange(e.target.value, index)}
+                                                //onChange={(e: any) => handleChange(e.target.value, index)}
                                             />
 
                                             <InputField label="value"
                                                         htmlFor="grid-value"
                                                         value={index.value}
-                                                        //onChange={(e: any) => handleChange(e.target.value, index)}
+                                                //onChange={(e: any) => handleChange(e.target.value, index)}
                                             />
 
                                             <button type="button"
@@ -245,7 +244,7 @@ export default function App() {
                                     </div>
                                 })
                                 }
-                                <button type="button" onClick={() => addField()} className="float-right mt-0">
+                                <button type="button" onClick={() => addFieldHandler()} className="float-right mt-0">
                                     <AiOutlinePlus size="45"
                                                    className="rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white "/>
                                 </button>
