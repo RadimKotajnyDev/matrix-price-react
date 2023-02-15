@@ -189,22 +189,6 @@ export default function App() {
         }
     }
 
-    //TODO: make these functions working
-    /*
-    function PriorityUp(id: number, number: number) {
-        if (Ruleset.length > 1) {
-            Ruleset[id] = {id: id + 1, number: number};
-            setRuleset(Ruleset);
-        }
-    }
-
-    function PriorityDown(id: number, priority: number, number: number) {
-        if (Ruleset.length > 1) {
-            Ruleset[id] = {id: id - 1, priority: priority - 1, number: number}
-            setRuleset(Ruleset);
-        }
-    }*/
-
     return (
         <>
             {
