@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from "react";
+import React, {useState, useEffect} from "react";
 //Icons (MIT License)
 import {AiOutlinePlus, AiOutlineMinus} from "react-icons/ai";
 import {GoChevronUp, GoChevronDown} from "react-icons/go";
@@ -7,7 +7,6 @@ import Pricing from "./components/Pricing";
 import InputField from "./components/InputField";
 import Field from "./components/Field";
 import Offer from "./components/Offer";
-import Rulesets from "./Rulesets"; //TODO: load rulesets from API not component
 
 export default function App() {
     const rulesetClass = "mb-5 uppercase tracking-wide text-gray-700 text-2xl font-bold mb-2";
@@ -102,7 +101,6 @@ export default function App() {
         const {name, value} = event.target;
         setField(prevState => {
             const fieldIndex = prevState.findIndex(item => item.id === id);
-
             if (name === 'field') {
                 return [
                     ...prevState.slice(0, fieldIndex),
@@ -110,7 +108,6 @@ export default function App() {
                     ...prevState.slice(fieldIndex + 1),
                 ];
             }
-
             if (name === 'operator') {
                 return [
                     ...prevState.slice(0, fieldIndex),
@@ -118,7 +115,6 @@ export default function App() {
                     ...prevState.slice(fieldIndex + 1),
                 ];
             }
-
             if (name === 'value') {
                 return [
                     ...prevState.slice(0, fieldIndex),
@@ -126,7 +122,6 @@ export default function App() {
                     ...prevState.slice(fieldIndex + 1),
                 ];
             }
-
             return prevState;
         });
     };
@@ -143,7 +138,6 @@ export default function App() {
         console.log(field)
     }, [field])
 
-
     const deleteFieldHandler = (id: number) => {
         const updatedField = field
             .filter(filterField => filterField.id !== id)
@@ -152,15 +146,19 @@ export default function App() {
     }
 
     // Ruleset
-    const [Ruleset, setRuleset] = useState(Rulesets);
+    //TODO: load rulesets from API
+    const [Ruleset, setRuleset] = useState([
+        {id: 1, priority: 1, number: Math.floor(Math.random() * 9000) + 1000}
+        ]
+    );
 
-    const handleDeleteRuleset = (id: number) => {
-        const filteredRulesets = Ruleset.filter((oneRuleset) => {
-            return oneRuleset.id !== id
-        })
+    const deleteRulesetHandler = (id: number) => {
+        const filteredRulesets = Ruleset
+            .filter((oneRuleset) => oneRuleset.id !== id)
+            .map((oneRuleset, index) => ({...oneRuleset, priority: index + 1, id: index + 1}))
         setRuleset(filteredRulesets);
     }
-    const handleAddRuleset = () => {
+    const AddRulesetHandler = () => {
         Ruleset.push({
             id: Ruleset.length + 1,
             priority: Ruleset.length + 1,
@@ -195,7 +193,7 @@ export default function App() {
                             className="w-full mr-auto ml-auto px-5">
                             <div className="flex flex-col md:flex-row md:justify-between">
                                 <p className={rulesetClass}>Ruleset&nbsp;#{number}&nbsp;|&nbsp;Priority:&nbsp;#{priority}</p>
-                                <button onClick={() => handleDeleteRuleset(id)}
+                                <button onClick={() => deleteRulesetHandler(id)}
                                         className="cursor-pointer p-3 uppercase rounded-md text-white bg-slate-900 hover:opacity-75 duration-700 disabled:opacity-75"
                                         disabled={Ruleset.length <= 1}>Remove ruleset
                                 </button>
@@ -240,7 +238,7 @@ export default function App() {
                                                    options={fieldOptions}
                                                    onSelectChange={(e: any) => {
                                                        setFieldValue(e.target.value) //TODO: unique setting
-                                                       //handleChange(e, index.id)
+                                                       handleChange(e, index.id)
                                                    }}
                                                    onChange={(e: any) => handleChange(e, index.id)}
                                                    componentID={index.fieldID}
@@ -290,7 +288,7 @@ export default function App() {
                     </div>
                 })
             }
-            <button type="button" onClick={handleAddRuleset}
+            <button type="button" onClick={AddRulesetHandler}
                     className="block ml-auto mr-auto mt-5 mb-14 cursor-pointer p-3 uppercase rounded-md text-white bg-slate-900 hover:opacity-75 duration-700">add
                 ruleset
             </button>
