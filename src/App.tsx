@@ -96,7 +96,6 @@ export default function App() {
         }
     ]);
 
-
     const handleChange = (event: any, id: number) => {
         const {name, value} = event.target;
         setField(prevState => {
@@ -144,55 +143,100 @@ export default function App() {
             .map((item, index) => ({ ...item, id: index + 1 }));
         setField(updatedField);
     }
-
     // Ruleset
     //TODO: load rulesets from API
     const [Ruleset, setRuleset] = useState([
-        {id: 1, priority: 1, number: Math.floor(Math.random() * 9000) + 1000}
+        {id: 1, number: Math.floor(Math.random() * 9000) + 1000}
         ]
     );
-
     const deleteRulesetHandler = (id: number) => {
         const filteredRulesets = Ruleset
             .filter((oneRuleset) => oneRuleset.id !== id)
-            .map((oneRuleset, index) => ({...oneRuleset, priority: index + 1, id: index + 1}))
+            .map((oneRuleset, index) => ({...oneRuleset, id: index + 1}))
         setRuleset(filteredRulesets);
     }
     const AddRulesetHandler = () => {
         Ruleset.push({
             id: Ruleset.length + 1,
-            priority: Ruleset.length + 1,
             number: Math.floor(Math.random() * 9000) + 1000,
         });
         setRuleset([...Ruleset]);
     }
+    /*
+    const PriorityUP = (id: number) => {
+        const index = Ruleset.findIndex(item => item.id === id);
+        if (index > 0) {
+            const item = Ruleset[index];
+            Ruleset.splice(index, 1);
+            Ruleset.splice(index-1, 0, item);
+            setRuleset([...Ruleset]);
+        }
+    }
+    const PriorityDown = (id: number) => {
+        const index = Ruleset.findIndex(item => item.id === id);
+        if (index < Ruleset.length - 1) {
+            const item = Ruleset[index];
+            Ruleset.splice(index, 1);
+            Ruleset.splice(index+1, 0, item);
+            setRuleset([...Ruleset]);
+        }
+    }
+     */
+    const PriorityUP = (id: number) => {
+        const index = Ruleset.findIndex(item => item.id === id);
+        if (index > 0) {
+            const item = Ruleset[index];
+            Ruleset.splice(index, 1);
+            Ruleset.splice(index-1, 0, item);
+            // přehození IDs
+            const tempID = Ruleset[index].id;
+            Ruleset[index].id = Ruleset[index-1].id;
+            Ruleset[index-1].id = tempID;
+            setRuleset([...Ruleset]);
+        }
+    }
+
+    const PriorityDown = (id: number) => {
+        const index = Ruleset.findIndex(item => item.id === id);
+        if (index < Ruleset.length - 1) {
+            const item = Ruleset[index];
+            Ruleset.splice(index, 1);
+            Ruleset.splice(index+1, 0, item);
+            // přehození IDs
+            const tempID = Ruleset[index].id;
+            Ruleset[index].id = Ruleset[index+1].id;
+            Ruleset[index+1].id = tempID;
+            setRuleset([...Ruleset]);
+        }
+    }
 
     //TODO: make these functions working
-    function PriorityUp(id: number, priority: number, number: number) {
+    /*
+    function PriorityUp(id: number, number: number) {
         if (Ruleset.length > 1) {
-            Ruleset[priority] = {id: id, priority: priority + 1, number: number};
+            Ruleset[id] = {id: id + 1, number: number};
             setRuleset(Ruleset);
         }
     }
 
     function PriorityDown(id: number, priority: number, number: number) {
         if (Ruleset.length > 1) {
-            Ruleset[priority] = {id: id, priority: priority - 1, number: number}
+            Ruleset[id] = {id: id - 1, priority: priority - 1, number: number}
             setRuleset(Ruleset);
         }
-    }
+    }*/
 
     return (
         <>
             {
                 Ruleset.map((oneRuleset) => {
-                    const {id, priority, number} = oneRuleset;
-                    return <div key={priority}
+                    const {id, number} = oneRuleset;
+                    return <div key={id}
                                 className="flex ml-auto mr-auto mt-14 w-fit p-5 outline outline-1 rounded outline-gray-200 shadow-lg">
                         <form
                             className="w-full mr-auto ml-auto px-5">
                             <div className="flex flex-col md:flex-row md:justify-between">
-                                <p className={rulesetClass}>Ruleset&nbsp;#{number}&nbsp;|&nbsp;Priority:&nbsp;#{priority}</p>
+                                <p className={rulesetClass}>Ruleset&nbsp;#{number}&nbsp;|&nbsp;Priority:&nbsp;#{id}</p>
                                 <button onClick={() => deleteRulesetHandler(id)}
                                         className="cursor-pointer p-3 uppercase rounded-md text-white bg-slate-900 hover:opacity-75 duration-700 disabled:opacity-75"
                                         disabled={Ruleset.length <= 1}>Remove ruleset
@@ -205,8 +249,8 @@ export default function App() {
                                     type="button"
                                     className="w-fit mr-5 my-2 h-fit rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority up"
-                                    disabled={Ruleset.length <= 1}
-                                    onClick={() => PriorityUp(id, priority, number)}>
+                                    disabled={Ruleset.length <= 1 || oneRuleset.id == 1}
+                                    onClick={() => {PriorityUP(oneRuleset.id)}}>
                                     <GoChevronUp size="30"/>
                                 </button>
 
@@ -214,8 +258,8 @@ export default function App() {
                                     type="button"
                                     className="w-fit h-fit my-2 rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority down"
-                                    disabled={Ruleset.length <= 1}
-                                    onClick={() => PriorityDown(id, priority, number)}>
+                                    disabled={Ruleset.length <= 1 || oneRuleset.id == Ruleset.length}
+                                    onClick={() => {PriorityDown(oneRuleset.id)}}>
                                     <GoChevronDown size="30"/>
                                 </button>
                                 <hr className="my-2"/>
