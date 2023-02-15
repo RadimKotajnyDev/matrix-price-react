@@ -7,8 +7,7 @@ import Pricing from "./components/Pricing";
 import InputField from "./components/InputField";
 import Field from "./components/Field";
 import Offer from "./components/Offer";
-import Rulesets from "./Rulesets";
-import {flushSync} from "react-dom"; //TODO: load rulesets from API not component
+import Rulesets from "./Rulesets"; //TODO: load rulesets from API not component
 
 export default function App() {
     const rulesetClass = "mb-5 uppercase tracking-wide text-gray-700 text-2xl font-bold mb-2";
@@ -40,6 +39,7 @@ export default function App() {
     const [fieldValue, setFieldValue] = useState(1);
     const [mappedOperatorArr, setMappedOperatorArr] = useState(defaultOperators);
 
+    //TODO: make mapping unique for field objects
     /** Mapping **/
     useEffect(() => {
         let tmp = parseInt(String(fieldValue)) //todo: check if this can be written easier
@@ -92,26 +92,50 @@ export default function App() {
     //ADD + remove fields
     const [field, setField] = useState([
         {
-            id: 1, field: "", operator: "", value: ""
+            id: 1, field: "PerformanceTime", operator: "LessThanOrEqual", value: "",
+            fieldID: 1, operatorID: 1, valueID: 1
         }
     ]);
 
-    function handleChange(value: any, index: any) {
-        //if(id) {
-            //field[id]
-            //setField()
-        //}
-    }
+
+    const handleChange = (event: any, id: number) => {
+        const {name, value} = event.target;
+        setField(prevState => {
+            const fieldIndex = prevState.findIndex(item => item.id === id);
+
+            if (name === 'field') {
+                return [
+                    ...prevState.slice(0, fieldIndex),
+                    {...prevState[fieldIndex], field: value},
+                    ...prevState.slice(fieldIndex + 1),
+                ];
+            }
+
+            if (name === 'operator') {
+                return [
+                    ...prevState.slice(0, fieldIndex),
+                    {...prevState[fieldIndex], operator: value},
+                    ...prevState.slice(fieldIndex + 1),
+                ];
+            }
+
+            if (name === 'value') {
+                return [
+                    ...prevState.slice(0, fieldIndex),
+                    {...prevState[fieldIndex], value: value},
+                    ...prevState.slice(fieldIndex + 1),
+                ];
+            }
+
+            return prevState;
+        });
+    };
 
     const addFieldHandler = () => {
-        // Map IDs in field (duplicity problem fix)
-        /*
-        setField(
-            field.map((item, i) => {
-                item.id = i + 1;
-                return {...item};
-            })) */
-        setField([...field, {id: field.length + 1, field: "", operator: "", value: ""}])
+        setField([...field, {
+            id: field.length + 1, field: "PerformanceTime", operator: "LessThanOrEqual", value: "",
+            fieldID: field.length + 1, operatorID: field.length + 1, valueID: field.length + 1
+        }])
     }
 
     //TODO: delete on deploy
@@ -119,22 +143,13 @@ export default function App() {
         console.log(field)
     }, [field])
 
+
     const deleteFieldHandler = (id: number) => {
-        const filteredField = field.filter((filterField) => {
-            return filterField.id !== id;
-        });
-        setField(filteredField);
-    };
-
-    // Update IDs in Field Array
-    const updateIDs = () => {
-        field.map((item, i) => {
-            item.id = i + 1;
-            return {...item};
-        })
-        setField(field)
+        const updatedField = field
+            .filter(filterField => filterField.id !== id)
+            .map((item, index) => ({ ...item, id: index + 1 }));
+        setField(updatedField);
     }
-
 
     // Ruleset
     const [Ruleset, setRuleset] = useState(Rulesets);
@@ -207,34 +222,45 @@ export default function App() {
                                 </button>
                                 <hr className="my-2"/>
                                 <InputField label="note" htmlFor="" className="w-full"
-                                            placeholder="write your note here"/>
+                                            placeholder="type something..."/>
                             </div>
                             <div>
                                 {/* TODO: add/delete fieldset only on Ruleset's ID, not on every Ruleset!  */}
-                                {field.map((index: { field: string; id: number; value: string; operator: string }) => {
+                                {field.map((index: {
+                                    id: number; field: string; operator: string; value: string,
+                                    fieldID: number; operatorID: number; valueID: number;
+                                }) => {
                                     //item: string
                                     return <div key={index.id}
                                                 className="grid grid-flow-row md:grid-flow-col"
                                     >
                                         <React.Fragment key={index.id}>
                                             <Field label="field"
+                                                   name="field"
                                                    options={fieldOptions}
-                                                   value={index.field}
-                                                   onSelectChange={(e: any) => setFieldValue(e.target.value)}
-                                                   onChange={(e: any) => handleChange(e.target.value, index.field)}
-                                                   fieldValue={fieldValue}
+                                                   onSelectChange={(e: any) => {
+                                                       setFieldValue(e.target.value) //TODO: unique setting
+                                                       //handleChange(e, index.id)
+                                                   }}
+                                                   onChange={(e: any) => handleChange(e, index.id)}
+                                                   componentID={index.fieldID}
+                                                   fieldValue={index.field}
                                             />
 
                                             <Field label="operator"
+                                                   name="operator"
+                                                   componentID={index.operatorID}
                                                    options={mappedOperatorArr}
-                                                   value={index.operator}
-                                                //onChange={(e: any) => handleChange(e.target.value, index)}
+                                                   fieldValue={index.operator}
+                                                   onSelectChange={(e: any) => handleChange(e, index.id)}
                                             />
                                             {/* TODO: map value depending on field */}
                                             <InputField label="value"
+                                                        name="value"
                                                         htmlFor="grid-value"
-                                                        value={index.value}
-                                                        onChange={(e: any) => handleChange(e.target.value, index.value)}
+                                                        componentID={index.valueID}
+                                                        inputValue={index.value}
+                                                        onInputChange={(e: any) => handleChange(e, index.id)}
                                             />
 
                                             <button type="button"
