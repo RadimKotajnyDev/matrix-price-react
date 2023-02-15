@@ -96,11 +96,11 @@ export default function App() {
         }
     ]);
 
-    function handleChange(id: number, field: string, operator: string, value: string) {
-        if(id) {
+    function handleChange(value: any, index: any) {
+        //if(id) {
             //field[id]
             //setField()
-        }
+        //}
     }
 
     const addFieldHandler = () => {
