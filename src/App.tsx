@@ -162,47 +162,26 @@ export default function App() {
         });
         setRuleset([...Ruleset]);
     }
-    /*
     const PriorityUP = (id: number) => {
         const index = Ruleset.findIndex(item => item.id === id);
         if (index > 0) {
             const item = Ruleset[index];
             Ruleset.splice(index, 1);
             Ruleset.splice(index-1, 0, item);
-            setRuleset([...Ruleset]);
-        }
-    }
-    const PriorityDown = (id: number) => {
-        const index = Ruleset.findIndex(item => item.id === id);
-        if (index < Ruleset.length - 1) {
-            const item = Ruleset[index];
-            Ruleset.splice(index, 1);
-            Ruleset.splice(index+1, 0, item);
-            setRuleset([...Ruleset]);
-        }
-    }
-     */
-    const PriorityUP = (id: number) => {
-        const index = Ruleset.findIndex(item => item.id === id);
-        if (index > 0) {
-            const item = Ruleset[index];
-            Ruleset.splice(index, 1);
-            Ruleset.splice(index-1, 0, item);
-            // přehození IDs
+            // swap IDs
             const tempID = Ruleset[index].id;
             Ruleset[index].id = Ruleset[index-1].id;
             Ruleset[index-1].id = tempID;
             setRuleset([...Ruleset]);
         }
     }
-
     const PriorityDown = (id: number) => {
         const index = Ruleset.findIndex(item => item.id === id);
         if (index < Ruleset.length - 1) {
             const item = Ruleset[index];
             Ruleset.splice(index, 1);
             Ruleset.splice(index+1, 0, item);
-            // přehození IDs
+            // swap IDs
             const tempID = Ruleset[index].id;
             Ruleset[index].id = Ruleset[index+1].id;
             Ruleset[index+1].id = tempID;
