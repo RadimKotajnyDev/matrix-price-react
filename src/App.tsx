@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 //Icons (MIT License)
 import {AiOutlinePlus, AiOutlineMinus} from "react-icons/ai";
 import {GoChevronUp, GoChevronDown} from "react-icons/go";
@@ -7,7 +7,8 @@ import Pricing from "./components/Pricing";
 import InputField from "./components/InputField";
 import Field from "./components/Field";
 import Offer from "./components/Offer";
-import Rulesets from "./Rulesets"; //TODO: load rulesets from API not component
+import Rulesets from "./Rulesets";
+import {flushSync} from "react-dom"; //TODO: load rulesets from API not component
 
 export default function App() {
     const rulesetClass = "mb-5 uppercase tracking-wide text-gray-700 text-2xl font-bold mb-2";
@@ -72,7 +73,7 @@ export default function App() {
                 tmpArray.push(operatorOptions[7 - 1]);
                 setMappedOperatorArr(tmpArray);
                 break;
-            //poznámka: Case 5 a 6 je stejný jako case 2.
+            //note: case 5 and 6 are the same as 2
             default:
                 alert("Map operator error");
                 console.log(fieldValue);
@@ -95,15 +96,25 @@ export default function App() {
         }
     ]);
 
+    function handleChange(id: number, field: string, operator: string, value: string) {
+        if(id) {
+            //field[id]
+            //setField()
+        }
+    }
+
     const addFieldHandler = () => {
+        // Map IDs in field (duplicity problem fix)
+        /*
         setField(
             field.map((item, i) => {
                 item.id = i + 1;
                 return {...item};
-            }))
+            })) */
         setField([...field, {id: field.length + 1, field: "", operator: "", value: ""}])
     }
 
+    //TODO: delete on deploy
     useEffect(() => {
         console.log(field)
     }, [field])
@@ -112,60 +123,56 @@ export default function App() {
         const filteredField = field.filter((filterField) => {
             return filterField.id !== id;
         });
-        setField(filteredField)
-        /*
-        setField(
-            field.map((item, i) => {
-                item.id = i + 1;
-                return {...item};
-            }))
-         */
-        /*
-        setField(
-            filteredField.map((item, i) => {
-                return { ...item, id: i + 1 };
-            })
-        ); */
+        setField(filteredField);
     };
 
+    // Update IDs in Field Array
+    const updateIDs = () => {
+        field.map((item, i) => {
+            item.id = i + 1;
+            return {...item};
+        })
+        setField(field)
+    }
+
+
     // Ruleset
-    const [myRuleset, setMyRuleset] = useState(Rulesets);
+    const [Ruleset, setRuleset] = useState(Rulesets);
 
     const handleDeleteRuleset = (id: number) => {
-        const filteredRulesets = myRuleset.filter((oneRuleset) => {
+        const filteredRulesets = Ruleset.filter((oneRuleset) => {
             return oneRuleset.id !== id
         })
-        setMyRuleset(filteredRulesets);
+        setRuleset(filteredRulesets);
     }
     const handleAddRuleset = () => {
-        let lastRuleset = myRuleset.length
-        myRuleset.push({
-            id: lastRuleset + 1,
-            priority: lastRuleset + 1,
+        Ruleset.push({
+            id: Ruleset.length + 1,
+            priority: Ruleset.length + 1,
             number: Math.floor(Math.random() * 9000) + 1000,
         });
-        setMyRuleset([...myRuleset]);
+        setRuleset([...Ruleset]);
     }
 
-//TODO: make this function working
+    //TODO: make these functions working
     function PriorityUp(id: number, priority: number, number: number) {
-        if (myRuleset.length > 1) {
-            myRuleset[priority] = {id: id, priority: priority + 1, number: number};
-            setMyRuleset(myRuleset);
+        if (Ruleset.length > 1) {
+            Ruleset[priority] = {id: id, priority: priority + 1, number: number};
+            setRuleset(Ruleset);
         }
     }
 
     function PriorityDown(id: number, priority: number, number: number) {
-        if (myRuleset.length > 1) {
-            myRuleset[priority] = {id: id, priority: priority - 1, number: number}
-            setMyRuleset(myRuleset);
+        if (Ruleset.length > 1) {
+            Ruleset[priority] = {id: id, priority: priority - 1, number: number}
+            setRuleset(Ruleset);
         }
     }
 
     return (
         <>
             {
-                myRuleset.map((oneRuleset) => {
+                Ruleset.map((oneRuleset) => {
                     const {id, priority, number} = oneRuleset;
                     return <div key={priority}
                                 className="flex ml-auto mr-auto mt-14 w-fit p-5 outline outline-1 rounded outline-gray-200 shadow-lg">
@@ -175,7 +182,7 @@ export default function App() {
                                 <p className={rulesetClass}>Ruleset&nbsp;#{number}&nbsp;|&nbsp;Priority:&nbsp;#{priority}</p>
                                 <button onClick={() => handleDeleteRuleset(id)}
                                         className="cursor-pointer p-3 uppercase rounded-md text-white bg-slate-900 hover:opacity-75 duration-700 disabled:opacity-75"
-                                        disabled={myRuleset.length <= 1}>Remove ruleset
+                                        disabled={Ruleset.length <= 1}>Remove ruleset
                                 </button>
                             </div>
                             <div>
@@ -185,7 +192,7 @@ export default function App() {
                                     type="button"
                                     className="w-fit mr-5 my-2 h-fit rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority up"
-                                    disabled={myRuleset.length <= 1}
+                                    disabled={Ruleset.length <= 1}
                                     onClick={() => PriorityUp(id, priority, number)}>
                                     <GoChevronUp size="30"/>
                                 </button>
@@ -194,7 +201,7 @@ export default function App() {
                                     type="button"
                                     className="w-fit h-fit my-2 rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority down"
-                                    disabled={myRuleset.length <= 1}
+                                    disabled={Ruleset.length <= 1}
                                     onClick={() => PriorityDown(id, priority, number)}>
                                     <GoChevronDown size="30"/>
                                 </button>
@@ -214,7 +221,7 @@ export default function App() {
                                                    options={fieldOptions}
                                                    value={index.field}
                                                    onSelectChange={(e: any) => setFieldValue(e.target.value)}
-                                                //onChange={(e: any) => handleChange(e.target.value, index)}
+                                                   onChange={(e: any) => handleChange(e.target.value, index.field)}
                                                    fieldValue={fieldValue}
                                             />
 
@@ -223,11 +230,11 @@ export default function App() {
                                                    value={index.operator}
                                                 //onChange={(e: any) => handleChange(e.target.value, index)}
                                             />
-
+                                            {/* TODO: map value depending on field */}
                                             <InputField label="value"
                                                         htmlFor="grid-value"
                                                         value={index.value}
-                                                //onChange={(e: any) => handleChange(e.target.value, index)}
+                                                        onChange={(e: any) => handleChange(e.target.value, index.value)}
                                             />
 
                                             <button type="button"
