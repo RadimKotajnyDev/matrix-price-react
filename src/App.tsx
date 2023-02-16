@@ -5,7 +5,7 @@ import {GoChevronUp, GoChevronDown} from "react-icons/go";
 //Components
 import Pricing from "./components/Pricing";
 import InputField from "./components/InputField";
-import Field from "./components/Field";
+import SelectField from "./components/SelectField";
 import Offer from "./components/Offer";
 
 export default function App() {
@@ -40,6 +40,7 @@ export default function App() {
 
     //TODO: make mapping unique for field objects
     /** Mapping **/
+    /*
     useEffect(() => {
         let tmp = parseInt(String(fieldValue)) //todo: check if this can be written easier
         switch (tmp) {
@@ -79,7 +80,7 @@ export default function App() {
                 break;
         }
     }, [fieldValue])
-
+     */
     function Reset() {
         window.location.reload()
     }
@@ -189,6 +190,8 @@ export default function App() {
         }
     }
 
+
+
     return (
         <>
             {
@@ -216,7 +219,6 @@ export default function App() {
                                     onClick={() => {PriorityUP(oneRuleset.id)}}>
                                     <GoChevronUp size="30"/>
                                 </button>
-
                                 <button
                                     type="button"
                                     className="w-fit h-fit my-2 rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
@@ -240,24 +242,24 @@ export default function App() {
                                                 className="grid grid-flow-row md:grid-flow-col"
                                     >
                                         <React.Fragment key={index.id}>
-                                            <Field label="field"
-                                                   name="field"
-                                                   options={fieldOptions}
-                                                   onSelectChange={(e: any) => {
-                                                       setFieldValue(e.target.value) //TODO: unique setting
+                                            <SelectField label="field"
+                                                         name="field"
+                                                         options={fieldOptions}
+                                                         onSelectChange={(e: any) => {
+                                                       //setFieldValue(e.target.value) //TODO: unique setting
                                                        handleChange(e, index.id)
                                                    }}
-                                                   onChange={(e: any) => handleChange(e, index.id)}
-                                                   componentID={index.fieldID}
-                                                   fieldValue={index.field}
+                                                   //onChange={(e: any) => handleChange(e, index.id)}
+                                                         componentID={index.fieldID}
+                                                         fieldValue={index.field}
                                             />
 
-                                            <Field label="operator"
-                                                   name="operator"
-                                                   componentID={index.operatorID}
-                                                   options={mappedOperatorArr}
-                                                   fieldValue={index.operator}
-                                                   onSelectChange={(e: any) => handleChange(e, index.id)}
+                                            <SelectField label="operator"
+                                                         name="operator"
+                                                         componentID={index.operatorID}
+                                                         options={mappedOperatorArr}
+                                                         fieldValue={index.operator}
+                                                         onSelectChange={(e: any) => handleChange(e, index.id)}
                                             />
                                             {/* TODO: map value depending on field */}
                                             <InputField label="value"

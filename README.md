@@ -99,14 +99,14 @@ poznámka: **matrixId bude existovat vždy**
 
 ## Mapování CompareOperátorů podle Fieldu
 
-Field 1 – Operatory 2,4
+SelectField 1 – Operatory 2,4
 
-Field 2 – Operatory 1,2,3,4,5,6
+SelectField 2 – Operatory 1,2,3,4,5,6
 
-Field 3 – Operatory 1,2,4,6
+SelectField 3 – Operatory 1,2,4,6
 
-Field 4 – Operatory 1,6,7
+SelectField 4 – Operatory 1,6,7
 
-Field 5 – Operatory 1,2,3,4,5,6
+SelectField 5 – Operatory 1,2,3,4,5,6
 
-Field 6 – Operatory 1,2,3,4,5,6
+SelectField 6 – Operatory 1,2,3,4,5,6

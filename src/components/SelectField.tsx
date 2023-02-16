@@ -1,4 +1,4 @@
-const Field = (props: any) => {
+const SelectField = (props: any) => {
     const options = props.options;
     const optionItems = options.map((option: any) =>
             <option value={option.id} key={option.id}>
@@ -30,4 +30,4 @@ const Field = (props: any) => {
     );
 }
 
-export default Field;
+export default SelectField;
