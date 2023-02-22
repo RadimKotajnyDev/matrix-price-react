@@ -30,6 +30,26 @@ export default function App() {
         {name: "In", id: 7},
     ];
 
+    // Ruleset
+    //TODO: load initial rulesets from API
+    const [Ruleset, setRuleset] = useState([
+        {
+            id: 1,
+            number: Math.floor(Math.random() * 9000) + 1000,
+            fields: [
+                {
+                    id: 1,
+                    field: "PerformanceTime",
+                    operator: "LessThanOrEqual",
+                    value: "",
+                    fieldID: 1,
+                    operatorID: 1,
+                    valueID: 1
+                },
+            ]
+        }
+    ]);
+
     let tmpArray: any = []
     const defaultOperators: any = []
     defaultOperators.push(operatorOptions[1]);
@@ -40,6 +60,7 @@ export default function App() {
 
     //TODO: make mapping unique for field objects
     /** Mapping **/
+
     /*
     useEffect(() => {
         let tmp = parseInt(String(fieldValue)) //todo: check if this can be written easier
@@ -82,7 +103,28 @@ export default function App() {
     }, [fieldValue])
      */
     function Reset() {
-        window.location.reload()
+        //Reset Ruleset Array
+        if(confirm("Are you sure you want to reset all rulesets?")) {
+            setRuleset(
+                [
+                    {
+                        id: 1,
+                        number: Math.floor(Math.random() * 9000) + 1000,
+                        fields: [
+                            {
+                                id: 1,
+                                field: "PerformanceTime",
+                                operator: "LessThanOrEqual",
+                                value: "",
+                                fieldID: 1,
+                                operatorID: 1,
+                                valueID: 1
+                            },
+                        ]
+                    }
+                ]
+            );
+        }
     }
 
     function Submit(e: any) {
@@ -90,13 +132,17 @@ export default function App() {
     }
 
     //ADD + remove fields
+    /*
     const [field, setField] = useState([
         {
             id: 1, field: "PerformanceTime", operator: "LessThanOrEqual", value: "",
             fieldID: 1, operatorID: 1, valueID: 1
         }
     ]);
+     */
 
+    /*
+    //FIXME: Change Ruleset, not Field
     const handleChange = (event: any, id: number) => {
         const {name, value} = event.target;
         setField(prevState => {
@@ -125,31 +171,81 @@ export default function App() {
             return prevState;
         });
     };
+    */
 
-    const addFieldHandler = () => {
-        setField([...field, {
-            id: field.length + 1, field: "PerformanceTime", operator: "LessThanOrEqual", value: "",
-            fieldID: field.length + 1, operatorID: field.length + 1, valueID: field.length + 1
-        }])
+
+    const addFieldHandler = (index: number) => {
+        const newField: any = {
+            id: Ruleset[index - 1].fields.length + 1,
+            field: "PerformanceTime",
+            operator: "LessThanOrEqual",
+            value: "",
+            fieldID: Ruleset[index - 1].fields.length + 1,
+            operatorID: Ruleset[index - 1].fields.length + 1,
+            valueID: Ruleset[index - 1].fields.length + 1,
+        };
+        Ruleset[index - 1].fields.push(newField);
+        setRuleset([...Ruleset]);
     }
-
-    //TODO: delete on deploy
-    useEffect(() => {
-        console.log(field)
-    }, [field])
-
+    /*
     const deleteFieldHandler = (id: number) => {
         const updatedField = field
             .filter(filterField => filterField.id !== id)
-            .map((item, index) => ({ ...item, id: index + 1 }));
+            .map((item, index) => ({...item, id: index + 1}));
         setField(updatedField);
     }
-    // Ruleset
-    //TODO: load rulesets from API
-    const [Ruleset, setRuleset] = useState([
-        {id: 1, number: Math.floor(Math.random() * 9000) + 1000}
-        ]
-    );
+     */
+
+    const handleChange = (event: any, rulesetId: number, fieldId: number) => {
+        const {name, value} = event.target;
+        setRuleset(prevState => {
+            const rulesetIndex = prevState.findIndex(item => item.id === rulesetId);
+            const fieldIndex = prevState[rulesetIndex].fields.findIndex(item => item.id === fieldId);
+            if (name === 'field') {
+                return [...prevState.slice(0, rulesetIndex), {
+                    ...prevState[rulesetIndex],
+                    fields: [
+                        ...prevState[rulesetIndex].fields.slice(0, fieldIndex),
+                        {...prevState[rulesetIndex].fields[fieldIndex], field: value},
+                        ...prevState[rulesetIndex].fields.slice(fieldIndex + 1),
+                    ]
+                },
+                    ...prevState.slice(rulesetIndex + 1),
+                ];
+            }
+            if (name === 'operator') {
+                return [...prevState.slice(0, rulesetIndex), {
+                    ...prevState[rulesetIndex],
+                    fields: [
+                        ...prevState[rulesetIndex].fields.slice(0, fieldIndex),
+                        {...prevState[rulesetIndex].fields[fieldIndex], operator: value},
+                        ...prevState[rulesetIndex].fields.slice(fieldIndex + 1),
+                    ]
+                },
+                    ...prevState.slice(rulesetIndex + 1),
+                ];
+            }
+            if (name === 'value') {
+                return [...prevState.slice(0, rulesetIndex), {
+                    ...prevState[rulesetIndex],
+                    fields: [
+                        ...prevState[rulesetIndex].fields.slice(0, fieldIndex),
+                        {...prevState[rulesetIndex].fields[fieldIndex], value: value},
+                        ...prevState[rulesetIndex].fields.slice(fieldIndex + 1),
+                    ]
+                },
+                    ...prevState.slice(rulesetIndex + 1),
+                ];
+            }
+            return prevState;
+        });
+    };
+
+    //TODO: delete code before deploy
+    useEffect(() => {
+        console.log(Ruleset)
+    },[Ruleset])
+
     const deleteRulesetHandler = (id: number) => {
         const filteredRulesets = Ruleset
             .filter((oneRuleset) => oneRuleset.id !== id)
@@ -159,7 +255,12 @@ export default function App() {
     const AddRulesetHandler = () => {
         Ruleset.push({
             id: Ruleset.length + 1,
-            number: Math.floor(Math.random() * 9000) + 1000,
+            number: Math.floor(Math.random() * 9000) + 1000, fields: [
+                {
+                    id: 1, field: "PerformanceTime", operator: "LessThanOrEqual", value: "",
+                    fieldID: 1, operatorID: 1, valueID: 1
+                },
+            ]
         });
         setRuleset([...Ruleset]);
     }
@@ -168,11 +269,11 @@ export default function App() {
         if (index > 0) {
             const item = Ruleset[index];
             Ruleset.splice(index, 1);
-            Ruleset.splice(index-1, 0, item);
+            Ruleset.splice(index - 1, 0, item);
             // swap IDs
             const tempID = Ruleset[index].id;
-            Ruleset[index].id = Ruleset[index-1].id;
-            Ruleset[index-1].id = tempID;
+            Ruleset[index].id = Ruleset[index - 1].id;
+            Ruleset[index - 1].id = tempID;
             setRuleset([...Ruleset]);
         }
     }
@@ -181,16 +282,14 @@ export default function App() {
         if (index < Ruleset.length - 1) {
             const item = Ruleset[index];
             Ruleset.splice(index, 1);
-            Ruleset.splice(index+1, 0, item);
+            Ruleset.splice(index + 1, 0, item);
             // swap IDs
             const tempID = Ruleset[index].id;
-            Ruleset[index].id = Ruleset[index+1].id;
-            Ruleset[index+1].id = tempID;
+            Ruleset[index].id = Ruleset[index + 1].id;
+            Ruleset[index + 1].id = tempID;
             setRuleset([...Ruleset]);
         }
     }
-
-
 
     return (
         <>
@@ -216,7 +315,9 @@ export default function App() {
                                     className="w-fit mr-5 my-2 h-fit rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority up"
                                     disabled={Ruleset.length <= 1 || oneRuleset.id == 1}
-                                    onClick={() => {PriorityUP(oneRuleset.id)}}>
+                                    onClick={() => {
+                                        PriorityUP(oneRuleset.id)
+                                    }}>
                                     <GoChevronUp size="30"/>
                                 </button>
                                 <button
@@ -224,7 +325,9 @@ export default function App() {
                                     className="w-fit h-fit my-2 rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority down"
                                     disabled={Ruleset.length <= 1 || oneRuleset.id == Ruleset.length}
-                                    onClick={() => {PriorityDown(oneRuleset.id)}}>
+                                    onClick={() => {
+                                        PriorityDown(oneRuleset.id)
+                                    }}>
                                     <GoChevronDown size="30"/>
                                 </button>
                                 <hr className="my-2"/>
@@ -233,10 +336,7 @@ export default function App() {
                             </div>
                             <div>
                                 {/* TODO: add/delete fieldset only on Ruleset's ID, not on every Ruleset!  */}
-                                {field.map((index: {
-                                    id: number; field: string; operator: string; value: string,
-                                    fieldID: number; operatorID: number; valueID: number;
-                                }) => {
+                                {oneRuleset.fields.map((index) => {
                                     //item: string
                                     return <div key={index.id}
                                                 className="grid grid-flow-row md:grid-flow-col"
@@ -246,10 +346,10 @@ export default function App() {
                                                          name="field"
                                                          options={fieldOptions}
                                                          onSelectChange={(e: any) => {
-                                                       //setFieldValue(e.target.value) //TODO: unique setting
-                                                       handleChange(e, index.id)
-                                                   }}
-                                                   //onChange={(e: any) => handleChange(e, index.id)}
+                                                             //setFieldValue(e.target.value) //TODO: unique setting
+                                                             handleChange(e, oneRuleset.id, oneRuleset.fields[oneRuleset.id - 1].fieldID)
+                                                         }}
+                                                //onChange={(e: any) => handleChange(e, index.id)}
                                                          componentID={index.fieldID}
                                                          fieldValue={index.field}
                                             />
@@ -259,20 +359,18 @@ export default function App() {
                                                          componentID={index.operatorID}
                                                          options={mappedOperatorArr}
                                                          fieldValue={index.operator}
-                                                         onSelectChange={(e: any) => handleChange(e, index.id)}
+                                                         onSelectChange={(e: any) => handleChange(e, oneRuleset.id, oneRuleset.fields[oneRuleset.id - 1].operatorID)}
                                             />
                                             {/* TODO: map value depending on field */}
                                             <InputField label="value"
                                                         name="value"
-                                                        htmlFor="grid-value"
                                                         componentID={index.valueID}
                                                         inputValue={index.value}
-                                                        onInputChange={(e: any) => handleChange(e, index.id)}
+                                                        onInputChange={(e: any) => handleChange(e, oneRuleset.id, oneRuleset.fields[oneRuleset.id - 1].valueID)}
                                             />
-
                                             <button type="button"
-                                                    onClick={() => deleteFieldHandler(index.id)}
-                                                    disabled={field.length <= 1}
+                                                //onClick={() => deleteFieldHandler(index.id)}
+                                                //disabled={Ruleset[index.id - 1].fields.length <= 1} //FIXME
                                                     className="disabled:opacity-75 duration-500"
                                             >
                                                 <AiOutlineMinus size="45"
@@ -284,7 +382,8 @@ export default function App() {
                                     </div>
                                 })
                                 }
-                                <button type="button" onClick={() => addFieldHandler()} className="float-right mt-0">
+                                <button type="button" onClick={() => addFieldHandler(oneRuleset.id)}
+                                        className="float-right mt-0">
                                     <AiOutlinePlus size="45"
                                                    className="rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white "/>
                                 </button>
