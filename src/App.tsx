@@ -101,33 +101,6 @@ export default function App() {
         }
     }, [fieldValue])
      */
-    function Reset() {
-        //Reset Ruleset Array
-        if(confirm("Are you sure you want to reset all rulesets?")) {
-            setRuleset(
-                [
-                    {
-                        id: 1,
-                        number: Math.floor(Math.random() * 9000) + 1000,
-                        fields: [
-                            {
-                                id: 1,
-                                field: "PerformanceTime",
-                                operator: "LessThanOrEqual",
-                                value: "",
-                                fieldID: 1,
-                                operatorID: 1,
-                                valueID: 1
-                            },
-                        ]
-                    }
-                ]
-            );
-        }
-    }
-    function Submit(e: any) {
-        e.preventDefault()
-    }
     const addFieldHandler = (index: number) => {
         const newField: any = {
             id: Ruleset[index - 1].fields.length + 1,
@@ -158,6 +131,7 @@ export default function App() {
         updatedRuleset[rulesetIndex].fields = remapFieldsIds(updatedFields);
         setRuleset(updatedRuleset);
     };
+    /*
     const handleChange = (event: any, rulesetId: number, fieldId: number) => {
         const {name, value} = event.target;
         setRuleset(prevState => {
@@ -202,6 +176,35 @@ export default function App() {
             return prevState;
         });
     };
+     */
+    const handleChange = (event: any, rulesetId: number, fieldId: number) => {
+        const { name, value } = event.target;
+        setRuleset(prevState => {
+            const rulesetIndex = prevState.findIndex(item => item.id === rulesetId);
+            const fieldIndex = prevState[rulesetIndex].fields.findIndex(item => item.id === fieldId);
+            const isField = name === 'field'; //FIXME: value isn't storing if field != ""
+            const isOperator = name === 'operator';
+            const isValue = name === 'value';
+            return [
+                ...prevState.slice(0, rulesetIndex),
+                {
+                    ...prevState[rulesetIndex],
+                    fields: [
+                        ...prevState[rulesetIndex].fields.slice(0, fieldIndex),
+                        {
+                            ...prevState[rulesetIndex].fields[fieldIndex],
+                            field: isField ? value : prevState[rulesetIndex].fields[fieldIndex].field,
+                            operator: isOperator ? value : prevState[rulesetIndex].fields[fieldIndex].operator,
+                            value: isValue ? value : prevState[rulesetIndex].fields[fieldIndex].value,
+                        },
+                        ...prevState[rulesetIndex].fields.slice(fieldIndex + 1),
+                    ],
+                },
+                ...prevState.slice(rulesetIndex + 1),
+            ];
+        });
+    };
+
 
     //TODO: delete code before deploy
     useEffect(() => {
@@ -252,6 +255,33 @@ export default function App() {
             setRuleset([...Ruleset]);
         }
     }
+    function Reset() {
+        //Reset Ruleset Array
+        if(confirm("Are you sure you want to reset all rulesets?")) {
+            setRuleset(
+                [
+                    {
+                        id: 1,
+                        number: Math.floor(Math.random() * 9000) + 1000,
+                        fields: [
+                            {
+                                id: 1,
+                                field: "PerformanceTime",
+                                operator: "LessThanOrEqual",
+                                value: "",
+                                fieldID: 1,
+                                operatorID: 1,
+                                valueID: 1
+                            },
+                        ]
+                    }
+                ]
+            );
+        }
+    }
+    function Submit(e: any) {
+        e.preventDefault()
+    }
     return (
         <>
             {
@@ -269,7 +299,7 @@ export default function App() {
                                 </button>
                             </div>
                             <div>
-                                <p className="block uppercase tracking-wide text-gray-700 text-xs font-bold ">Change
+                                <p className="block uppercaŕse tracking-wide text-gray-700 text-xs font-bold ">Change
                                     ruleset priority</p>
                                 <button
                                     type="button"
@@ -311,14 +341,13 @@ export default function App() {
                                                              handleChange(e, oneRuleset.id, oneRuleset.fields[index.id - 1].fieldID)
                                                          }}
                                                          componentID={index.fieldID}
-                                                         fieldValue={index.field}
+                                                         fieldValue={undefined}
                                             />
-
                                             <SelectField label="operator"
                                                          name="operator"
                                                          componentID={index.operatorID}
                                                          options={mappedOperatorArr}
-                                                         fieldValue={index.operator}
+                                                         fieldValue={undefined}
                                                          onSelectChange={(e: any) => handleChange(e, oneRuleset.id, oneRuleset.fields[index.id - 1].operatorID)}
                                             />
                                             {/* TODO: map value depending on field */}
