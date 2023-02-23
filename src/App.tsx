@@ -36,6 +36,7 @@ export default function App() {
         {
             id: 1,
             number: Math.floor(Math.random() * 9000) + 1000,
+            note: "",
             fields: [
                 {
                     id: 1,
@@ -131,64 +132,20 @@ export default function App() {
         updatedRuleset[rulesetIndex].fields = remapFieldsIds(updatedFields);
         setRuleset(updatedRuleset);
     };
-    /*
-    const handleChange = (event: any, rulesetId: number, fieldId: number) => {
-        const {name, value} = event.target;
-        setRuleset(prevState => {
-            const rulesetIndex = prevState.findIndex(item => item.id === rulesetId);
-            const fieldIndex = prevState[rulesetIndex].fields.findIndex(item => item.id === fieldId);
-            if (name === 'field') {
-                return [...prevState.slice(0, rulesetIndex), {
-                    ...prevState[rulesetIndex],
-                    fields: [
-                        ...prevState[rulesetIndex].fields.slice(0, fieldIndex),
-                        {...prevState[rulesetIndex].fields[fieldIndex], field: value},
-                        ...prevState[rulesetIndex].fields.slice(fieldIndex + 1),
-                    ]
-                },
-                    ...prevState.slice(rulesetIndex + 1),
-                ];
-            }
-            if (name === 'operator') {
-                return [...prevState.slice(0, rulesetIndex), {
-                    ...prevState[rulesetIndex],
-                    fields: [
-                        ...prevState[rulesetIndex].fields.slice(0, fieldIndex),
-                        {...prevState[rulesetIndex].fields[fieldIndex], operator: value},
-                        ...prevState[rulesetIndex].fields.slice(fieldIndex + 1),
-                    ]
-                },
-                    ...prevState.slice(rulesetIndex + 1),
-                ];
-            }
-            if (name === 'value') {
-                return [...prevState.slice(0, rulesetIndex), {
-                    ...prevState[rulesetIndex],
-                    fields: [
-                        ...prevState[rulesetIndex].fields.slice(0, fieldIndex),
-                        {...prevState[rulesetIndex].fields[fieldIndex], value: value},
-                        ...prevState[rulesetIndex].fields.slice(fieldIndex + 1),
-                    ]
-                },
-                    ...prevState.slice(rulesetIndex + 1),
-                ];
-            }
-            return prevState;
-        });
-    };
-     */
     const handleChange = (event: any, rulesetId: number, fieldId: number) => {
         const { name, value } = event.target;
         setRuleset(prevState => {
             const rulesetIndex = prevState.findIndex(item => item.id === rulesetId);
             const fieldIndex = prevState[rulesetIndex].fields.findIndex(item => item.id === fieldId);
-            const isField = name === 'field'; //FIXME: value isn't storing if field != ""
+            const isNote = name === 'note';
+            const isField = name === 'field';
             const isOperator = name === 'operator';
             const isValue = name === 'value';
             return [
                 ...prevState.slice(0, rulesetIndex),
                 {
                     ...prevState[rulesetIndex],
+                    note: isNote ? value : prevState[rulesetIndex].note,
                     fields: [
                         ...prevState[rulesetIndex].fields.slice(0, fieldIndex),
                         {
@@ -205,7 +162,6 @@ export default function App() {
         });
     };
 
-
     //TODO: delete code before deploy
     useEffect(() => {
         console.log(Ruleset)
@@ -220,7 +176,9 @@ export default function App() {
     const AddRulesetHandler = () => {
         Ruleset.push({
             id: Ruleset.length + 1,
-            number: Math.floor(Math.random() * 9000) + 1000, fields: [
+            number: Math.floor(Math.random() * 9000) + 1000,
+            note: "",
+            fields: [
                 {
                     id: 1, field: "PerformanceTime", operator: "LessThanOrEqual", value: "",
                     fieldID: 1, operatorID: 1, valueID: 1
@@ -258,11 +216,13 @@ export default function App() {
     function Reset() {
         //Reset Ruleset Array
         if(confirm("Are you sure you want to reset all rulesets?")) {
+            window.location.reload();
             setRuleset(
                 [
                     {
                         id: 1,
                         number: Math.floor(Math.random() * 9000) + 1000,
+                        note: "",
                         fields: [
                             {
                                 id: 1,
@@ -273,7 +233,7 @@ export default function App() {
                                 operatorID: 1,
                                 valueID: 1
                             },
-                        ]
+                        ],
                     }
                 ]
             );
@@ -288,13 +248,15 @@ export default function App() {
                 Ruleset.map((oneRuleset) => {
                     const {id, number} = oneRuleset;
                     return <div key={id}
-                                className="flex ml-auto mr-auto mt-14 w-fit p-5 outline outline-1 rounded outline-gray-200 shadow-lg">
+                                className="flex ml-auto mr-auto mt-14 w-fit p-5 outline outline-1
+                                 rounded outline-gray-200 shadow-lg">
                         <form
                             className="w-full mr-auto ml-auto px-5">
                             <div className="flex flex-col md:flex-row md:justify-between">
                                 <p className={rulesetClass}>Ruleset&nbsp;#{number}&nbsp;|&nbsp;Priority:&nbsp;#{id}</p>
                                 <button onClick={() => deleteRulesetHandler(id)}
-                                        className="cursor-pointer p-3 uppercase rounded-md text-white bg-slate-900 hover:opacity-75 duration-700 disabled:opacity-75"
+                                        className="cursor-pointer p-3 uppercase rounded-md text-white
+                                         bg-slate-900 hover:opacity-75 duration-700 disabled:opacity-75"
                                         disabled={Ruleset.length <= 1}>Remove ruleset
                                 </button>
                             </div>
@@ -303,7 +265,8 @@ export default function App() {
                                     ruleset priority</p>
                                 <button
                                     type="button"
-                                    className="w-fit mr-5 my-2 h-fit rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
+                                    className="w-fit mr-5 my-2 h-fit rounded text-white bg-slate-900
+                                     duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority up"
                                     disabled={Ruleset.length <= 1 || oneRuleset.id == 1}
                                     onClick={() => {
@@ -313,7 +276,8 @@ export default function App() {
                                 </button>
                                 <button
                                     type="button"
-                                    className="w-fit h-fit my-2 rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
+                                    className="w-fit h-fit my-2 rounded text-white bg-slate-900 duration-200
+                                     hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority down"
                                     disabled={Ruleset.length <= 1 || oneRuleset.id == Ruleset.length}
                                     onClick={() => {
@@ -322,11 +286,15 @@ export default function App() {
                                     <GoChevronDown size="30"/>
                                 </button>
                                 <hr className="my-2"/>
-                                <InputField label="note" htmlFor="" className="w-full"
+                                <InputField label="note"
+                                            name="note"
+                                            className="w-full"
+                                            //componentID={oneRuleset.id}
+                                            //inputValue={undefined}
+                                            onInputChange={(e: any) => handleChange(e, oneRuleset.id, 1)}
                                             placeholder="type something..."/>
                             </div>
                             <div>
-                                {/* TODO: add/delete fieldset only on Ruleset's ID, not on every Ruleset!  */}
                                 {oneRuleset.fields.map((index) => {
                                     //item: string
                                     return <div key={index.id}
@@ -337,7 +305,9 @@ export default function App() {
                                                          name="field"
                                                          options={fieldOptions}
                                                          onSelectChange={(e: any) =>
-                                                             handleChange(e, oneRuleset.id, oneRuleset.fields[index.id - 1].fieldID)
+                                                             handleChange(e,
+                                                                 oneRuleset.id,
+                                                                 oneRuleset.fields[index.id - 1].fieldID)
                                                          }
                                                          componentID={index.fieldID}
                                                          fieldValue={undefined}
@@ -347,17 +317,22 @@ export default function App() {
                                                          componentID={index.operatorID}
                                                          options={mappedOperatorArr}
                                                          fieldValue={undefined}
-                                                         onSelectChange={(e: any) => handleChange(e, oneRuleset.id, oneRuleset.fields[index.id - 1].operatorID)}
+                                                         onSelectChange={(e: any) => handleChange(e,
+                                                             oneRuleset.id,
+                                                             oneRuleset.fields[index.id - 1].operatorID)}
                                             />
                                             {/* TODO: map value depending on field */}
                                             <InputField label="value"
                                                         name="value"
                                                         componentID={index.valueID}
                                                         inputValue={index.value}
-                                                        onInputChange={(e: any) => handleChange(e, oneRuleset.id, oneRuleset.fields[index.id - 1].valueID)}
+                                                        onInputChange={(e: any) => handleChange(e,
+                                                            oneRuleset.id,
+                                                            oneRuleset.fields[index.id - 1].valueID)}
                                             />
                                             <button type="button"
-                                                onClick={() => deleteFieldHandler(oneRuleset.id - 1, oneRuleset.fields[index.id-1].id)}
+                                                onClick={() => deleteFieldHandler(oneRuleset.id - 1,
+                                                    oneRuleset.fields[index.id-1].id)}
                                                 disabled={oneRuleset.fields.length <= 1}
                                                     className="disabled:opacity-75 duration-500"
                                             >
@@ -375,7 +350,8 @@ export default function App() {
                                 <button type="button" onClick={() => addFieldHandler(oneRuleset.id)}
                                         className="float-right mt-0">
                                     <AiOutlinePlus size="45"
-                                                   className="rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white "/>
+                                                   className="rounded text-white bg-slate-900 duration-200
+                                                    hover:text-slate-900 hover:bg-white "/>
                                 </button>
                             </div>
                             <div className="flex flex-col md:flex-row space-x-6">
@@ -387,19 +363,22 @@ export default function App() {
                 })
             }
             <button type="button" onClick={AddRulesetHandler}
-                    className="block ml-auto mr-auto mt-5 mb-14 cursor-pointer p-3 uppercase rounded-md text-white bg-slate-900 hover:opacity-75 duration-700">add
+                    className="block ml-auto mr-auto mt-5 mb-14 cursor-pointer p-3 uppercase rounded-md
+                     text-white bg-slate-900 hover:opacity-75 duration-700">add
                 ruleset
             </button>
             {/* submit and reset buttons*/}
             <div className="flex flex-row justify-center mt-5">
                 <div className="m-5">
                     <button type="submit" value="submit" onClick={(e) => Submit(e)}
-                            className="w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase bg-slate-900 text-white rounded-xl hover:opacity-75 duration-700">submit
+                            className="w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase
+                             bg-slate-900 text-white rounded-xl hover:opacity-75 duration-700">submit
                     </button>
                 </div>
                 <div className="m-5">
                     <button type="reset" value="reset" onClick={Reset}
-                            className="w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase bg-white text-black rounded-xl hover:bg-red-900 hover:text-white duration-700">reset
+                            className="w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase
+                             bg-white text-black rounded-xl hover:bg-red-900 hover:text-white duration-700">reset
                     </button>
                 </div>
             </div>
