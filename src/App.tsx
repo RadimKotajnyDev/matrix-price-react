@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect, useState} from "react";
 //Icons (MIT License)
-import {AiOutlinePlus, AiOutlineMinus} from "react-icons/ai";
-import {GoChevronUp, GoChevronDown} from "react-icons/go";
+import {AiOutlineMinus, AiOutlinePlus} from "react-icons/ai";
+import {GoChevronDown, GoChevronUp} from "react-icons/go";
 //Components
 import Pricing from "./components/Pricing";
 import InputField from "./components/InputField";
@@ -126,11 +126,9 @@ export default function App() {
             );
         }
     }
-
     function Submit(e: any) {
         e.preventDefault()
     }
-
     //ADD + remove fields
     /*
     const [field, setField] = useState([
@@ -140,7 +138,6 @@ export default function App() {
         }
     ]);
      */
-
     /*
     //FIXME: Change Ruleset, not Field
     const handleChange = (event: any, id: number) => {
@@ -172,8 +169,6 @@ export default function App() {
         });
     };
     */
-
-
     const addFieldHandler = (index: number) => {
         const newField: any = {
             id: Ruleset[index - 1].fields.length + 1,
@@ -195,7 +190,32 @@ export default function App() {
         setField(updatedField);
     }
      */
-
+    /*
+    const deleteFieldHandler = (rulesetIndex: number, fieldId: number) => {
+        setRuleset(prevRuleset => {
+            const updatedRuleset = [...prevRuleset];
+            updatedRuleset[rulesetIndex].fields = updatedRuleset[rulesetIndex].fields.filter(field => field.id !== fieldId);
+            return updatedRuleset;
+        });
+    }
+    */
+    const remapFieldsIds = (fields: any[]) => {
+        return fields.map((field, index) => {
+            return {
+                ...field,
+                id: index + 1,
+                fieldID: index + 1,
+                operatorID: index + 1,
+                valueID: index + 1,
+            };
+        });
+    }
+    const deleteFieldHandler = (rulesetIndex: number, fieldId: number) => {
+        const updatedRuleset = [...Ruleset];
+        const updatedFields = updatedRuleset[rulesetIndex].fields.filter(field => field.id !== fieldId);
+        updatedRuleset[rulesetIndex].fields = remapFieldsIds(updatedFields);
+        setRuleset(updatedRuleset);
+    };
     const handleChange = (event: any, rulesetId: number, fieldId: number) => {
         const {name, value} = event.target;
         setRuleset(prevState => {
@@ -290,7 +310,6 @@ export default function App() {
             setRuleset([...Ruleset]);
         }
     }
-
     return (
         <>
             {
@@ -349,7 +368,6 @@ export default function App() {
                                                              //setFieldValue(e.target.value) //TODO: unique setting
                                                              handleChange(e, oneRuleset.id, oneRuleset.fields[index.id - 1].fieldID)
                                                          }}
-                                                //onChange={(e: any) => handleChange(e, index.id)}
                                                          componentID={index.fieldID}
                                                          fieldValue={index.field}
                                             />
@@ -369,12 +387,14 @@ export default function App() {
                                                         onInputChange={(e: any) => handleChange(e, oneRuleset.id, oneRuleset.fields[index.id - 1].valueID)}
                                             />
                                             <button type="button"
-                                                //onClick={() => deleteFieldHandler(index.id)}
+                                                onClick={() => deleteFieldHandler(oneRuleset.id - 1, oneRuleset.fields[index.id-1].id)}
                                                 //disabled={Ruleset[index.id - 1].fields.length <= 1} //FIXME
                                                     className="disabled:opacity-75 duration-500"
                                             >
-                                                <AiOutlineMinus size="45"
-                                                                className="ml-2 rounded text-white bg-slate-900 duration-200 hover:text-slate-900 hover:bg-white disabled:cursor-not-allowed"
+                                                <AiOutlineMinus
+                                                    size="45"
+                                                    className="ml-2 rounded text-white bg-slate-900 duration-200
+                                                     hover:text-slate-900 hover:bg-white disabled:cursor-not-allowed"
 
                                                 />
                                             </button>
