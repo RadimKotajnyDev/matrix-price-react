@@ -347,7 +347,7 @@ export default function App() {
                                                          options={fieldOptions}
                                                          onSelectChange={(e: any) => {
                                                              //setFieldValue(e.target.value) //TODO: unique setting
-                                                             handleChange(e, oneRuleset.id, oneRuleset.fields[oneRuleset.id - 1].fieldID)
+                                                             handleChange(e, oneRuleset.id, oneRuleset.fields[index.id - 1].fieldID)
                                                          }}
                                                 //onChange={(e: any) => handleChange(e, index.id)}
                                                          componentID={index.fieldID}
@@ -359,14 +359,14 @@ export default function App() {
                                                          componentID={index.operatorID}
                                                          options={mappedOperatorArr}
                                                          fieldValue={index.operator}
-                                                         onSelectChange={(e: any) => handleChange(e, oneRuleset.id, oneRuleset.fields[oneRuleset.id - 1].operatorID)}
+                                                         onSelectChange={(e: any) => handleChange(e, oneRuleset.id, oneRuleset.fields[index.id - 1].operatorID)}
                                             />
                                             {/* TODO: map value depending on field */}
                                             <InputField label="value"
                                                         name="value"
                                                         componentID={index.valueID}
                                                         inputValue={index.value}
-                                                        onInputChange={(e: any) => handleChange(e, oneRuleset.id, oneRuleset.fields[oneRuleset.id - 1].valueID)}
+                                                        onInputChange={(e: any) => handleChange(e, oneRuleset.id, oneRuleset.fields[index.id - 1].valueID)}
                                             />
                                             <button type="button"
                                                 //onClick={() => deleteFieldHandler(index.id)}
