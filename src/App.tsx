@@ -60,7 +60,6 @@ export default function App() {
 
     //TODO: make mapping unique for field objects
     /** Mapping **/
-
     /*
     useEffect(() => {
         let tmp = parseInt(String(fieldValue)) //todo: check if this can be written easier
@@ -129,46 +128,6 @@ export default function App() {
     function Submit(e: any) {
         e.preventDefault()
     }
-    //ADD + remove fields
-    /*
-    const [field, setField] = useState([
-        {
-            id: 1, field: "PerformanceTime", operator: "LessThanOrEqual", value: "",
-            fieldID: 1, operatorID: 1, valueID: 1
-        }
-    ]);
-     */
-    /*
-    //FIXME: Change Ruleset, not Field
-    const handleChange = (event: any, id: number) => {
-        const {name, value} = event.target;
-        setField(prevState => {
-            const fieldIndex = prevState.findIndex(item => item.id === id);
-            if (name === 'field') {
-                return [
-                    ...prevState.slice(0, fieldIndex),
-                    {...prevState[fieldIndex], field: value},
-                    ...prevState.slice(fieldIndex + 1),
-                ];
-            }
-            if (name === 'operator') {
-                return [
-                    ...prevState.slice(0, fieldIndex),
-                    {...prevState[fieldIndex], operator: value},
-                    ...prevState.slice(fieldIndex + 1),
-                ];
-            }
-            if (name === 'value') {
-                return [
-                    ...prevState.slice(0, fieldIndex),
-                    {...prevState[fieldIndex], value: value},
-                    ...prevState.slice(fieldIndex + 1),
-                ];
-            }
-            return prevState;
-        });
-    };
-    */
     const addFieldHandler = (index: number) => {
         const newField: any = {
             id: Ruleset[index - 1].fields.length + 1,
@@ -182,23 +141,6 @@ export default function App() {
         Ruleset[index - 1].fields.push(newField);
         setRuleset([...Ruleset]);
     }
-    /*
-    const deleteFieldHandler = (id: number) => {
-        const updatedField = field
-            .filter(filterField => filterField.id !== id)
-            .map((item, index) => ({...item, id: index + 1}));
-        setField(updatedField);
-    }
-     */
-    /*
-    const deleteFieldHandler = (rulesetIndex: number, fieldId: number) => {
-        setRuleset(prevRuleset => {
-            const updatedRuleset = [...prevRuleset];
-            updatedRuleset[rulesetIndex].fields = updatedRuleset[rulesetIndex].fields.filter(field => field.id !== fieldId);
-            return updatedRuleset;
-        });
-    }
-    */
     const remapFieldsIds = (fields: any[]) => {
         return fields.map((field, index) => {
             return {
