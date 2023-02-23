@@ -299,7 +299,7 @@ export default function App() {
                                 </button>
                             </div>
                             <div>
-                                <p className="block uppercaŕse tracking-wide text-gray-700 text-xs font-bold ">Change
+                                <p className="block uppercase tracking-wide text-gray-700 text-xs font-bold ">Change
                                     ruleset priority</p>
                                 <button
                                     type="button"
@@ -336,10 +336,9 @@ export default function App() {
                                             <SelectField label="field"
                                                          name="field"
                                                          options={fieldOptions}
-                                                         onSelectChange={(e: any) => {
-                                                             //setFieldValue(e.target.value) //TODO: unique setting
+                                                         onSelectChange={(e: any) =>
                                                              handleChange(e, oneRuleset.id, oneRuleset.fields[index.id - 1].fieldID)
-                                                         }}
+                                                         }
                                                          componentID={index.fieldID}
                                                          fieldValue={undefined}
                                             />
