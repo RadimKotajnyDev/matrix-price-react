@@ -102,6 +102,45 @@ export default function App() {
         }
     }, [fieldValue])
      */
+    function mapOperators(name: string, defaultOperator: any) {
+        switch (name) {
+            case "PerformanceTime":
+                tmpArray = []
+                tmpArray.push(operatorOptions[2 - 1]) //array začíná od 0
+                tmpArray.push(operatorOptions[4 - 1])
+                setMappedOperatorArr(tmpArray);
+                break;
+            case "PerformanceDate":
+            case "BookingDate":
+            case "FaceValue":
+                tmpArray = []
+                tmpArray = [...operatorOptions]
+                tmpArray.pop();
+                setMappedOperatorArr(tmpArray);
+                break;
+            case "PerformanceDayOfWeek":
+                tmpArray = []
+                tmpArray.push(operatorOptions[1 - 1]);
+                tmpArray.push(operatorOptions[2 - 1]);
+                tmpArray.push(operatorOptions[4 - 1]);
+                tmpArray.push(operatorOptions[6 - 1]);
+                setMappedOperatorArr(tmpArray);
+                break;
+            case "PriceBandCode":
+                //FIXME: fix default operator value to "Equal"
+                tmpArray = []
+                tmpArray.push(operatorOptions[1 - 1]);
+                tmpArray.push(operatorOptions[6 - 1]);
+                tmpArray.push(operatorOptions[7 - 1]);
+                setMappedOperatorArr(tmpArray);
+                break;
+            //note: case 5 and 6 are the same as 2
+            default:
+                alert("Map operator error");
+                break;
+        }
+    }
+
     const addFieldHandler = (index: number) => {
         const newField: any = {
             id: Ruleset[index - 1].fields.length + 1,
@@ -150,7 +189,7 @@ export default function App() {
                         ...prevState[rulesetIndex].fields.slice(0, fieldIndex),
                         {
                             ...prevState[rulesetIndex].fields[fieldIndex],
-                            field: isField ? value : prevState[rulesetIndex].fields[fieldIndex].field,
+                            field: isField ? value && mapOperators(value, prevState[rulesetIndex].fields[fieldIndex].operator) : prevState[rulesetIndex].fields[fieldIndex].field,
                             operator: isOperator ? value : prevState[rulesetIndex].fields[fieldIndex].operator,
                             value: isValue ? value : prevState[rulesetIndex].fields[fieldIndex].value,
                         },
