@@ -330,7 +330,7 @@ export default function App() {
                                             />
                                             <button type="button"
                                                 onClick={() => deleteFieldHandler(oneRuleset.id - 1, oneRuleset.fields[index.id-1].id)}
-                                                //disabled={Ruleset[index.id - 1].fields.length <= 1} //FIXME
+                                                disabled={oneRuleset.fields.length <= 1}
                                                     className="disabled:opacity-75 duration-500"
                                             >
                                                 <AiOutlineMinus
