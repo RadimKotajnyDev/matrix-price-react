@@ -20,6 +20,7 @@ export default function App() {
         {name: "FaceValue", id: 5},
     ];
 
+    //TODO: Remove numbers from names. It's just for debug.
     const operatorOptions = [
         {name: "", id: 0},
         {name: "Equal 1", id: 1},
@@ -28,7 +29,7 @@ export default function App() {
         {name: "GreaterThanOrEqual 4", id: 4},
         {name: "GreaterThan 5", id: 5},
         {name: "NotEquals 6", id: 6},
-        {name: "In 7    ", id: 7},
+        {name: "In 7", id: 7},
     ];
 
     // Ruleset
@@ -294,6 +295,7 @@ export default function App() {
                                             className="w-full"
                                             //componentID={oneRuleset.id}
                                             //inputValue={undefined}
+                                            inputType="text"
                                             onInputChange={(e: any) => handleChange(e, oneRuleset.id, 1)}
                                             placeholder="type something..."/>
                             </div>
@@ -329,6 +331,7 @@ export default function App() {
                                                         name="value"
                                                         componentID={index.valueID}
                                                         inputValue={index.value}
+                                                        inputType="text"
                                                         onInputChange={(e: any) => handleChange(e,
                                                             oneRuleset.id,
                                                             oneRuleset.fields[index.id - 1].valueID)}
