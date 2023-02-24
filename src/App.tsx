@@ -12,26 +12,28 @@ export default function App() {
     const rulesetClass = "mb-5 uppercase tracking-wide text-gray-700 text-2xl font-bold mb-2";
 
     const fieldOptions = [
-        {name: "PerformanceTime", id: 1},
-        {name: "PerformanceDate", id: 2},
-        {name: "PerformanceDayOfWeek", id: 3},
-        {name: "PriceBandCode", id: 4},
-        {name: "BookingDate", id: 5},
-        {name: "FaceValue", id: 6},
+        {name: "PerformanceTime", id: 0},
+        {name: "PerformanceDate", id: 1},
+        {name: "PerformanceDayOfWeek", id: 2},
+        {name: "PriceBandCode", id: 3},
+        {name: "BookingDate", id: 4},
+        {name: "FaceValue", id: 5},
     ];
 
     const operatorOptions = [
-        {name: "Equal", id: 1},
-        {name: "LessThanOrEqual", id: 2},
-        {name: "LessThan", id: 3},
-        {name: "GreaterThanOrEqual", id: 4},
-        {name: "GreaterThan", id: 5},
-        {name: "NotEquals", id: 6},
-        {name: "In", id: 7},
+        {name: "", id: 0},
+        {name: "Equal 1", id: 1},
+        {name: "LessThanOrEqual 2", id: 2},
+        {name: "LessThan 3", id: 3},
+        {name: "GreaterThanOrEqual 4", id: 4},
+        {name: "GreaterThan 5", id: 5},
+        {name: "NotEquals 6", id: 6},
+        {name: "In 7    ", id: 7},
     ];
 
     // Ruleset
     //TODO: load initial rulesets from API
+    //TODO: Rename ID to priority and add RulesetID
     const [Ruleset, setRuleset] = useState([
         {
             id: 1,
@@ -41,7 +43,7 @@ export default function App() {
                 {
                     id: 1,
                     field: "PerformanceTime",
-                    operator: "LessThanOrEqual",
+                    operator: "",
                     value: "",
                     fieldID: 1,
                     operatorID: 1,
@@ -53,85 +55,46 @@ export default function App() {
 
     let tmpArray: any = []
     const defaultOperators: any = []
-    defaultOperators.push(operatorOptions[1]);
-    defaultOperators.push(operatorOptions[3]);
+    defaultOperators.push(operatorOptions[0]);
+    defaultOperators.push(operatorOptions[2]);
+    defaultOperators.push(operatorOptions[4]);
 
-    const [fieldValue, setFieldValue] = useState(1);
     const [mappedOperatorArr, setMappedOperatorArr] = useState(defaultOperators);
 
-    //TODO: make mapping unique for field objects
     /** Mapping **/
-    /*
-    useEffect(() => {
-        let tmp = parseInt(String(fieldValue)) //todo: check if this can be written easier
-        switch (tmp) {
-            case 1:
-                tmpArray = []
-                tmpArray.push(operatorOptions[2 - 1]) //array začíná od 0
-                tmpArray.push(operatorOptions[4 - 1])
-                setMappedOperatorArr(tmpArray);
-                break;
-            case 2:
-            case 5:
-            case 6:
-                tmpArray = []
-                tmpArray = [...operatorOptions]
-                tmpArray.pop();
-                setMappedOperatorArr(tmpArray);
-                break;
-            case 3:
-                tmpArray = []
-                tmpArray.push(operatorOptions[1 - 1]);
-                tmpArray.push(operatorOptions[2 - 1]);
-                tmpArray.push(operatorOptions[4 - 1]);
-                tmpArray.push(operatorOptions[6 - 1]);
-                setMappedOperatorArr(tmpArray);
-                break;
-            case 4:
-                tmpArray = []
-                tmpArray.push(operatorOptions[1 - 1]);
-                tmpArray.push(operatorOptions[6 - 1]);
-                tmpArray.push(operatorOptions[7 - 1]);
-                setMappedOperatorArr(tmpArray);
-                break;
-            //note: case 5 and 6 are the same as 2
-            default:
-                alert("Map operator error");
-                console.log(fieldValue);
-                break;
-        }
-    }, [fieldValue])
-     */
-    function mapOperators(name: string, defaultOperator: any) {
+    //TODO: Add mapping value type
+    function mapOperators(name: string) {
         switch (name) {
-            case "PerformanceTime":
+            case "PerformanceTime": //1
                 tmpArray = []
-                tmpArray.push(operatorOptions[2 - 1]) //array začíná od 0
-                tmpArray.push(operatorOptions[4 - 1])
+                tmpArray.push(operatorOptions[0])
+                tmpArray.push(operatorOptions[2])
+                tmpArray.push(operatorOptions[4])
                 setMappedOperatorArr(tmpArray);
                 break;
-            case "PerformanceDate":
-            case "BookingDate":
-            case "FaceValue":
+            case "PerformanceDate": //2
+            case "BookingDate": //5
+            case "FaceValue": //6
                 tmpArray = []
                 tmpArray = [...operatorOptions]
                 tmpArray.pop();
                 setMappedOperatorArr(tmpArray);
                 break;
-            case "PerformanceDayOfWeek":
+            case "PerformanceDayOfWeek": //3
                 tmpArray = []
-                tmpArray.push(operatorOptions[1 - 1]);
-                tmpArray.push(operatorOptions[2 - 1]);
-                tmpArray.push(operatorOptions[4 - 1]);
-                tmpArray.push(operatorOptions[6 - 1]);
+                tmpArray.push(operatorOptions[0])
+                tmpArray.push(operatorOptions[1]);
+                tmpArray.push(operatorOptions[2]);
+                tmpArray.push(operatorOptions[4]);
+                tmpArray.push(operatorOptions[6]);
                 setMappedOperatorArr(tmpArray);
                 break;
-            case "PriceBandCode":
-                //FIXME: fix default operator value to "Equal"
+            case "PriceBandCode": //4
                 tmpArray = []
-                tmpArray.push(operatorOptions[1 - 1]);
-                tmpArray.push(operatorOptions[6 - 1]);
-                tmpArray.push(operatorOptions[7 - 1]);
+                tmpArray.push(operatorOptions[0])
+                tmpArray.push(operatorOptions[1]);
+                tmpArray.push(operatorOptions[6]);
+                tmpArray.push(operatorOptions[7]);
                 setMappedOperatorArr(tmpArray);
                 break;
             //note: case 5 and 6 are the same as 2
@@ -139,6 +102,7 @@ export default function App() {
                 alert("Map operator error");
                 break;
         }
+        return;
     }
 
     const addFieldHandler = (index: number) => {
@@ -189,7 +153,7 @@ export default function App() {
                         ...prevState[rulesetIndex].fields.slice(0, fieldIndex),
                         {
                             ...prevState[rulesetIndex].fields[fieldIndex],
-                            field: isField ? value && mapOperators(value, prevState[rulesetIndex].fields[fieldIndex].operator) : prevState[rulesetIndex].fields[fieldIndex].field,
+                            field: isField ? value && mapOperators(value) : prevState[rulesetIndex].fields[fieldIndex].field,
                             operator: isOperator ? value : prevState[rulesetIndex].fields[fieldIndex].operator,
                             value: isValue ? value : prevState[rulesetIndex].fields[fieldIndex].value,
                         },
@@ -219,7 +183,7 @@ export default function App() {
             note: "",
             fields: [
                 {
-                    id: 1, field: "PerformanceTime", operator: "LessThanOrEqual", value: "",
+                    id: 1, field: "PerformanceTime", operator: "", value: "",
                     fieldID: 1, operatorID: 1, valueID: 1
                 },
             ]
@@ -266,7 +230,7 @@ export default function App() {
                             {
                                 id: 1,
                                 field: "PerformanceTime",
-                                operator: "LessThanOrEqual",
+                                operator: "",
                                 value: "",
                                 fieldID: 1,
                                 operatorID: 1,
