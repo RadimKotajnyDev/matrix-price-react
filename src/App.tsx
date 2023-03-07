@@ -103,7 +103,7 @@ export default function App() {
                 alert("Map operator error");
                 break;
         }
-        return;
+        return name;
     }
 
     const addFieldHandler = (index: number) => {
@@ -154,7 +154,7 @@ export default function App() {
                         ...prevState[rulesetIndex].fields.slice(0, fieldIndex),
                         {
                             ...prevState[rulesetIndex].fields[fieldIndex],
-                            field: isField ? value && mapOperators(value) : prevState[rulesetIndex].fields[fieldIndex].field,
+                            field: isField ? mapOperators(value) : prevState[rulesetIndex].fields[fieldIndex].field,
                             operator: isOperator ? value : prevState[rulesetIndex].fields[fieldIndex].operator,
                             value: isValue ? value : prevState[rulesetIndex].fields[fieldIndex].value,
                         },
