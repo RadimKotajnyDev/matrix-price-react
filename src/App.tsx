@@ -38,6 +38,7 @@ export default function App() {
     const [Ruleset, setRuleset] = useState([
         {
             id: 1,
+            priority: 1,
             number: Math.floor(Math.random() * 9000) + 1000,
             note: "",
             fields: [
@@ -180,6 +181,7 @@ export default function App() {
     const AddRulesetHandler = () => {
         Ruleset.push({
             id: Ruleset.length + 1,
+            priority: Ruleset.length + 1,
             number: Math.floor(Math.random() * 9000) + 1000,
             note: "",
             fields: [
@@ -225,6 +227,7 @@ export default function App() {
                 [
                     {
                         id: 1,
+                        priority: 1,
                         number: Math.floor(Math.random() * 9000) + 1000,
                         note: "",
                         fields: [
