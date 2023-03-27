@@ -19,7 +19,7 @@ interface Ruleset {
 }
 
 export default function api() {
-    function getRuleset(id: number): any {
+    function getRuleset(id: number): Ruleset[] {
             axios.get("/" + id)
                 .then(function (response) {
                     return JSON.parse(response.data)
@@ -27,11 +27,10 @@ export default function api() {
                 .catch(function (error) {
                     // handle error
                     console.log(error);
-                    return null
                 })
                 .finally(function () {
                     // always executed
-                    return null
+                    console.log(done);
                 });
         }
 
