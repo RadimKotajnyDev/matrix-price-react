@@ -105,6 +105,7 @@ export default function App() {
         return name;
     }
 
+    // fixme: něco jsem tu dojebal, v git diffu nic není kurva
     const addFieldHandler = (index: number) => {
         const newField: any = {
             id: Ruleset[index - 1].fields.length + 1,
