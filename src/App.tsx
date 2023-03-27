@@ -178,8 +178,16 @@ export default function App() {
         setRuleset(filteredRulesets);
     }
     const AddRulesetHandler = () => {
+        // check if IDs are duplicated
+        let newID = Math.floor(Math.random() * 9000) + 1000;
+        for(let i = 0; i < Ruleset.length; i++) {
+            if(Ruleset[i].id == newID) {
+                newID += 1
+                i = 0
+            }
+        }
         Ruleset.push({
-            id: Math.floor(Math.random() * 9000) + 1000,
+            id: newID,
             priority: Ruleset.length + 1,
             note: "",
             fields: [
