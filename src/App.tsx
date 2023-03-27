@@ -31,11 +31,10 @@ export default function App() {
         {name: "In", id: 7},
     ];
 
-    // Ruleset
-    //TODO: load initial rulesets from API
-    const [Ruleset, setRuleset] = useState([
+    const initialRuleset = [
         {
             id: 1,
+            priority: 1,
             number: Math.floor(Math.random() * 9000) + 1000,
             note: "",
             fields: [
@@ -50,7 +49,11 @@ export default function App() {
                 },
             ]
         }
-    ]);
+    ]
+
+    // Ruleset
+    //TODO: load initial rulesets from API
+    const [Ruleset, setRuleset] = useState(initialRuleset);
 
     let tmpArray: any = []
     const defaultOperators: any = []
@@ -178,6 +181,7 @@ export default function App() {
     const AddRulesetHandler = () => {
         Ruleset.push({
             id: Ruleset.length + 1,
+            priority: Ruleset.length + 1,
             number: Math.floor(Math.random() * 9000) + 1000,
             note: "",
             fields: [
@@ -189,29 +193,29 @@ export default function App() {
         });
         setRuleset([...Ruleset]);
     }
-    const PriorityUP = (id: number) => {
-        const index = Ruleset.findIndex(item => item.id === id);
+    const PriorityUP = (priority: number) => {
+        const index = Ruleset.findIndex(item => item.priority === priority);
         if (index > 0) {
             const item = Ruleset[index];
             Ruleset.splice(index, 1);
             Ruleset.splice(index - 1, 0, item);
-            // swap IDs
-            const tempID = Ruleset[index].id;
-            Ruleset[index].id = Ruleset[index - 1].id;
-            Ruleset[index - 1].id = tempID;
+            // swap Priorities
+            const tempPriority = Ruleset[index].priority;
+            Ruleset[index].priority = Ruleset[index - 1].priority;
+            Ruleset[index - 1].priority = tempPriority;
             setRuleset([...Ruleset]);
         }
     }
-    const PriorityDown = (id: number) => {
-        const index = Ruleset.findIndex(item => item.id === id);
+    const PriorityDown = (priority: number) => {
+        const index = Ruleset.findIndex(item => item.priority === priority);
         if (index < Ruleset.length - 1) {
             const item = Ruleset[index];
             Ruleset.splice(index, 1);
             Ruleset.splice(index + 1, 0, item);
-            // swap IDs
-            const tempID = Ruleset[index].id;
-            Ruleset[index].id = Ruleset[index + 1].id;
-            Ruleset[index + 1].id = tempID;
+            // swap Priorities
+            const tempPriority = Ruleset[index].priority;
+            Ruleset[index].priority = Ruleset[index + 1].priority;
+            Ruleset[index + 1].priority = tempPriority;
             setRuleset([...Ruleset]);
         }
     }
@@ -219,26 +223,7 @@ export default function App() {
         //Reset Ruleset Array
         if(confirm("Are you sure you want to reset all rulesets?")) {
             window.location.reload();
-            setRuleset(
-                [
-                    {
-                        id: 1,
-                        number: Math.floor(Math.random() * 9000) + 1000,
-                        note: "",
-                        fields: [
-                            {
-                                id: 1,
-                                field: "PerformanceTime",
-                                operator: "",
-                                value: "",
-                                fieldID: 1,
-                                operatorID: 1,
-                                valueID: 1
-                            },
-                        ],
-                    }
-                ]
-            );
+            setRuleset(initialRuleset);
         }
     }
     function Submit(e: any) {
@@ -248,14 +233,14 @@ export default function App() {
         <>
             {
                 Ruleset.map((oneRuleset) => {
-                    const {id, number} = oneRuleset;
-                    return <div key={id}
+                    const {id, number, priority} = oneRuleset;
+                    return <div key={priority}
                                 className="flex ml-auto mr-auto mt-14 w-fit p-5 outline outline-1
                                  rounded outline-gray-200 shadow-lg">
                         <form
                             className="w-full mr-auto ml-auto px-5">
                             <div className="flex flex-col md:flex-row md:justify-between">
-                                <p className={rulesetClass}>Ruleset&nbsp;#{number}&nbsp;|&nbsp;Priority:&nbsp;#{id}</p>
+                                <p className={rulesetClass}>Ruleset&nbsp;#{number}&nbsp;|&nbsp;Priority:&nbsp;#{priority}</p>
                                 <button onClick={() => deleteRulesetHandler(id)}
                                         className="cursor-pointer p-3 uppercase rounded-md text-white
                                          bg-slate-900 hover:opacity-75 duration-700 disabled:opacity-75"
@@ -270,9 +255,9 @@ export default function App() {
                                     className="w-fit mr-5 my-2 h-fit rounded text-white bg-slate-900
                                      duration-200 hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority up"
-                                    disabled={Ruleset.length <= 1 || oneRuleset.id == 1}
+                                    disabled={Ruleset.length <= 1 || oneRuleset.priority == 1}
                                     onClick={() => {
-                                        PriorityUP(oneRuleset.id)
+                                        PriorityUP(oneRuleset.priority)
                                     }}>
                                     <GoChevronUp size="30"/>
                                 </button>
@@ -281,9 +266,9 @@ export default function App() {
                                     className="w-fit h-fit my-2 rounded text-white bg-slate-900 duration-200
                                      hover:text-slate-900 hover:bg-white disabled:opacity-75"
                                     title="priority down"
-                                    disabled={Ruleset.length <= 1 || oneRuleset.id == Ruleset.length}
+                                    disabled={Ruleset.length <= 1 || oneRuleset.priority == Ruleset.length}
                                     onClick={() => {
-                                        PriorityDown(oneRuleset.id)
+                                        PriorityDown(oneRuleset.priority)
                                     }}>
                                     <GoChevronDown size="30"/>
                                 </button>
@@ -299,7 +284,6 @@ export default function App() {
                             </div>
                             <div>
                                 {oneRuleset.fields.map((index) => {
-                                    //item: string
                                     return <div key={index.id}
                                                 className="grid grid-flow-row md:grid-flow-col"
                                     >
@@ -389,19 +373,3 @@ export default function App() {
         </>
     );
 }
-
-/*
-var name = "Radima" || "Suchánka";
-
-let KOLEDA = "
-    Na Štěpána Suchánek
-    a Radim do kódu hledí,
-    všude kaj se podívaj,
-    Errory a bugy...
-
-    Svítil měsíc a byl mráz,
-    debuggoval jako divý.
-    A v tom spatří {name}
-    jak tam ztrácí nervy.
-";
-*/

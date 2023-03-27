@@ -29,9 +29,8 @@ const Pricing = () => {
                 .min(0, "InsideCommission must be 0% minimum!")
                 .required("Inside Commission is Required"),
         }),
-        onSubmit: (values) => {
-            //TODO: delete next line on final build
-            //console.log(values)
+        onSubmit: (/*values */) => {
+
         },
     })
     //console.log(formik.values)
