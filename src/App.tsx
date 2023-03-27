@@ -33,9 +33,8 @@ export default function App() {
 
     const initialRuleset = [
         {
-            id: 1,
+            id: Math.floor(Math.random() * 9000) + 1000,
             priority: 1,
-            number: Math.floor(Math.random() * 9000) + 1000,
             note: "",
             fields: [
                 {
@@ -172,17 +171,16 @@ export default function App() {
     }, [Ruleset])
 
 
-    const deleteRulesetHandler = (id: number) => {
+    const deleteRulesetHandler = (priority: number) => {
         const filteredRulesets = Ruleset
-            .filter((oneRuleset) => oneRuleset.id !== id)
-            .map((oneRuleset, index) => ({...oneRuleset, id: index + 1}))
+            .filter((oneRuleset) => oneRuleset.priority !== priority)
+            .map((oneRuleset, index) => ({...oneRuleset, priority: index + 1}))
         setRuleset(filteredRulesets);
     }
     const AddRulesetHandler = () => {
         Ruleset.push({
-            id: Ruleset.length + 1,
+            id: Math.floor(Math.random() * 9000) + 1000,
             priority: Ruleset.length + 1,
-            number: Math.floor(Math.random() * 9000) + 1000,
             note: "",
             fields: [
                 {
@@ -233,15 +231,15 @@ export default function App() {
         <>
             {
                 Ruleset.map((oneRuleset) => {
-                    const {id, number, priority} = oneRuleset;
+                    const {id, priority} = oneRuleset;
                     return <div key={priority}
                                 className="flex ml-auto mr-auto mt-14 w-fit p-5 outline outline-1
                                  rounded outline-gray-200 shadow-lg">
                         <form
                             className="w-full mr-auto ml-auto px-5">
                             <div className="flex flex-col md:flex-row md:justify-between">
-                                <p className={rulesetClass}>Ruleset&nbsp;#{number}&nbsp;|&nbsp;Priority:&nbsp;#{priority}</p>
-                                <button onClick={() => deleteRulesetHandler(id)}
+                                <p className={rulesetClass}>Ruleset&nbsp;#{id}&nbsp;|&nbsp;Priority:&nbsp;#{priority}</p>
+                                <button onClick={() => deleteRulesetHandler(priority)}
                                         className="cursor-pointer p-3 uppercase rounded-md text-white
                                          bg-slate-900 hover:opacity-75 duration-700 disabled:opacity-75"
                                         disabled={Ruleset.length <= 1}>Remove ruleset
