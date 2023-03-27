@@ -182,8 +182,8 @@ export default function App() {
         let newID = Math.floor(Math.random() * 9000) + 1000;
         for(let i = 0; i < Ruleset.length; i++) {
             if(Ruleset[i].id == newID) {
-                newID += 1
-                i = 0
+                newID = Math.floor(Math.random() * 9000) + 1000;
+                i = 0;
             }
         }
         Ruleset.push({
