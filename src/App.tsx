@@ -20,21 +20,19 @@ export default function App() {
         {name: "FaceValue", id: 5},
     ];
 
-    //TODO: Remove numbers from names. It's just for debug.
     const operatorOptions = [
         {name: "", id: 0},
-        {name: "Equal 1", id: 1},
-        {name: "LessThanOrEqual 2", id: 2},
-        {name: "LessThan 3", id: 3},
-        {name: "GreaterThanOrEqual 4", id: 4},
-        {name: "GreaterThan 5", id: 5},
-        {name: "NotEquals 6", id: 6},
-        {name: "In 7", id: 7},
+        {name: "Equal", id: 1},
+        {name: "LessThanOrEqual", id: 2},
+        {name: "LessThan", id: 3},
+        {name: "GreaterThanOrEqual", id: 4},
+        {name: "GreaterThan", id: 5},
+        {name: "NotEquals", id: 6},
+        {name: "In", id: 7},
     ];
 
     // Ruleset
     //TODO: load initial rulesets from API
-    //TODO: Rename ID to priority and add RulesetID
     const [Ruleset, setRuleset] = useState([
         {
             id: 1,
@@ -63,7 +61,6 @@ export default function App() {
     const [mappedOperatorArr, setMappedOperatorArr] = useState(defaultOperators);
 
     /** Mapping **/
-    //TODO: Add mapping value type
     function mapOperators(name: string) {
         switch (name) {
             case "PerformanceTime": //1
@@ -169,7 +166,8 @@ export default function App() {
     //TODO: delete code before deploy
     useEffect(() => {
         console.log(Ruleset)
-    },[Ruleset])
+    }, [Ruleset])
+
 
     const deleteRulesetHandler = (id: number) => {
         const filteredRulesets = Ruleset
