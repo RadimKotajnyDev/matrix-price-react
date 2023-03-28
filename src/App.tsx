@@ -105,7 +105,6 @@ export default function App() {
         return name;
     }
 
-    // fixme: něco jsem tu dojebal, v git diffu nic není kurva
     const addFieldHandler = (index: number) => {
         const newField: any = {
             id: Ruleset[index - 1].fields.length + 1,
@@ -170,7 +169,6 @@ export default function App() {
     useEffect(() => {
         console.log(Ruleset)
     }, [Ruleset])
-
 
     const deleteRulesetHandler = (priority: number) => {
         const filteredRulesets = Ruleset
