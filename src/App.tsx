@@ -342,7 +342,7 @@ export default function App() {
                                     </div>
                                 })
                                 }
-                                <button type="button" onClick={() => addFieldHandler(oneRuleset.id)}
+                                <button type="button" onClick={() => addFieldHandler(oneRuleset.priority)}
                                         className="float-right mt-0">
                                     <AiOutlinePlus size="45"
                                                    className="rounded text-white bg-slate-900 duration-200
