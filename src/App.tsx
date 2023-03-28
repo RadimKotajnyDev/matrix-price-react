@@ -109,7 +109,7 @@ export default function App() {
         const newField: any = {
             id: Ruleset[index - 1].fields.length + 1,
             field: "PerformanceTime",
-            operator: "LessThanOrEqual",
+            operator: "",
             value: "",
             fieldID: Ruleset[index - 1].fields.length + 1,
             operatorID: Ruleset[index - 1].fields.length + 1,
@@ -324,7 +324,7 @@ export default function App() {
                                                             oneRuleset.fields[index.id - 1].valueID)}
                                             />
                                             <button type="button"
-                                                onClick={() => deleteFieldHandler(oneRuleset.id - 1,
+                                                onClick={() => deleteFieldHandler(oneRuleset.priority - 1,
                                                     oneRuleset.fields[index.id-1].id)}
                                                 disabled={oneRuleset.fields.length <= 1}
                                                     className="disabled:opacity-75 duration-500"
