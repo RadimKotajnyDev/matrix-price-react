@@ -9,7 +9,6 @@ import SelectField from "./components/SelectField";
 import Offer from "./components/Offer";
 
 export default function App() {
-    const rulesetClass = "mb-5 uppercase tracking-wide text-gray-700 text-2xl font-bold mb-2";
 
     const fieldOptions = [
         {name: "PerformanceTime", id: 0},
@@ -38,13 +37,13 @@ export default function App() {
             note: "",
             fields: [
                 {
-                    id: 1,
+                    id: 0,
                     field: "PerformanceTime",
                     operator: "",
                     value: "",
-                    fieldID: 1,
-                    operatorID: 1,
-                    valueID: 1
+                    fieldID: 0,
+                    operatorID: 0,
+                    valueID: 0
                 },
             ]
         }
@@ -60,17 +59,26 @@ export default function App() {
     defaultOperators.push(operatorOptions[2]);
     defaultOperators.push(operatorOptions[4]);
 
-    const [mappedOperatorArr, setMappedOperatorArr] = useState(defaultOperators);
+    const operatorsInRuleset = [
+        {
+            id: 0,
+            OperatorsPerField: [
+                {id: 0, operators: defaultOperators}
+            ]
+        }
+    ]
+
+    const [mappedOperatorArr, setMappedOperatorArr] = useState(operatorsInRuleset);
 
     /** Mapping **/
-    function mapOperators(name: string) {
+    function mapOperators(name: string, Ruleset: number, Field: number) {
         switch (name) {
             case "PerformanceTime": //1
                 tmpArray = []
                 tmpArray.push(operatorOptions[0])
                 tmpArray.push(operatorOptions[2])
                 tmpArray.push(operatorOptions[4])
-                setMappedOperatorArr(tmpArray);
+                setMappedOperatorArr([...operatorsInRuleset[Ruleset].OperatorsPerField[Field].operators.push(tmpArray)]);
                 break;
             case "PerformanceDate": //2
             case "BookingDate": //5
@@ -87,7 +95,7 @@ export default function App() {
                 tmpArray.push(operatorOptions[2]);
                 tmpArray.push(operatorOptions[4]);
                 tmpArray.push(operatorOptions[6]);
-                setMappedOperatorArr(tmpArray);
+                setMappedOperatorArr([...operatorsInRuleset[Ruleset].OperatorsPerField[Field].operators.push(tmpArray)]);
                 break;
             case "PriceBandCode": //4
                 tmpArray = []
@@ -95,7 +103,7 @@ export default function App() {
                 tmpArray.push(operatorOptions[1]);
                 tmpArray.push(operatorOptions[6]);
                 tmpArray.push(operatorOptions[7]);
-                setMappedOperatorArr(tmpArray);
+                setMappedOperatorArr([...operatorsInRuleset[Ruleset].OperatorsPerField[Field].operators.push(tmpArray)]);
                 break;
             //note: case 5 and 6 are the same as 2
             default:
@@ -136,7 +144,7 @@ export default function App() {
         setRuleset(updatedRuleset);
     };
     const handleChange = (event: any, rulesetId: number, fieldId: number) => {
-        const { name, value } = event.target;
+        const {name, value} = event.target;
         setRuleset(prevState => {
             const rulesetIndex = prevState.findIndex(item => item.id === rulesetId);
             const fieldIndex = prevState[rulesetIndex].fields.findIndex(item => item.id === fieldId);
@@ -153,7 +161,7 @@ export default function App() {
                         ...prevState[rulesetIndex].fields.slice(0, fieldIndex),
                         {
                             ...prevState[rulesetIndex].fields[fieldIndex],
-                            field: isField ? mapOperators(value) : prevState[rulesetIndex].fields[fieldIndex].field,
+                            field: isField ? mapOperators(value, rulesetId, fieldId) : prevState[rulesetIndex].fields[fieldIndex].field,
                             operator: isOperator ? value : prevState[rulesetIndex].fields[fieldIndex].operator,
                             value: isValue ? value : prevState[rulesetIndex].fields[fieldIndex].value,
                         },
@@ -169,18 +177,34 @@ export default function App() {
     useEffect(() => {
         console.log(Ruleset)
     }, [Ruleset])
+    useEffect(() => console.log(mappedOperatorArr), [mappedOperatorArr])
 
     const deleteRulesetHandler = (priority: number) => {
         const filteredRulesets = Ruleset
             .filter((oneRuleset) => oneRuleset.priority !== priority)
             .map((oneRuleset, index) => ({...oneRuleset, priority: index + 1}))
         setRuleset(filteredRulesets);
+        const filteredOptions = operatorsInRuleset
+            .filter((oneOperatorField) => oneOperatorField.id !== priority)
+            .map((oneOperatorField, index) => ({...oneOperatorField, id: index + 1}))
+        setMappedOperatorArr(filteredOptions)
     }
     const AddRulesetHandler = () => {
+        //TODO: add operators
+        operatorsInRuleset.push(
+            {
+                id: Ruleset.length + 1,
+                OperatorsPerField: [
+                    {id: Ruleset.length + 1, operators: defaultOperators}
+                ]
+            }
+        )
+        setMappedOperatorArr(operatorsInRuleset)
         // check if IDs are duplicated
         let newID = Math.floor(Math.random() * 9000) + 1000;
-        for(let i = 0; i < Ruleset.length; i++) {
-            if(Ruleset[i].id == newID) {
+        for (let i = 0; i < Ruleset.length; i++) {
+            console.log(i)
+            if (Ruleset[i].id == newID) {
                 newID = Math.floor(Math.random() * 9000) + 1000;
                 i = 0;
             }
@@ -191,8 +215,8 @@ export default function App() {
             note: "",
             fields: [
                 {
-                    id: 1, field: "PerformanceTime", operator: "", value: "",
-                    fieldID: 1, operatorID: 1, valueID: 1
+                    id: 0, field: "PerformanceTime", operator: "", value: "",
+                    fieldID: 0, operatorID: 0, valueID: 0
                 },
             ]
         });
@@ -224,16 +248,19 @@ export default function App() {
             setRuleset([...Ruleset]);
         }
     }
+
     function Reset() {
         //Reset Ruleset Array
-        if(confirm("Are you sure you want to reset all rulesets?")) {
+        if (confirm("Are you sure you want to reset all rulesets?")) {
             window.location.reload();
             setRuleset(initialRuleset);
         }
     }
+
     function Submit(e: any) {
         e.preventDefault()
     }
+
     return (
         <>
             {
@@ -245,7 +272,9 @@ export default function App() {
                         <form
                             className="w-full mr-auto ml-auto px-5">
                             <div className="flex flex-col md:flex-row md:justify-between">
-                                <p className={rulesetClass}>Ruleset&nbsp;#{id}&nbsp;|&nbsp;Priority:&nbsp;#{priority}</p>
+                                <p className="mb-5 uppercase tracking-wide
+                                 text-gray-700 text-2xl font-bold mb-2"
+                                >Ruleset&nbsp;#{id}&nbsp;|&nbsp;Priority:&nbsp;#{priority}</p>
                                 <button onClick={() => deleteRulesetHandler(priority)}
                                         className="cursor-pointer p-3 uppercase rounded-md text-white
                                          bg-slate-900 hover:opacity-75 duration-700 disabled:opacity-75"
@@ -284,7 +313,7 @@ export default function App() {
                                             //componentID={oneRuleset.id}
                                             //inputValue={undefined}
                                             inputType="text"
-                                            onInputChange={(e: any) => handleChange(e, oneRuleset.id, 1)}
+                                            onInputChange={(e: any) => handleChange(e, oneRuleset.id, 0)}
                                             placeholder="type something..."/>
                             </div>
                             <div>
@@ -299,7 +328,7 @@ export default function App() {
                                                          onSelectChange={(e: any) =>
                                                              handleChange(e,
                                                                  oneRuleset.id,
-                                                                 oneRuleset.fields[index.id - 1].fieldID)
+                                                                 oneRuleset.fields[index.id].fieldID)
                                                          }
                                                          componentID={index.fieldID}
                                                          fieldValue={undefined}
@@ -307,11 +336,12 @@ export default function App() {
                                             <SelectField label="operator"
                                                          name="operator"
                                                          componentID={index.operatorID}
-                                                         options={mappedOperatorArr}
+                                                         options={mappedOperatorArr[oneRuleset.priority - 1].OperatorsPerField[index.id].operators}
                                                          fieldValue={undefined}
-                                                         onSelectChange={(e: any) => handleChange(e,
+                                                         onSelectChange={(e: any) => handleChange(
+                                                             e,
                                                              oneRuleset.id,
-                                                             oneRuleset.fields[index.id - 1].operatorID)}
+                                                             oneRuleset.fields[index.id].operatorID)}
                                             />
                                             {/* TODO: map value depending on field */}
                                             <InputField label="value"
@@ -319,14 +349,16 @@ export default function App() {
                                                         componentID={index.valueID}
                                                         inputValue={index.value}
                                                         inputType="text"
-                                                        onInputChange={(e: any) => handleChange(e,
+                                                        onInputChange={(e: any) => handleChange(
+                                                            e,
                                                             oneRuleset.id,
-                                                            oneRuleset.fields[index.id - 1].valueID)}
+                                                            oneRuleset.fields[index.id].valueID)}
                                             />
                                             <button type="button"
-                                                onClick={() => deleteFieldHandler(oneRuleset.priority - 1,
-                                                    oneRuleset.fields[index.id-1].id)}
-                                                disabled={oneRuleset.fields.length <= 1}
+                                                    onClick={() => deleteFieldHandler(
+                                                        oneRuleset.priority - 1,
+                                                        oneRuleset.fields[index.id].id)}
+                                                    disabled={oneRuleset.fields.length <= 1}
                                                     className="disabled:opacity-75 duration-500"
                                             >
                                                 <AiOutlineMinus
