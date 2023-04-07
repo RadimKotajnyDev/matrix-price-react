@@ -61,14 +61,14 @@ export default function App() {
 
     const operatorsInRuleset = [
         {
-            id: 0,
+            id: 1,
             OperatorsPerField: [
-                {id: 0, operators: defaultOperators}
+                {id: 1, operators: defaultOperators}
             ]
         }
     ]
 
-    const [mappedOperatorArr, setMappedOperatorArr] = useState(operatorsInRuleset);
+    const [mappedOperatorArr, setMappedOperatorArr] = useState([...operatorsInRuleset]);
 
     /** Mapping **/
     function mapOperators(name: string, Ruleset: number, Field: number) {
@@ -114,6 +114,10 @@ export default function App() {
     }
 
     const addFieldHandler = (index: number) => {
+        operatorsInRuleset[index - 1].OperatorsPerField.push({
+            id: index, operators: defaultOperators
+        })
+        setMappedOperatorArr([...operatorsInRuleset])
         const newField: any = {
             id: Ruleset[index - 1].fields.length + 1,
             field: "PerformanceTime",
@@ -126,6 +130,7 @@ export default function App() {
         Ruleset[index - 1].fields.push(newField);
         setRuleset([...Ruleset]);
     }
+
     const remapFieldsIds = (fields: any[]) => {
         return fields.map((field, index) => {
             return {
@@ -143,6 +148,7 @@ export default function App() {
         updatedRuleset[rulesetIndex].fields = remapFieldsIds(updatedFields);
         setRuleset(updatedRuleset);
     };
+
     const handleChange = (event: any, rulesetId: number, fieldId: number) => {
         const {name, value} = event.target;
         setRuleset(prevState => {
@@ -174,9 +180,9 @@ export default function App() {
     };
 
     //TODO: delete code before deploy
-    useEffect(() => {
+    /*useEffect(() => {
         console.log(Ruleset)
-    }, [Ruleset])
+    }, [Ruleset]) */
     useEffect(() => console.log(mappedOperatorArr), [mappedOperatorArr])
 
     const deleteRulesetHandler = (priority: number) => {
@@ -190,7 +196,6 @@ export default function App() {
         setMappedOperatorArr(filteredOptions)
     }
     const AddRulesetHandler = () => {
-        //TODO: add operators
         operatorsInRuleset.push(
             {
                 id: Ruleset.length + 1,
@@ -199,11 +204,11 @@ export default function App() {
                 ]
             }
         )
-        setMappedOperatorArr(operatorsInRuleset)
+        setMappedOperatorArr([...operatorsInRuleset])
         // check if IDs are duplicated
         let newID = Math.floor(Math.random() * 9000) + 1000;
         for (let i = 0; i < Ruleset.length; i++) {
-            console.log(i)
+            //console.log(i)
             if (Ruleset[i].id == newID) {
                 newID = Math.floor(Math.random() * 9000) + 1000;
                 i = 0;
@@ -250,11 +255,13 @@ export default function App() {
     }
 
     function Reset() {
+        /* TODO: delete current ruleset, not all
         //Reset Ruleset Array
         if (confirm("Are you sure you want to reset all rulesets?")) {
             window.location.reload();
             setRuleset(initialRuleset);
         }
+         */
     }
 
     function Submit(e: any) {
@@ -274,7 +281,9 @@ export default function App() {
                             <div className="flex flex-col md:flex-row md:justify-between">
                                 <p className="mb-5 uppercase tracking-wide
                                  text-gray-700 text-2xl font-bold mb-2"
-                                >Ruleset&nbsp;#{id}&nbsp;|&nbsp;Priority:&nbsp;#{priority}</p>
+                                >Ruleset&nbsp;#{id}&nbsp;
+                                    <span className="font-light">|</span>
+                                    &nbsp;Priority:&nbsp;#{priority}</p>
                                 <button onClick={() => deleteRulesetHandler(priority)}
                                         className="cursor-pointer p-3 uppercase rounded-md text-white
                                          bg-slate-900 hover:opacity-75 duration-700 disabled:opacity-75"
@@ -383,6 +392,22 @@ export default function App() {
                                 <Pricing/>
                                 <Offer/>
                             </div>
+                            {/* submit and reset buttons*/}
+                            {/* TODO: submit (PUT method) and delete (DELETE method), pass current ruleset to method argument */}
+                            <div className="flex flex-row justify-center mt-5">
+                                <div className="m-5">
+                                    <button type="submit" value="submit" onClick={(e) => Submit(e)}
+                                            className="w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase
+                             bg-slate-900 text-white rounded-lg hover:opacity-75 duration-700">submit
+                                    </button>
+                                </div>
+                                <div className="m-5">
+                                    <button type="reset" value="reset" onClick={Reset}
+                                            className="w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase
+                             bg-white text-black rounded-lg hover:bg-red-900 hover:text-white duration-700">reset
+                                    </button>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 })
@@ -392,21 +417,6 @@ export default function App() {
                      text-white bg-slate-900 hover:opacity-75 duration-700">add
                 ruleset
             </button>
-            {/* submit and reset buttons*/}
-            <div className="flex flex-row justify-center mt-5">
-                <div className="m-5">
-                    <button type="submit" value="submit" onClick={(e) => Submit(e)}
-                            className="w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase
-                             bg-slate-900 text-white rounded-xl hover:opacity-75 duration-700">submit
-                    </button>
-                </div>
-                <div className="m-5">
-                    <button type="reset" value="reset" onClick={Reset}
-                            className="w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase
-                             bg-white text-black rounded-xl hover:bg-red-900 hover:text-white duration-700">reset
-                    </button>
-                </div>
-            </div>
         </>
     );
 }
