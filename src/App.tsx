@@ -61,14 +61,14 @@ export default function App() {
 
   const operatorsInRuleset = [
     {
-      RulesetId: 0,
+      Ruleset: 0,
       OperatorsPerField: [
-        {id: 0, operators: defaultOperators}
+        {id: 0, operators: defaultOperators},
       ]
     }
   ]
 
-  const [mappedOperatorArr, setMappedOperatorArr] = useState([...operatorsInRuleset]);
+  const [mappedOperatorArr, setMappedOperatorArr] = useState(operatorsInRuleset);
 
   /** Mapping **/
   function mapOperators(name: string, Ruleset: number, Field: number) {
@@ -113,22 +113,25 @@ export default function App() {
     return name;
   }
 
+  //index is priority - 1
   const addFieldHandler = (index: number) => {
-    mappedOperatorArr[index - 1].OperatorsPerField.push(
-      {id: mappedOperatorArr[index - 1].OperatorsPerField.length + 1, operators: defaultOperators}
-    )
-    setMappedOperatorArr([...mappedOperatorArr])
     const newField: any = {
-      id: Ruleset[index - 1].fields.length + 1,
+      id: Ruleset[index].fields.length,
       field: "PerformanceTime",
       operator: "",
       value: "",
-      fieldID: Ruleset[index - 1].fields.length + 1,
-      operatorID: Ruleset[index - 1].fields.length + 1,
-      valueID: Ruleset[index - 1].fields.length + 1,
+      fieldID: Ruleset[index].fields.length,
+      operatorID: Ruleset[index].fields.length,
+      valueID: Ruleset[index].fields.length,
     };
-    Ruleset[index - 1].fields.push(newField);
+    Ruleset[index].fields.push(newField);
     setRuleset([...Ruleset]);
+    //operators
+    const newOperators: any = {
+      id: Ruleset[index].fields.length - 1, operators: defaultOperators
+    }
+    mappedOperatorArr[index].OperatorsPerField.push(newOperators)
+    setMappedOperatorArr([...mappedOperatorArr])
   }
 
   //TODO: remap also operators
@@ -192,7 +195,7 @@ export default function App() {
       .map((oneRuleset, index) => ({...oneRuleset, priority: index + 1}))
     setRuleset(filteredRulesets);
     const filteredOptions = operatorsInRuleset
-      .filter((oneOperatorField) => oneOperatorField.RulesetId !== priority)
+      .filter((oneOperatorField) => oneOperatorField.Ruleset !== priority - 1)
       .map((oneOperatorField, index) => ({...oneOperatorField, id: index + 1}))
     setMappedOperatorArr(filteredOptions)
   }
@@ -220,7 +223,7 @@ export default function App() {
     setRuleset([...Ruleset]);
     //SET OPERATORS
     mappedOperatorArr.push({
-      RulesetId: Ruleset.length - 1,
+      Ruleset: Ruleset.length - 1,
       OperatorsPerField: [
         {id: 0, operators: defaultOperators}
       ]
@@ -274,7 +277,8 @@ export default function App() {
         Ruleset.map((oneRuleset) => {
           const {id, priority} = oneRuleset;
           return <div key={priority}
-                      className="flex ml-auto mr-auto justify-center mt-14 w-fit p-5 outline outline-1
+                      className="scale-[90%] sm:scale-100
+                       flex ml-auto mr-auto justify-center mt-14 w-fit p-5 outline outline-1
                                  rounded outline-gray-200 shadow-lg">
             <form
               className="w-full mr-auto ml-auto px-5">
@@ -319,8 +323,8 @@ export default function App() {
                 <InputField label="note"
                             name="note"
                             className="w-full"
-                  //componentID={oneRuleset.id}
-                  //inputValue={undefined}
+                            //componentID={oneRuleset.id}
+                            //inputValue={undefined}
                             inputType="text"
                             onInputChange={(e: any) => handleChange(e, oneRuleset.id, 0)}
                             placeholder="type something..."/>
@@ -345,6 +349,7 @@ export default function App() {
                       <SelectField label="operator"
                                    name="operator"
                                    componentID={index.operatorID}
+                                   //because priority cannot be 0
                                    options={mappedOperatorArr[oneRuleset.priority - 1].OperatorsPerField[index.id].operators}
                                    fieldValue={undefined}
                                    onSelectChange={(e: any) => handleChange(
@@ -381,7 +386,7 @@ export default function App() {
                   </div>
                 })
                 }
-                <button type="button" onClick={() => addFieldHandler(oneRuleset.priority)}
+                <button type="button" onClick={() => addFieldHandler(oneRuleset.priority - 1)}
                         className="float-right mt-0">
                   <AiOutlinePlus size="45"
                                  className="rounded text-white bg-slate-900 duration-200
