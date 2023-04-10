@@ -146,11 +146,22 @@ export default function App() {
       };
     });
   }
+
   const deleteFieldHandler = (rulesetIndex: number, fieldId: number) => {
     const updatedRuleset = [...Ruleset];
     const updatedFields = updatedRuleset[rulesetIndex].fields.filter(field => field.id !== fieldId);
     updatedRuleset[rulesetIndex].fields = remapFieldsIds(updatedFields);
-    setRuleset(updatedRuleset);
+    setRuleset([...updatedRuleset]);
+    //delete also operators obj from arr
+    // const updatedOpArr = [...mappedOperatorArr]
+    // updatedOpArr[rulesetIndex].OperatorsPerField.filter(current => current.id !== 1)
+    //todo: remap
+    const newOperatorState = [...mappedOperatorArr];
+    newOperatorState[rulesetIndex].OperatorsPerField = newOperatorState[rulesetIndex].OperatorsPerField.filter(current => current.id !== fieldId);
+    newOperatorState[rulesetIndex].OperatorsPerField.forEach((operatorsPerField, index) => {
+      operatorsPerField.id = index;
+    });
+    setMappedOperatorArr([...newOperatorState]);
   };
 
   const handleChange = (event: any, rulesetId: number, fieldId: number) => {
@@ -194,9 +205,10 @@ export default function App() {
       .filter((oneRuleset) => oneRuleset.priority !== priority)
       .map((oneRuleset, index) => ({...oneRuleset, priority: index + 1}))
     setRuleset(filteredRulesets);
+    //FIXME Uncaught TypeError: can't access property "OperatorsPerField", mappedOperatorArr[(oneRuleset.priority - 1)] is undefined
     const filteredOptions = operatorsInRuleset
       .filter((oneOperatorField) => oneOperatorField.Ruleset !== priority - 1)
-      .map((oneOperatorField, index) => ({...oneOperatorField, id: index + 1}))
+      .map((oneOperatorField, index) => ({...oneOperatorField, Ruleset: index}))
     setMappedOperatorArr(filteredOptions)
   }
   const AddRulesetHandler = () => {
@@ -204,7 +216,7 @@ export default function App() {
     let newID = Math.floor(Math.random() * 9000) + 1000;
     for (let i = 0; i < Ruleset.length; i++) {
       //console.log(i)
-      if (Ruleset[i].id == newID) {
+      if (Ruleset[i].id === newID) {
         newID = Math.floor(Math.random() * 9000) + 1000;
         i = 0;
       }
@@ -241,6 +253,17 @@ export default function App() {
       Ruleset[index].priority = Ruleset[index - 1].priority;
       Ruleset[index - 1].priority = tempPriority;
       setRuleset([...Ruleset]);
+      // swap operators
+      const operatorIndex = mappedOperatorArr.findIndex(item => item.Ruleset === priority - 1);
+      if (operatorIndex > 0) {
+        const itemOperator = mappedOperatorArr[operatorIndex]
+        mappedOperatorArr.splice(operatorIndex, 1)
+        mappedOperatorArr.splice(operatorIndex - 1, 0, itemOperator);
+        const tempRuleset = mappedOperatorArr[operatorIndex].Ruleset;
+        mappedOperatorArr[operatorIndex].Ruleset = mappedOperatorArr[operatorIndex - 1].Ruleset;
+        mappedOperatorArr[operatorIndex - 1].Ruleset = tempRuleset;
+        setMappedOperatorArr([...mappedOperatorArr])
+      }
     }
   }
   const PriorityDown = (priority: number) => {
@@ -254,6 +277,16 @@ export default function App() {
       Ruleset[index].priority = Ruleset[index + 1].priority;
       Ruleset[index + 1].priority = tempPriority;
       setRuleset([...Ruleset]);
+    }    // swap operators
+    const operatorIndex = mappedOperatorArr.findIndex(item => item.Ruleset === priority - 1);
+    if (operatorIndex < mappedOperatorArr.length) {
+      const itemOperator = mappedOperatorArr[operatorIndex]
+      mappedOperatorArr.splice(operatorIndex, 1)
+      mappedOperatorArr.splice(operatorIndex + 1, 0, itemOperator);
+      const tempRuleset = mappedOperatorArr[operatorIndex].Ruleset;
+      mappedOperatorArr[operatorIndex].Ruleset = mappedOperatorArr[operatorIndex + 1].Ruleset;
+      mappedOperatorArr[operatorIndex + 1].Ruleset = tempRuleset;
+      setMappedOperatorArr([...mappedOperatorArr])
     }
   }
 
@@ -278,7 +311,7 @@ export default function App() {
           const {id, priority} = oneRuleset;
           return <div key={priority}
                       className="scale-[90%] sm:scale-100
-                       flex ml-auto mr-auto justify-center mt-14 w-fit p-5 outline outline-1
+                       flex ml-auto mr-auto mt-14 w-fit p-5 outline outline-1
                                  rounded outline-gray-200 shadow-lg">
             <form
               className="w-full mr-auto ml-auto px-5">
@@ -319,7 +352,7 @@ export default function App() {
                     <GoChevronDown size="30"/>
                   </button>
                 </div>
-                <hr className="my-2"/>
+                <hr className="mt-5 mb-2"/>
                 <InputField label="note"
                             name="note"
                             className="w-full"
@@ -341,16 +374,16 @@ export default function App() {
                                    onSelectChange={(e: any) =>
                                      handleChange(e,
                                        oneRuleset.id,
-                                       oneRuleset.fields[index.id].fieldID)
-                                   }
+                                       oneRuleset.fields[index.id].fieldID
+                                     )}
                                    componentID={index.fieldID}
                                    fieldValue={undefined}
                       />
-                      <SelectField label="operator"
+                      <SelectField label={mappedOperatorArr[oneRuleset.priority - 1].OperatorsPerField[index.id]?.id}
                                    name="operator"
                                    componentID={index.operatorID}
                                    //because priority cannot be 0
-                                   options={mappedOperatorArr[oneRuleset.priority - 1].OperatorsPerField[index.id].operators}
+                                   options={mappedOperatorArr[oneRuleset.priority - 1].OperatorsPerField[index.id]?.operators || []}
                                    fieldValue={undefined}
                                    onSelectChange={(e: any) => handleChange(
                                      e,
@@ -394,7 +427,7 @@ export default function App() {
                 </button>
               </div>
               <div className="flex flex-col md:flex-row space-x-6">
-                <Pricing/>
+                <Pricing onPricingDataSubmit={(pricingData: any) => console.log(pricingData)}/>
                 <Offer/>
               </div>
               {/* submit and reset buttons*/}
