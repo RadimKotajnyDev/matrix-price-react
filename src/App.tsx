@@ -7,8 +7,9 @@ import Pricing from "./components/Pricing";
 import InputField from "./components/InputField";
 import SelectField from "./components/SelectField";
 import Offer from "./components/Offer";
+import { Api } from "./api/api";
 
-export default function App() {
+export default async function App() {
     const rulesetClass = "mb-5 uppercase tracking-wide text-gray-700 text-2xl font-bold mb-2";
 
     const fieldOptions = [
@@ -35,25 +36,7 @@ export default function App() {
     // Ruleset
     //TODO: load initial rulesets from API
     //TODO: Rename ID to priority and add RulesetID
-    const [Ruleset, setRuleset] = useState([
-        {
-            id: 1,
-            priority: 1,
-            number: Math.floor(Math.random() * 9000) + 1000,
-            note: "",
-            fields: [
-                {
-                    id: 1,
-                    field: "PerformanceTime",
-                    operator: "",
-                    value: "",
-                    fieldID: 1,
-                    operatorID: 1,
-                    valueID: 1
-                },
-            ]
-        }
-    ]);
+    const [Ruleset, setRuleset] = useState(await Api.getRuleset(null));
 
     let tmpArray: any = []
     const defaultOperators: any = []
@@ -138,7 +121,7 @@ export default function App() {
         setRuleset(updatedRuleset);
     };
     const handleChange = (event: any, rulesetId: number, fieldId: number) => {
-        const { name, value } = event.target;
+        const {name, value} = event.target;
         setRuleset(prevState => {
             const rulesetIndex = prevState.findIndex(item => item.id === rulesetId);
             const fieldIndex = prevState[rulesetIndex].fields.findIndex(item => item.id === fieldId);
@@ -170,7 +153,7 @@ export default function App() {
     //TODO: delete code before deploy
     useEffect(() => {
         console.log(Ruleset)
-    },[Ruleset])
+    }, [Ruleset])
 
     const deleteRulesetHandler = (id: number) => {
         const filteredRulesets = Ruleset
@@ -219,9 +202,10 @@ export default function App() {
             setRuleset([...Ruleset]);
         }
     }
+
     function Reset() {
         //Reset Ruleset Array
-        if(confirm("Are you sure you want to reset all rulesets?")) {
+        if (confirm("Are you sure you want to reset all rulesets?")) {
             window.location.reload();
             setRuleset(
                 [
@@ -246,9 +230,11 @@ export default function App() {
             );
         }
     }
+
     function Submit(e: any) {
         e.preventDefault()
     }
+
     return (
         <>
             {
@@ -296,8 +282,8 @@ export default function App() {
                                 <InputField label="note"
                                             name="note"
                                             className="w-full"
-                                            //componentID={oneRuleset.id}
-                                            //inputValue={undefined}
+                                    //componentID={oneRuleset.id}
+                                    //inputValue={undefined}
                                             inputType="text"
                                             onInputChange={(e: any) => handleChange(e, oneRuleset.id, 1)}
                                             placeholder="type something..."/>
@@ -340,9 +326,9 @@ export default function App() {
                                                             oneRuleset.fields[index.id - 1].valueID)}
                                             />
                                             <button type="button"
-                                                onClick={() => deleteFieldHandler(oneRuleset.id - 1,
-                                                    oneRuleset.fields[index.id-1].id)}
-                                                disabled={oneRuleset.fields.length <= 1}
+                                                    onClick={() => deleteFieldHandler(oneRuleset.id - 1,
+                                                        oneRuleset.fields[index.id - 1].id)}
+                                                    disabled={oneRuleset.fields.length <= 1}
                                                     className="disabled:opacity-75 duration-500"
                                             >
                                                 <AiOutlineMinus
