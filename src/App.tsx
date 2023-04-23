@@ -48,7 +48,6 @@ export default function App() {
       ]
     }
   ]
-
   // Ruleset
   //TODO: load initial rulesets from API
   const [Ruleset, setRuleset] = useState(initialRuleset);
@@ -156,12 +155,12 @@ export default function App() {
     // const updatedOpArr = [...mappedOperatorArr]
     // updatedOpArr[rulesetIndex].OperatorsPerField.filter(current => current.id !== 1)
     //todo: remap
-    const newOperatorState = [...mappedOperatorArr];
+    /* const newOperatorState = [...mappedOperatorArr];
     newOperatorState[rulesetIndex].OperatorsPerField = newOperatorState[rulesetIndex].OperatorsPerField.filter(current => current.id !== fieldId);
     newOperatorState[rulesetIndex].OperatorsPerField.forEach((operatorsPerField, index) => {
-      operatorsPerField.id = index;
+      operatorsPerField.id = index + 1;
     });
-    setMappedOperatorArr([...newOperatorState]);
+    setMappedOperatorArr([...newOperatorState]); */
   };
 
   const handleChange = (event: any, rulesetId: number, fieldId: number) => {
