@@ -138,10 +138,10 @@ export default function App() {
     return fields.map((field, index) => {
       return {
         ...field,
-        id: index + 1,
-        fieldID: index + 1,
-        operatorID: index + 1,
-        valueID: index + 1,
+        id: index,
+        fieldID: index,
+        operatorID: index,
+        valueID: index,
       };
     });
   }
@@ -151,16 +151,13 @@ export default function App() {
     const updatedFields = updatedRuleset[rulesetIndex].fields.filter(field => field.id !== fieldId);
     updatedRuleset[rulesetIndex].fields = remapFieldsIds(updatedFields);
     setRuleset([...updatedRuleset]);
-    //delete also operators obj from arr
-    // const updatedOpArr = [...mappedOperatorArr]
-    // updatedOpArr[rulesetIndex].OperatorsPerField.filter(current => current.id !== 1)
-    //todo: remap
-    /* const newOperatorState = [...mappedOperatorArr];
+    // delete and remap also operators
+    const newOperatorState = [...mappedOperatorArr];
     newOperatorState[rulesetIndex].OperatorsPerField = newOperatorState[rulesetIndex].OperatorsPerField.filter(current => current.id !== fieldId);
     newOperatorState[rulesetIndex].OperatorsPerField.forEach((operatorsPerField, index) => {
-      operatorsPerField.id = index + 1;
+      operatorsPerField.id = index;
     });
-    setMappedOperatorArr([...newOperatorState]); */
+    setMappedOperatorArr([...newOperatorState]); //*/
   };
 
   const handleChange = (event: any, rulesetId: number, fieldId: number) => {
@@ -378,11 +375,11 @@ export default function App() {
                                    componentID={index.fieldID}
                                    fieldValue={undefined}
                       />
-                      <SelectField label={mappedOperatorArr[oneRuleset.priority - 1].OperatorsPerField[index.id]?.id}
+                      <SelectField label="operator"
                                    name="operator"
                                    componentID={index.operatorID}
                                    //because priority cannot be 0
-                                   options={mappedOperatorArr[oneRuleset.priority - 1].OperatorsPerField[index.id]?.operators || []}
+                                   options={mappedOperatorArr[oneRuleset.priority - 1].OperatorsPerField[index.id].operators || []}
                                    fieldValue={undefined}
                                    onSelectChange={(e: any) => handleChange(
                                      e,
@@ -401,9 +398,11 @@ export default function App() {
                                     oneRuleset.fields[index.id].valueID)}
                       />
                       <button type="button"
-                              onClick={() => deleteFieldHandler(
+                              onClick={() => {
+                                deleteFieldHandler(
                                 oneRuleset.priority - 1,
-                                oneRuleset.fields[index.id].id)}
+                                  oneRuleset.fields[index.id].id);
+                              }}
                               disabled={oneRuleset.fields.length <= 1}
                               className="disabled:opacity-75 duration-500"
                       >
