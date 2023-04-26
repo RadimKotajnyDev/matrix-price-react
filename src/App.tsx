@@ -159,7 +159,6 @@ export default function App() {
     });
     setMappedOperatorArr([...newOperatorState]); //*/
   };
-
   const handleChange = (event: any, rulesetId: number, fieldId: number) => {
     const {name, value} = event.target;
     setRuleset(prevState => {
@@ -200,12 +199,12 @@ export default function App() {
     const filteredRulesets = Ruleset
       .filter((oneRuleset) => oneRuleset.priority !== priority)
       .map((oneRuleset, index) => ({...oneRuleset, priority: index + 1}))
-    setRuleset(filteredRulesets);
-    //FIXME Uncaught TypeError: can't access property "OperatorsPerField", mappedOperatorArr[(oneRuleset.priority - 1)] is undefined
-    const filteredOptions = operatorsInRuleset
-      .filter((oneOperatorField) => oneOperatorField.Ruleset !== priority - 1)
+    // fixed: There was incorrectly set an array from original operatorsInRuleset instead of mappedOperatorArr
+    const filteredOptions = [...mappedOperatorArr]
+      .filter((oneOperatorField) => oneOperatorField.Ruleset !== priority)
       .map((oneOperatorField, index) => ({...oneOperatorField, Ruleset: index}))
-    setMappedOperatorArr(filteredOptions)
+    setMappedOperatorArr([...filteredOptions])
+    setRuleset([...filteredRulesets]);
   }
   const AddRulesetHandler = () => {
     // check if IDs are duplicated
