@@ -6,7 +6,6 @@ import {GoChevronDown, GoChevronUp} from "react-icons/go";
 import Pricing from "./components/Pricing";
 import InputField from "./components/InputField";
 import SelectField from "./components/SelectField";
-import Offer from "./components/Offer";
 
 export default function App() {
 
@@ -45,7 +44,8 @@ export default function App() {
                     operatorID: 0,
                     valueID: 0
                 },
-            ]
+            ],
+            offerCode: ""
         }
     ]
     // Ruleset
@@ -171,6 +171,7 @@ export default function App() {
             const isField = name === 'field';
             const isOperator = name === 'operator';
             const isValue = name === 'value';
+            const isOffer = name === 'offer'
             return [
                 ...prevState.slice(0, rulesetIndex),
                 {
@@ -186,6 +187,7 @@ export default function App() {
                         },
                         ...prevState[rulesetIndex].fields.slice(fieldIndex + 1),
                     ],
+                    offerCode: isOffer ? value : prevState[rulesetIndex].offerCode
                 },
                 ...prevState.slice(rulesetIndex + 1),
             ];
@@ -193,10 +195,10 @@ export default function App() {
     };
 
     //TODO: delete code before deploy
-    /*useEffect(() => {
+    useEffect(() => {
         console.log(Ruleset)
-    }, [Ruleset]) */
-    useEffect(() => console.log(mappedOperatorArr), [mappedOperatorArr])
+    }, [Ruleset])
+    /* useEffect(() => console.log(mappedOperatorArr), [mappedOperatorArr]) */
 
     const deleteRulesetHandler = (priority: number) => {
         const filteredRulesets = Ruleset
@@ -228,7 +230,8 @@ export default function App() {
                     id: 0, field: "PerformanceTime", operator: "", value: "",
                     fieldID: 0, operatorID: 0, valueID: 0
                 },
-            ]
+            ],
+            offerCode: ""
         });
         setRuleset([...Ruleset]);
         //SET OPERATORS
@@ -432,7 +435,17 @@ export default function App() {
                             </div>
                             <div className="flex flex-col md:flex-row space-x-6">
                                 <Pricing onPricingDataSubmit={(pricingData: any) => console.log(pricingData)}/>
-                                <Offer/>
+                                {/* <Offer/> */}
+                                <div className="mt-14 border h-fit pb-5 w-fit p-2 rounded text-sm">
+                                    <InputField label="offer code"
+                                                name="offer"
+                                                className=""
+                                                //componentID={oneRuleset.id}
+                                                //inputValue={undefined}
+                                                inputType="text"
+                                                onInputChange={(e: any) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
+                                    />
+                                </div>
                             </div>
                             {/* submit and reset buttons*/}
                             {/* TODO: submit (PUT method) and delete (DELETE method), pass current ruleset to method argument */}
