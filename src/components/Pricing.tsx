@@ -1,4 +1,4 @@
-  import {useFormik} from "formik";
+import {useFormik} from "formik";
 import * as Yup from "yup"
 /*
     Pricing
@@ -46,7 +46,6 @@ const Pricing = (props: any) => {
     },
 
   })
-  //console.log(formik.values)
   return (
     <div
       className="mt-14 border w-fit p-2 rounded text-sm">

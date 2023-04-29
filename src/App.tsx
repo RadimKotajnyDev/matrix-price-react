@@ -29,7 +29,8 @@ export default function App() {
         {name: "In", id: 7},
     ];
 
-    const initialRuleset = [
+    // fieldID, operatorID and valueID was added due errors
+    const initialRuleset =
         {
             id: Math.floor(Math.random() * 9000) + 1000,
             priority: 1,
@@ -45,12 +46,18 @@ export default function App() {
                     valueID: 0
                 },
             ],
-            offerCode: ""
+            offerCode: "",
+            pricing: {
+                BookingFeeAbsolute: 0,
+                BookingFeePercent: 0,
+                PriceSelling: 0,
+                InsideCommission: 0
+            }
         }
-    ]
+
     // Ruleset
     //TODO: load initial rulesets from API
-    const [Ruleset, setRuleset] = useState(initialRuleset);
+    const [Ruleset, setRuleset] = useState([initialRuleset]);
 
     let tmpArray: any = []
     const defaultOperators: any = []
@@ -193,7 +200,7 @@ export default function App() {
             ];
         });
     };
-
+    /*
     //TODO: delete code before deploy
     useEffect(() => {
         console.log(Ruleset)
@@ -212,7 +219,7 @@ export default function App() {
         setRuleset([...filteredRulesets]);
     }
     const AddRulesetHandler = () => {
-        // check if IDs are duplicated
+        // check if IDs aren't duplicated
         let newID = Math.floor(Math.random() * 9000) + 1000;
         for (let i = 0; i < Ruleset.length; i++) {
             //console.log(i)
@@ -231,7 +238,13 @@ export default function App() {
                     fieldID: 0, operatorID: 0, valueID: 0
                 },
             ],
-            offerCode: ""
+            offerCode: "",
+            pricing: {
+                BookingFeeAbsolute: 0,
+                BookingFeePercent: 0,
+                PriceSelling: 0,
+                InsideCommission: 0
+            }
         });
         setRuleset([...Ruleset]);
         //SET OPERATORS
@@ -311,14 +324,14 @@ export default function App() {
                 Ruleset.map((oneRuleset) => {
                     const {id, priority} = oneRuleset;
                     return <div key={priority}
-                                className="scale-[90%] sm:scale-100
+                                className="scale-[70%] sm:scale-100
                        flex ml-auto mr-auto mt-14 w-fit p-5 outline outline-1
                                  rounded outline-gray-200 shadow-lg">
                         <form
                             className="w-full mr-auto ml-auto px-5">
                             <div className="flex flex-col md:flex-row md:justify-between">
                                 <p className="mb-5 uppercase tracking-wide
-                                 text-gray-700 text-2xl font-bold mb-2"
+                                 text-gray-700 text-2xl font-bold"
                                 >Ruleset&nbsp;#{id}&nbsp;
                                     <span className="font-light">|</span>
                                     &nbsp;Priority:&nbsp;#{priority}</p>
@@ -357,8 +370,8 @@ export default function App() {
                                 <InputField label="note"
                                             name="note"
                                             className="w-full"
-                                    //componentID={oneRuleset.id}
-                                    //inputValue={undefined}
+                                            //componentID={oneRuleset.id}
+                                            //inputValue={undefined}
                                             inputType="text"
                                             onInputChange={(e: any) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
                                             placeholder="type something..."/>
@@ -440,8 +453,8 @@ export default function App() {
                                     <InputField label="offer code"
                                                 name="offer"
                                                 className=""
-                                                //componentID={oneRuleset.id}
-                                                //inputValue={undefined}
+                                        //componentID={oneRuleset.id}
+                                        //inputValue={undefined}
                                                 inputType="text"
                                                 onInputChange={(e: any) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
                                     />
