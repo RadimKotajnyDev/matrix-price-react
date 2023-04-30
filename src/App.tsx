@@ -6,8 +6,11 @@ import {GoChevronDown, GoChevronUp} from "react-icons/go";
 //Components
 import InputField from "./components/InputField";
 import SelectField from "./components/SelectField";
+//API
+import {Api} from "./api/api";
 
-const baseURL = "../APITEST.json"
+
+//const baseURL = "../APITEST.json"
 export default function App() {
 
     /*
@@ -36,6 +39,17 @@ export default function App() {
         {name: "NotEquals", id: 6},
         {name: "In", id: 7},
     ];
+
+    const daysOfWeek = [
+        {name: "", id: 0},
+        {name: "Monday", id: 1},
+        {name: "Tuesday", id: 2},
+        {name: "Wednesday", id: 3},
+        {name: "Thursday", id: 4},
+        {name: "Friday", id: 5},
+        {name: "Saturday", id: 6},
+        {name: "Sunday", id: 7},
+    ]
 
     // fieldID, operatorID and valueID was added due errors
     const initialRuleset =
@@ -71,15 +85,13 @@ export default function App() {
     const [Ruleset, setRuleset] = useState([initialRuleset]);
 
     //API GET REQUEST
+    /*
     useEffect(() => {
-            axios.get(baseURL).then((response) => {
-            setRuleset(response.data)
-        })
-            .catch(error => {
-                alert(error);
+        Api.getRuleset(0)
+            .then(function (response: any) {
+                setRuleset(response)
             })
-    }, [])
-
+    }, []) */
 
     let tmpArray: any = []
     const defaultOperators: any = []
@@ -91,7 +103,7 @@ export default function App() {
         {
             Ruleset: 0,
             OperatorsPerField: [
-                {id: 0, operators: defaultOperators},
+                {id: 0, operators: defaultOperators, type: "time"},
             ]
         }
     ]
@@ -107,15 +119,15 @@ export default function App() {
                 tmpArray.push(operatorOptions[2])
                 tmpArray.push(operatorOptions[4])
                 mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].operators = [...tmpArray]
+                mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].type = "time"
                 setMappedOperatorArr([...mappedOperatorArr])
                 break;
             case "PerformanceDate": //2
-            case "BookingDate": //5
-            case "FaceValue": //6
                 tmpArray = []
                 tmpArray = [...operatorOptions]
                 tmpArray.pop();
                 mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].operators = [...tmpArray]
+                mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].type = "date"
                 setMappedOperatorArr([...mappedOperatorArr])
                 break;
             case "PerformanceDayOfWeek": //3
@@ -135,9 +147,25 @@ export default function App() {
                 tmpArray.push(operatorOptions[6]);
                 tmpArray.push(operatorOptions[7]);
                 mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].operators = [...tmpArray]
+                mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].type = "text"
                 setMappedOperatorArr([...mappedOperatorArr])
                 break;
-            //note: case 5 and 6 are the same as 2
+            case "BookingDate": //5
+                tmpArray = []
+                tmpArray = [...operatorOptions]
+                tmpArray.pop();
+                mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].operators = [...tmpArray]
+                mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].type = "date"
+                setMappedOperatorArr([...mappedOperatorArr])
+                break;
+            case "FaceValue": //6
+                tmpArray = []
+                tmpArray = [...operatorOptions]
+                tmpArray.pop();
+                mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].operators = [...tmpArray]
+                mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].type = "number"
+                setMappedOperatorArr([...mappedOperatorArr])
+                break;
             default:
                 alert("Map operator error");
                 break;
@@ -285,7 +313,7 @@ export default function App() {
         mappedOperatorArr.push({
             Ruleset: Ruleset.length - 1,
             OperatorsPerField: [
-                {id: 0, operators: defaultOperators}
+                {id: 0, operators: defaultOperators, type: "time"}
             ]
         })
         setMappedOperatorArr([...mappedOperatorArr])
@@ -472,18 +500,33 @@ export default function App() {
                                                              oneRuleset.priority
                                                          )}
                                             />
-                                            <InputField label="value"
-                                                        name="value"
-                                                        componentID={index.valueID}
-                                                        inputValue={index.value}
-                                                        inputType="text"
-                                                        onInputChange={(e: any) => handleChange(
-                                                            e,
-                                                            oneRuleset.id,
-                                                            oneRuleset.fields[index.id].valueID,
-                                                            oneRuleset.priority
-                                                        )}
-                                            />
+                                            {oneRuleset.fields[index.id].field !== "PerformanceDayOfWeek" ?
+                                                <InputField label="value"
+                                                            name="value"
+                                                            componentID={index.valueID}
+                                                            inputValue={index.value}
+                                                            inputType={mappedOperatorArr[oneRuleset.priority - 1]
+                                                                .OperatorsPerField[index.id].type || "time"}
+                                                            onInputChange={(e: any) => handleChange(
+                                                                e,
+                                                                oneRuleset.id,
+                                                                oneRuleset.fields[index.id].valueID,
+                                                                oneRuleset.priority
+                                                            )}
+                                            /> :
+                                                <SelectField label="day of week"
+                                                             name="value"
+                                                             //componentID={index.operatorID}
+                                                    //because priority cannot be 0
+                                                             options={daysOfWeek}
+                                                             fieldValue={undefined}
+                                                             onSelectChange={(e: any) => handleChange(
+                                                                 e,
+                                                                 oneRuleset.id,
+                                                                 oneRuleset.fields[index.id].operatorID,
+                                                                 oneRuleset.priority
+                                                             )}
+                                                />}
                                             <button type="button"
                                                     onClick={() => {
                                                         deleteFieldHandler(
