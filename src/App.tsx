@@ -7,7 +7,8 @@ import Pricing from "./components/Pricing";
 import InputField from "./components/InputField";
 import SelectField from "./components/SelectField";
 import Offer from "./components/Offer";
-import { Api } from "./api/api";
+import {Api} from "./api/api";
+import {Convert} from "./api/ruleset";
 
 export default async function App() {
     const rulesetClass = "mb-5 uppercase tracking-wide text-gray-700 text-2xl font-bold mb-2";
@@ -34,9 +35,43 @@ export default async function App() {
     ];
 
     // Ruleset
-    //TODO: load initial rulesets from API
-    //TODO: Rename ID to priority and add RulesetID
-    const [Ruleset, setRuleset] = useState(await Api.getRuleset(null));
+    const initialRuleset =
+        {
+            id: Math.floor(Math.random() * 9000) + 1000,
+            priority: 1,
+            note: "",
+            fields: [
+                {
+                    id: 0,
+                    field: "PerformanceTime",
+                    operator: "",
+                    value: "",
+                    fieldID: 0,
+                    operatorID: 0,
+                    valueID: 0
+                },
+            ],
+            offerCode: "",
+            pricing: {
+                BookingFeeAbsolute: 0,
+                BookingFeePercent: 0,
+                PriceSelling: 0,
+                InsideCommission: 0,
+                BFAid: 0,
+                BFPid: 0,
+                PSid: 0,
+                ICid: 0
+            }
+        }
+
+    const [Ruleset, setRuleset] = useState([initialRuleset]);
+
+    useEffect(() => {
+        Api.getRuleset(0)
+            .then(function (response: any) {
+                setRuleset(response)
+            })
+    }, [])
 
     let tmpArray: any = []
     const defaultOperators: any = []
