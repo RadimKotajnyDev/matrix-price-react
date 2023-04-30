@@ -1,12 +1,13 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import axios from "axios";
 //Icons (MIT License)
 import {AiOutlineMinus, AiOutlinePlus} from "react-icons/ai";
 import {GoChevronDown, GoChevronUp} from "react-icons/go";
 //Components
-//import Pricing from "./components/Pricing";
 import InputField from "./components/InputField";
 import SelectField from "./components/SelectField";
 
+const baseURL = "../APITEST.json"
 export default function App() {
 
     /*
@@ -67,8 +68,18 @@ export default function App() {
         }
 
     // Ruleset
-    //TODO: load initial rulesets from API
     const [Ruleset, setRuleset] = useState([initialRuleset]);
+
+    //API GET REQUEST
+    useEffect(() => {
+            axios.get(baseURL).then((response) => {
+            setRuleset(response.data)
+        })
+            .catch(error => {
+                alert(error);
+            })
+    }, [])
+
 
     let tmpArray: any = []
     const defaultOperators: any = []
@@ -576,7 +587,6 @@ export default function App() {
                                 </div>
                             </div>
                             {/* submit and reset buttons*/}
-                            {/* TODO: submit (PUT method) and delete (DELETE method), pass current ruleset to method argument */}
                             <div className="flex flex-row justify-center mt-5">
                                 <div className="m-5">
                                     <button type="submit" value="submit" onClick={(e) =>

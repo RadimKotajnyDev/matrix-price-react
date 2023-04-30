@@ -1,0 +1,29 @@
+[
+  {
+    "id": 2044,
+    "priority": 1,
+    "note": "",
+    "fields": [
+      {
+        "id": 0,
+        "field": "PerformanceTime",
+        "operator": "",
+        "value": "",
+        "fieldID": 0,
+        "operatorID": 0,
+        "valueID": 0
+      }
+    ],
+    "offerCode": "",
+    "pricing": {
+      "BookingFeeAbsolute": 0,
+      "BookingFeePercent": 0,
+      "PriceSelling": 0,
+      "InsideCommission": 0,
+      "BFAid": 0,
+      "BFPid": 0,
+      "PSid": 0,
+      "ICid": 0
+    }
+  }
+]
