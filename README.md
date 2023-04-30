@@ -4,6 +4,9 @@
 - React
 - Vite
 - TypeScript
+## Setup
+`npm install`
+`npm run dev`
 
 Jedná se o tool pro úpravu tzv Price Matrixů.
 
