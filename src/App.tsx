@@ -3,7 +3,7 @@ import React, {useEffect, useState} from "react";
 import {AiOutlineMinus, AiOutlinePlus} from "react-icons/ai";
 import {GoChevronDown, GoChevronUp} from "react-icons/go";
 //Components
-import Pricing from "./components/Pricing";
+//import Pricing from "./components/Pricing";
 import InputField from "./components/InputField";
 import SelectField from "./components/SelectField";
 
@@ -51,7 +51,11 @@ export default function App() {
                 BookingFeeAbsolute: 0,
                 BookingFeePercent: 0,
                 PriceSelling: 0,
-                InsideCommission: 0
+                InsideCommission: 0,
+                BFAid: 0,
+                BFPid: 0,
+                PSid: 0,
+                ICid: 0
             }
         }
 
@@ -178,7 +182,11 @@ export default function App() {
             const isField = name === 'field';
             const isOperator = name === 'operator';
             const isValue = name === 'value';
-            const isOffer = name === 'offer'
+            const isOffer = name === 'offer';
+            const isBFA = name === 'BookingFeeAbsolute';
+            const isBFP = name === 'BookingFeePercent';
+            const isPS = name === 'PriceSelling';
+            const isIC = name === 'InsideCommission';
             return [
                 ...prevState.slice(0, rulesetIndex),
                 {
@@ -194,7 +202,17 @@ export default function App() {
                         },
                         ...prevState[rulesetIndex].fields.slice(fieldIndex + 1),
                     ],
-                    offerCode: isOffer ? value : prevState[rulesetIndex].offerCode
+                    offerCode: isOffer ? value : prevState[rulesetIndex].offerCode,
+                    pricing: {
+                        BookingFeeAbsolute: isBFA ? parseInt(value) : prevState[rulesetIndex].pricing.BookingFeeAbsolute,
+                        BookingFeePercent: isBFP ? parseInt(value) : prevState[rulesetIndex].pricing.BookingFeePercent,
+                        PriceSelling: isPS ? parseInt(value) : prevState[rulesetIndex].pricing.PriceSelling,
+                        InsideCommission: isIC ? parseInt(value) : prevState[rulesetIndex].pricing.InsideCommission,
+                        BFAid: rulesetPriority - 1,
+                        BFPid: rulesetPriority - 1,
+                        PSid: rulesetPriority - 1,
+                        ICid: rulesetPriority - 1,
+                    }
                 },
                 ...prevState.slice(rulesetIndex + 1),
             ];
@@ -243,7 +261,11 @@ export default function App() {
                 BookingFeeAbsolute: 0,
                 BookingFeePercent: 0,
                 PriceSelling: 0,
-                InsideCommission: 0
+                InsideCommission: 0,
+                BFAid: 0,
+                BFPid: 0,
+                PSid: 0,
+                ICid: 0
             }
         });
         setRuleset([...Ruleset]);
@@ -314,8 +336,9 @@ export default function App() {
          */
     }
 
-    function Submit(e: any) {
+    function SubmitSave(e: any, Ruleset: any, RulesetPriority: number) {
         e.preventDefault()
+        console.log(Ruleset[RulesetPriority - 1])
     }
 
     return (
@@ -323,11 +346,11 @@ export default function App() {
             {
                 Ruleset.map((oneRuleset) => {
                     const {id, priority} = oneRuleset;
-                    return <div key={priority}
+                    return <form key={priority}
                                 className="scale-[70%] sm:scale-100
                        flex ml-auto mr-auto mt-14 w-fit p-5 outline outline-1
                                  rounded outline-gray-200 shadow-lg">
-                        <form
+                        <div
                             className="w-full mr-auto ml-auto px-5">
                             <div className="flex flex-col md:flex-row md:justify-between">
                                 <p className="mb-5 uppercase tracking-wide
@@ -373,7 +396,8 @@ export default function App() {
                                             //componentID={oneRuleset.id}
                                             //inputValue={undefined}
                                             inputType="text"
-                                            onInputChange={(e: any) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
+                                            onInputChange={(e: any) =>
+                                                handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
                                             placeholder="type something..."/>
                             </div>
                             <div>
@@ -398,7 +422,8 @@ export default function App() {
                                                          name="operator"
                                                          componentID={index.operatorID}
                                                 //because priority cannot be 0
-                                                         options={mappedOperatorArr[oneRuleset.priority - 1].OperatorsPerField[index.id].operators || []}
+                                                         options={mappedOperatorArr[oneRuleset.priority - 1]
+                                                             .OperatorsPerField[index.id].operators || []}
                                                          fieldValue={undefined}
                                                          onSelectChange={(e: any) => handleChange(
                                                              e,
@@ -447,7 +472,59 @@ export default function App() {
                                 </button>
                             </div>
                             <div className="flex flex-col md:flex-row space-x-6">
-                                <Pricing onPricingDataSubmit={(pricingData: any) => console.log(pricingData)}/>
+                                <div className="mt-14 border w-fit p-2 rounded text-sm">
+                                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold
+                                     mb-2">Pricing</label>
+                                    <div className="grid grid-cols-2 w-fit max-w-xs">
+                                        <label htmlFor="BookingFeeAbsolute"
+                                                className="font-light mt-1"
+                                        >BookingFeeAbsolute (&#163;)</label>
+                                        <input type="number" required name="BookingFeeAbsolute"
+                                               value={oneRuleset.pricing.BookingFeeAbsolute}
+                                               onChange={(e) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
+                                               id={`BookingFeeAbsolute-${oneRuleset.pricing.BFAid}`}
+                                                className="appearance-none text-gray-700 bg-gray-200 border rounded
+                                                 py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-2 w-fit max-w-xs">
+                                        <label htmlFor="BookingFeePercent"
+                                               className="font-light mt-1"
+                                        >BookingFeePercent (%)</label>
+                                        <input type="number" required name="BookingFeePercent"
+                                               value={oneRuleset.pricing.BookingFeePercent}
+                                               onChange={(e) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
+                                               id={`BookingFeeAbsolute-${oneRuleset.pricing.BFPid}`}
+                                               className="appearance-none text-gray-700 bg-gray-200 border rounded
+                                                py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-2 w-fit max-w-xs">
+                                        <label htmlFor="PriceSelling"
+                                               className="font-light mt-1"
+                                        >PriceSelling (&#163;)</label>
+                                        <input type="number" required name="PriceSelling"
+                                               value={oneRuleset.pricing.PriceSelling}
+                                               onChange={(e) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
+                                               id={`BookingFeeAbsolute-${oneRuleset.pricing.PSid}`}
+                                               className="appearance-none text-gray-700 bg-gray-200 border
+                                                rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-2 w-fit max-w-xs">
+                                        <label htmlFor="InsideCommission"
+                                               className="font-light mt-1"
+                                        >InsideCommission (%)</label>
+                                        <input type="number" required name="InsideCommission"
+                                               value={oneRuleset.pricing.InsideCommission}
+                                               onChange={(e) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
+                                               id={`BookingFeeAbsolute-${oneRuleset.pricing.ICid}`}
+                                               className="appearance-none text-gray-700 bg-gray-200 border
+                                                rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                        />
+                                    </div>
+                                </div>
+                                {/* <Pricing onPricingDataSubmit={(pricingData: any) => console.log(pricingData)}/> */}
                                 {/* <Offer/> */}
                                 <div className="mt-14 border h-fit pb-5 w-fit p-2 rounded text-sm">
                                     <InputField label="offer code"
@@ -456,7 +533,8 @@ export default function App() {
                                         //componentID={oneRuleset.id}
                                         //inputValue={undefined}
                                                 inputType="text"
-                                                onInputChange={(e: any) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
+                                                onInputChange={(e: any) =>
+                                                    handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
                                     />
                                 </div>
                             </div>
@@ -464,7 +542,8 @@ export default function App() {
                             {/* TODO: submit (PUT method) and delete (DELETE method), pass current ruleset to method argument */}
                             <div className="flex flex-row justify-center mt-5">
                                 <div className="m-5">
-                                    <button type="submit" value="submit" onClick={(e) => Submit(e)}
+                                    <button type="submit" value="submit" onClick={(e) =>
+                                        SubmitSave(e, Ruleset, oneRuleset.priority)}
                                             className="w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase
                              bg-slate-900 text-white rounded-lg hover:opacity-75 duration-700">save
                                     </button>
@@ -476,8 +555,8 @@ export default function App() {
                                     </button>
                                 </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 })
             }
             <button type="button" onClick={AddRulesetHandler}

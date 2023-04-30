@@ -44,12 +44,12 @@ const Pricing = (props: any) => {
       // Poslat data do parent componentu
       props.onPricingDataSubmit(pricingData);
     },
-
   })
+
   return (
     <div
       className="mt-14 border w-fit p-2 rounded text-sm">
-      <h1 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Pricing</h1>
+      <h2 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">Pricing</h2>
       <div className="grid grid-flow-row">
         <div className="grid grid-cols-2 w-80">
           <label htmlFor="BookingFeeAbsolute"
