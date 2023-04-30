@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 //Icons (MIT License)
 import {AiOutlineMinus, AiOutlinePlus} from "react-icons/ai";
 import {GoChevronDown, GoChevronUp} from "react-icons/go";
@@ -211,10 +211,10 @@ export default function App() {
                     ],
                     offerCode: isOffer ? value : prevState[rulesetIndex].offerCode,
                     pricing: {
-                        BookingFeeAbsolute: isBFA ? parseInt(value) : prevState[rulesetIndex].pricing.BookingFeeAbsolute,
-                        BookingFeePercent: isBFP ? parseInt(value) : prevState[rulesetIndex].pricing.BookingFeePercent,
-                        PriceSelling: isPS ? parseInt(value) : prevState[rulesetIndex].pricing.PriceSelling,
-                        InsideCommission: isIC ? parseInt(value) : prevState[rulesetIndex].pricing.InsideCommission,
+                        BookingFeeAbsolute: isBFA ? Math.abs(parseInt(value)) : prevState[rulesetIndex].pricing.BookingFeeAbsolute,
+                        BookingFeePercent: isBFP ? Math.abs(parseInt(value)) : prevState[rulesetIndex].pricing.BookingFeePercent,
+                        PriceSelling: isPS ? Math.abs(parseInt(value)) : prevState[rulesetIndex].pricing.PriceSelling,
+                        InsideCommission: isIC ? Math.abs(parseInt(value)) : prevState[rulesetIndex].pricing.InsideCommission,
                         BFAid: rulesetPriority - 1,
                         BFPid: rulesetPriority - 1,
                         PSid: rulesetPriority - 1,
@@ -510,9 +510,11 @@ export default function App() {
                                         >BookingFeeAbsolute (&#163;)</label>
                                         <input type="number" required name="BookingFeeAbsolute"
                                                value={oneRuleset.pricing.BookingFeeAbsolute}
+                                               pattern="[0-9]*"
                                                onChange={(e) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
                                                id={`BookingFeeAbsolute-${oneRuleset.pricing.BFAid}`}
                                                className="appearance-none text-gray-700 bg-gray-200 border rounded
+                                               invalid:border-red-400 invalid:focus:border-red-700
                                                  py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                                         />
                                     </div>
@@ -522,9 +524,11 @@ export default function App() {
                                         >BookingFeePercent (%)</label>
                                         <input type="number" required name="BookingFeePercent"
                                                value={oneRuleset.pricing.BookingFeePercent}
+                                               pattern="[0-9]*"
                                                onChange={(e) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
                                                id={`BookingFeeAbsolute-${oneRuleset.pricing.BFPid}`}
                                                className="appearance-none text-gray-700 bg-gray-200 border rounded
+                                               invalid:border-red-400 invalid:focus:border-red-700
                                                 py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                                         />
                                     </div>
@@ -534,9 +538,11 @@ export default function App() {
                                         >PriceSelling (&#163;)</label>
                                         <input type="number" required name="PriceSelling"
                                                value={oneRuleset.pricing.PriceSelling}
+                                               pattern="[0-9]*"
                                                onChange={(e) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
                                                id={`BookingFeeAbsolute-${oneRuleset.pricing.PSid}`}
                                                className="appearance-none text-gray-700 bg-gray-200 border
+                                               invalid:border-red-400 invalid:focus:border-red-700
                                                 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                                         />
                                     </div>
@@ -546,9 +552,11 @@ export default function App() {
                                         >InsideCommission (%)</label>
                                         <input type="number" required name="InsideCommission"
                                                value={oneRuleset.pricing.InsideCommission}
+                                               pattern="[0-9]*"
                                                onChange={(e) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
                                                id={`BookingFeeAbsolute-${oneRuleset.pricing.ICid}`}
                                                className="appearance-none text-gray-700 bg-gray-200 border
+                                               invalid:border-red-400 invalid:focus:border-red-700
                                                 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                                         />
                                     </div>
