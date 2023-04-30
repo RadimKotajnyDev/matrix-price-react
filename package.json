@@ -9,11 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "formik": "^2.2.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.7.1",
-    "yup": "^0.32.11"
+    "react-icons": "^4.7.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.26",
