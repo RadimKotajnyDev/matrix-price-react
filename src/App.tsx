@@ -9,6 +9,13 @@ import SelectField from "./components/SelectField";
 
 export default function App() {
 
+    /*
+    // TEST VALUES HERE:
+    useEffect(() => {
+        console.log(Ruleset)
+    }, [Ruleset])
+    /* useEffect(() => console.log(mappedOperatorArr), [mappedOperatorArr]) */
+
     const fieldOptions = [
         {name: "PerformanceTime", id: 0},
         {name: "PerformanceDate", id: 1},
@@ -218,12 +225,6 @@ export default function App() {
             ];
         });
     };
-    /*
-    //TODO: delete code before deploy
-    useEffect(() => {
-        console.log(Ruleset)
-    }, [Ruleset])
-    /* useEffect(() => console.log(mappedOperatorArr), [mappedOperatorArr]) */
 
     const deleteRulesetHandler = (priority: number) => {
         const filteredRulesets = Ruleset
@@ -351,10 +352,10 @@ export default function App() {
                             BookingFeePercent: 0,
                             PriceSelling: 0,
                             InsideCommission: 0,
-                            BFAid: 0,
-                            BFPid: 0,
-                            PSid: 0,
-                            ICid: 0
+                            BFAid: rulesetPriority - 1,
+                            BFPid: rulesetPriority - 1,
+                            PSid: rulesetPriority - 1,
+                            ICid: rulesetPriority - 1
                         }
                     }
                 }
@@ -590,8 +591,8 @@ export default function App() {
             }
             <button type="button" onClick={AddRulesetHandler}
                     className="block ml-auto mr-auto mt-5 mb-14 cursor-pointer p-3 uppercase rounded-md
-                     text-white bg-slate-900 hover:opacity-75 duration-700">add
-                ruleset
+                     text-white bg-slate-900 hover:opacity-75 duration-700">
+                add ruleset
             </button>
         </>
     );
