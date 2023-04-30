@@ -326,14 +326,42 @@ export default function App() {
         }
     }
 
-    function Reset() {
-        /* TODO: delete current ruleset, not all
-        //Reset Ruleset Array
-        if (confirm("Are you sure you want to reset all rulesets?")) {
-            window.location.reload();
-            setRuleset(initialRuleset);
+    function Reset(rulesetID: number, rulesetPriority: number) {
+        if (confirm("This action will reset Ruleset #" + rulesetID + ".")) {
+            const remappedRuleset = Ruleset.map(oneRuleset => {
+                if (oneRuleset.id === rulesetID) {
+                    return {
+                        id: rulesetID,
+                        priority: rulesetPriority,
+                        note: "",
+                        fields: [
+                            {
+                                id: 0,
+                                field: "PerformanceTime",
+                                operator: "",
+                                value: "",
+                                fieldID: 0,
+                                operatorID: 0,
+                                valueID: 0
+                            },
+                        ],
+                        offerCode: "",
+                        pricing: {
+                            BookingFeeAbsolute: 0,
+                            BookingFeePercent: 0,
+                            PriceSelling: 0,
+                            InsideCommission: 0,
+                            BFAid: 0,
+                            BFPid: 0,
+                            PSid: 0,
+                            ICid: 0
+                        }
+                    }
+                }
+                return oneRuleset;
+            })
+            setRuleset([...remappedRuleset])
         }
-         */
     }
 
     function SubmitSave(e: any, Ruleset: any, RulesetPriority: number) {
@@ -347,7 +375,7 @@ export default function App() {
                 Ruleset.map((oneRuleset) => {
                     const {id, priority} = oneRuleset;
                     return <form key={priority}
-                                className="scale-[70%] sm:scale-100
+                                 className="scale-[70%] sm:scale-100
                        flex ml-auto mr-auto mt-14 w-fit p-5 outline outline-1
                                  rounded outline-gray-200 shadow-lg">
                         <div
@@ -393,8 +421,8 @@ export default function App() {
                                 <InputField label="note"
                                             name="note"
                                             className="w-full"
-                                            //componentID={oneRuleset.id}
-                                            //inputValue={undefined}
+                                    //componentID={oneRuleset.id}
+                                    //inputValue={undefined}
                                             inputType="text"
                                             onInputChange={(e: any) =>
                                                 handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
@@ -477,13 +505,13 @@ export default function App() {
                                      mb-2">Pricing</label>
                                     <div className="grid grid-cols-2 w-fit max-w-xs">
                                         <label htmlFor="BookingFeeAbsolute"
-                                                className="font-light mt-1"
+                                               className="font-light mt-1"
                                         >BookingFeeAbsolute (&#163;)</label>
                                         <input type="number" required name="BookingFeeAbsolute"
                                                value={oneRuleset.pricing.BookingFeeAbsolute}
                                                onChange={(e) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
                                                id={`BookingFeeAbsolute-${oneRuleset.pricing.BFAid}`}
-                                                className="appearance-none text-gray-700 bg-gray-200 border rounded
+                                               className="appearance-none text-gray-700 bg-gray-200 border rounded
                                                  py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                                         />
                                     </div>
@@ -549,7 +577,8 @@ export default function App() {
                                     </button>
                                 </div>
                                 <div className="m-5">
-                                    <button type="reset" value="reset" onClick={Reset}
+                                    <button type="reset" value="reset"
+                                            onClick={() => Reset(oneRuleset.id, oneRuleset.priority)}
                                             className="w-fit font-light cursor-pointer border-2 p-2 px-10 uppercase
                              bg-white text-black rounded-lg hover:bg-red-900 hover:text-white duration-700">reset
                                     </button>
