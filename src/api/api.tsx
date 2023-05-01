@@ -20,19 +20,17 @@ interface Ruleset {
 
 export default function api() {
     function getRuleset(id: number): Ruleset[] {
-            axios.get("/" + id)
-                .then(function (response) {
-                    return JSON.parse(response.data)
-                })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
-                })
-                .finally(function () {
-                    // always executed
-                    console.log(done);
-                });
-        }
-
-
+        axios.get("/" + id)
+            .then(function (response) {
+                return JSON.parse(response.data)
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+                console.log("done");
+            });
+    }
 }

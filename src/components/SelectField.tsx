@@ -12,7 +12,7 @@ const SelectField = (props: any) => {
         {props.label}
       </label>
       <div className="relative">
-        <select onChange={props.onSelectChange} name={props.name}
+        <select onChange={props.onSelectChange} name={props.name} value={props.selected}
                 className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id={props.componentID} multiple={false}>
           {optionItems}

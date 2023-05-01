@@ -30,25 +30,23 @@ export default function App() {
     ];
 
     const operatorOptions = [
-        {name: "", id: 0},
-        {name: "Equal", id: 1},
-        {name: "LessThanOrEqual", id: 2},
-        {name: "LessThan", id: 3},
-        {name: "GreaterThanOrEqual", id: 4},
-        {name: "GreaterThan", id: 5},
-        {name: "NotEquals", id: 6},
-        {name: "In", id: 7},
+        {name: "Equal", id: 0},
+        {name: "LessThanOrEqual", id: 1},
+        {name: "LessThan", id: 2},
+        {name: "GreaterThanOrEqual", id: 3},
+        {name: "GreaterThan", id: 4},
+        {name: "NotEquals", id: 5},
+        {name: "In", id: 6},
     ];
 
     const daysOfWeek = [
-        {name: "", id: 0},
-        {name: "Monday", id: 1},
-        {name: "Tuesday", id: 2},
-        {name: "Wednesday", id: 3},
-        {name: "Thursday", id: 4},
-        {name: "Friday", id: 5},
-        {name: "Saturday", id: 6},
-        {name: "Sunday", id: 7},
+        {name: "Monday", id: 0},
+        {name: "Tuesday", id: 1},
+        {name: "Wednesday", id: 2},
+        {name: "Thursday", id: 3},
+        {name: "Friday", id: 4},
+        {name: "Saturday", id: 5},
+        {name: "Sunday", id: 6},
     ]
 
     // fieldID, operatorID and valueID was added due errors
@@ -61,7 +59,7 @@ export default function App() {
                 {
                     id: 0,
                     field: "PerformanceTime",
-                    operator: "",
+                    operator: "Equal",
                     value: "",
                     fieldID: 0,
                     operatorID: 0,
@@ -115,9 +113,8 @@ export default function App() {
         switch (name) {
             case "PerformanceTime": //1
                 tmpArray = []
-                tmpArray.push(operatorOptions[0])
-                tmpArray.push(operatorOptions[2])
-                tmpArray.push(operatorOptions[4])
+                tmpArray.push(operatorOptions[1])
+                tmpArray.push(operatorOptions[3])
                 mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].operators = [...tmpArray]
                 mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].type = "time"
                 setMappedOperatorArr([...mappedOperatorArr])
@@ -134,18 +131,16 @@ export default function App() {
                 tmpArray = []
                 tmpArray.push(operatorOptions[0])
                 tmpArray.push(operatorOptions[1]);
-                tmpArray.push(operatorOptions[2]);
-                tmpArray.push(operatorOptions[4]);
-                tmpArray.push(operatorOptions[6]);
+                tmpArray.push(operatorOptions[3]);
+                tmpArray.push(operatorOptions[5]);
                 mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].operators = [...tmpArray]
                 setMappedOperatorArr([...mappedOperatorArr])
                 break;
             case "PriceBandCode": //4
                 tmpArray = []
                 tmpArray.push(operatorOptions[0])
-                tmpArray.push(operatorOptions[1]);
+                tmpArray.push(operatorOptions[5]);
                 tmpArray.push(operatorOptions[6]);
-                tmpArray.push(operatorOptions[7]);
                 mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].operators = [...tmpArray]
                 mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].type = "text"
                 setMappedOperatorArr([...mappedOperatorArr])
@@ -178,7 +173,7 @@ export default function App() {
         const newField: any = {
             id: Ruleset[index].fields.length,
             field: "PerformanceTime",
-            operator: "",
+            operator: "Equal",
             value: "",
             fieldID: Ruleset[index].fields.length,
             operatorID: Ruleset[index].fields.length,
@@ -221,6 +216,10 @@ export default function App() {
     };
     const handleChange = (event: any, rulesetId: number, fieldId: number, rulesetPriority: number) => {
         const {name, value} = event.target;
+        /* mappedOperatorArr.map((index) => {
+            if (index.OperatorsPerField[indexID].selectedField === )
+        }) */
+
         setRuleset(prevState => {
             const rulesetIndex = prevState.findIndex(item => item.id === rulesetId);
             const fieldIndex = prevState[rulesetIndex].fields.findIndex(item => item.id === fieldId);
@@ -292,7 +291,7 @@ export default function App() {
             note: "",
             fields: [
                 {
-                    id: 0, field: "PerformanceTime", operator: "", value: "",
+                    id: 0, field: "PerformanceTime", operator: "Equal", value: "",
                     fieldID: 0, operatorID: 0, valueID: 0
                 },
             ],
@@ -378,7 +377,7 @@ export default function App() {
                             {
                                 id: 0,
                                 field: "PerformanceTime",
-                                operator: "",
+                                operator: "Equal",
                                 value: "",
                                 fieldID: 0,
                                 operatorID: 0,
@@ -408,7 +407,6 @@ export default function App() {
         e.preventDefault()
         console.log(Ruleset[RulesetPriority - 1])
     }
-
     return (
         <>
             {
@@ -477,6 +475,7 @@ export default function App() {
                                             <SelectField label="field"
                                                          name="field"
                                                          options={fieldOptions}
+                                                         selected={oneRuleset.fields[index.id].field}
                                                          onSelectChange={(e: any) =>
                                                              handleChange(e,
                                                                  oneRuleset.id,
@@ -493,15 +492,16 @@ export default function App() {
                                                          options={mappedOperatorArr[oneRuleset.priority - 1]
                                                              .OperatorsPerField[index.id].operators || []}
                                                          fieldValue={undefined}
+                                                         selected={oneRuleset.fields[index.id].operator}
                                                          onSelectChange={(e: any) => handleChange(
                                                              e,
                                                              oneRuleset.id,
                                                              oneRuleset.fields[index.id].operatorID,
                                                              oneRuleset.priority
-                                                         )}
+                                                         )} //oneRuleset.fields[index.id].value === "Monday"
                                             />
-                                            {oneRuleset.fields[index.id].field !== "PerformanceDayOfWeek" ?
-                                                <InputField label="value"
+                                            { oneRuleset.fields[index.id].field !== "PerformanceDayOfWeek" ?
+                                                (<InputField label="value"
                                                             name="value"
                                                             componentID={index.valueID}
                                                             inputValue={index.value}
@@ -513,20 +513,22 @@ export default function App() {
                                                                 oneRuleset.fields[index.id].valueID,
                                                                 oneRuleset.priority
                                                             )}
-                                            /> :
+                                            />) : (
+                                                //TODO: oneRuleset.fields[index.id].value = "Monday";
                                                 <SelectField label="day of week"
                                                              name="value"
                                                              //componentID={index.operatorID}
                                                     //because priority cannot be 0
                                                              options={daysOfWeek}
-                                                             fieldValue={undefined}
+                                                             fieldValue={oneRuleset.fields[index.id].value}
+                                                             selected={oneRuleset.fields[index.id].value}
                                                              onSelectChange={(e: any) => handleChange(
                                                                  e,
                                                                  oneRuleset.id,
                                                                  oneRuleset.fields[index.id].operatorID,
                                                                  oneRuleset.priority
                                                              )}
-                                                />}
+                                                />)}
                                             <button type="button"
                                                     onClick={() => {
                                                         deleteFieldHandler(
