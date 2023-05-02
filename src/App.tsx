@@ -93,9 +93,8 @@ export default function App() {
 
     let tmpArray: any = []
     const defaultOperators: any = []
-    defaultOperators.push(operatorOptions[0]);
-    defaultOperators.push(operatorOptions[2]);
-    defaultOperators.push(operatorOptions[4]);
+    defaultOperators.push(operatorOptions[1]);
+    defaultOperators.push(operatorOptions[3]);
 
     const operatorsInRuleset = [
         {
@@ -366,6 +365,7 @@ export default function App() {
     }
 
     function Reset(rulesetID: number, rulesetPriority: number) {
+        //FIXME: RESET OPERATORS and VALUE
         if (confirm("This action will reset Ruleset #" + rulesetID + ".")) {
             const remappedRuleset = Ruleset.map(oneRuleset => {
                 if (oneRuleset.id === rulesetID) {
