@@ -6,7 +6,7 @@ const SelectField = (props: any) => {
       </option>
   );
   return (
-    <div className="w-full md:w-[15rem] pr-5 mb-6 md:mb-6">
+    <div className={props.selectClassName}>
       <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
              htmlFor={props.componentID}>
         {props.label}

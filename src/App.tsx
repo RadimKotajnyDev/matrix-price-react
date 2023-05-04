@@ -516,6 +516,7 @@ export default function App() {
                     <React.Fragment key={index.id}>
                       <SelectField label="field"
                                    name="field"
+                                   selectClassName="w-full md:w-[15rem] pr-5 mb-6 md:mb-6 max-w-[300px]"
                                    options={fieldOptions}
                                    selected={oneRuleset.fields[index.id].field}
                                    onSelectChange={(e: any) =>
@@ -529,6 +530,7 @@ export default function App() {
                       />
                       <SelectField label="operator"
                                    name="operator"
+                                   selectClassName="w-full md:w-[15rem] pr-5 mb-6 md:mb-6 max-w-[300px]"
                                    componentID={index.operatorID}
                         //because priority cannot be 0
                                    options={mappedOperatorArr[oneRuleset.priority - 1]
@@ -565,6 +567,9 @@ export default function App() {
                         /> :
                         <SelectField label="day of week"
                                      name="value"
+                                     selectClassName="
+                                     w-full md:w-[15rem] mb-6 md:mb-6 max-w-[200px]
+                                     "
                           //componentID={index.operatorID}
                           //because priority cannot be 0
                                      options={daysOfWeek}
