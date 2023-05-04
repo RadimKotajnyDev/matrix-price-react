@@ -1,9 +1,9 @@
 const SelectField = (props: any) => {
   const options = props.options;
   const optionItems = options.map((option: any) =>
-    <option value={props.fieldValue} key={option.id}>
-      {option.name}
-    </option>
+      <option value={props.fieldValue} key={option.id} >
+        {option.name}
+      </option>
   );
   return (
     <div className="w-full md:w-[15rem] pr-5 mb-6 md:mb-6">
