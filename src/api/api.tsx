@@ -1,4 +1,5 @@
 import axios from "axios";
+import {data} from "autoprefixer";
 
 interface field {
     id: number;
@@ -10,14 +11,23 @@ interface field {
     valueID: number;
 }
 
+interface pricing {
+    BookingFeeAbsolute: number,
+    BookingFeePercent: number,
+    PriceSelling: number,
+    InsideCommission: number
+}
+
 interface Ruleset {
     id: number;
     priority: number;
     number: number;
     note: string;
     fields: [field];
+    pricing: [pricing],
+    offerCode: string,
 }
-
+/*
 export default function api() {
     function getRuleset(id: number): Ruleset[] {
         axios.get("/" + id)
@@ -27,10 +37,21 @@ export default function api() {
             .catch(function (error) {
                 // handle error
                 console.log(error);
+                return []
             })
             .finally(function () {
                 // always executed
                 console.log("done");
             });
     }
+}
+ */
+export default async function api() {
+    async function getRuleset(id: number): Promise<Ruleset[]> {
+        const response = await axios.get("/" + id);
+        return JSON.parse(response.data);
+    }
+
+    const ruleset = await getRuleset(123);
+    console.log(ruleset);
 }

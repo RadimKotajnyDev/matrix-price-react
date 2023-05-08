@@ -9,7 +9,6 @@ import SelectField from "./components/SelectField";
 //API
 import {Api} from "./api/api";
 
-
 //const baseURL = "../APITEST.json"
 export default function App() {
 
@@ -40,16 +39,16 @@ export default function App() {
   ];
 
   const daysOfWeek = [
-    {name: "Monday", id: 0},
-    {name: "Tuesday", id: 1},
-    {name: "Wednesday", id: 2},
-    {name: "Thursday", id: 3},
-    {name: "Friday", id: 4},
-    {name: "Saturday", id: 5},
-    {name: "Sunday", id: 6},
+    {name: "", id: 0},
+    {name: "Monday", id: 1},
+    {name: "Tuesday", id: 2},
+    {name: "Wednesday", id: 3},
+    {name: "Thursday", id: 4},
+    {name: "Friday", id: 5},
+    {name: "Saturday", id: 6},
+    {name: "Sunday", id: 7},
   ]
 
-  // fieldID, operatorID and valueID was added due errors
   const initialRuleset =
     {
       id: Math.floor(Math.random() * 9000) + 1000,
@@ -60,10 +59,7 @@ export default function App() {
           id: 0,
           field: "PerformanceTime",
           operator: "LessThanOrEqual",
-          value: "",
-          fieldID: 0,
-          operatorID: 0,
-          valueID: 0
+          value: ""
         },
       ],
       offerCode: "",
@@ -71,11 +67,7 @@ export default function App() {
         BookingFeeAbsolute: 0,
         BookingFeePercent: 0,
         PriceSelling: 0,
-        InsideCommission: 0,
-        BFAid: 0,
-        BFPid: 0,
-        PSid: 0,
-        ICid: 0
+        InsideCommission: 0
       }
     }
 
@@ -85,11 +77,14 @@ export default function App() {
   //API GET REQUEST
   /*
   useEffect(() => {
-      Api.getRuleset(0)
+      Api.getRuleset(123)
           .then(function (response: any) {
-              setRuleset(response)
+              //setRuleset(response)
+            console.log(response)
           })
-  }, []) */
+  }, [])
+   */
+
 
   let tmpArray: any = []
   const defaultOperators: any = []
@@ -106,6 +101,8 @@ export default function App() {
   ]
 
   const [mappedOperatorArr, setMappedOperatorArr] = useState(operatorsInRuleset);
+
+  // TODO: When is API loaded, load data into mappedOperatorArr
 
   /** Mapping **/
   function mapOperators(name: string, RulesetID: number, Field: number, RulesetPriority: number) {
@@ -134,42 +131,6 @@ export default function App() {
         tmpArray.push(operatorOptions[5]);
         mappedOperatorArr[RulesetPriority - 1].OperatorsPerField[Field].operators = [...tmpArray]
         setMappedOperatorArr([...mappedOperatorArr])
-        //FIXME: retarded monday
-        console.log(RulesetID)
-        console.log(Field)
-        setRuleset(prevState => {
-          const rulesetIndex = prevState.findIndex(item => item.id === RulesetID);
-          const fieldIndex = prevState[rulesetIndex].fields.findIndex(item => item.id === Field);
-          return [
-            ...prevState.slice(0, rulesetIndex),
-            {
-              ...prevState[rulesetIndex],
-              note: prevState[rulesetIndex].note,
-              fields: [
-                ...prevState[rulesetIndex].fields.slice(0, fieldIndex),
-                {
-                  ...prevState[rulesetIndex].fields[fieldIndex],
-                  field: prevState[rulesetIndex].fields[fieldIndex].field,
-                  operator: prevState[rulesetIndex].fields[fieldIndex].operator,
-                  value: "Monday",
-                },
-                ...prevState[rulesetIndex].fields.slice(fieldIndex + 1),
-              ],
-              offerCode: prevState[rulesetIndex].offerCode,
-              pricing: {
-                BookingFeeAbsolute: prevState[rulesetIndex].pricing.BookingFeeAbsolute,
-                BookingFeePercent: prevState[rulesetIndex].pricing.BookingFeePercent,
-                PriceSelling: prevState[rulesetIndex].pricing.PriceSelling,
-                InsideCommission: prevState[rulesetIndex].pricing.InsideCommission,
-                BFAid: prevState[rulesetIndex].pricing.BFAid,
-                BFPid: prevState[rulesetIndex].pricing.BFPid,
-                PSid: prevState[rulesetIndex].pricing.PSid,
-                ICid: prevState[rulesetIndex].pricing.ICid,
-              }
-            },
-            ...prevState.slice(rulesetIndex + 1),
-          ];
-        });
         break;
       case "PriceBandCode": //4
         tmpArray = []
@@ -287,11 +248,7 @@ export default function App() {
             BookingFeeAbsolute: isBFA ? Math.abs(parseInt(value)) : prevState[rulesetIndex].pricing.BookingFeeAbsolute,
             BookingFeePercent: isBFP ? Math.abs(parseInt(value)) : prevState[rulesetIndex].pricing.BookingFeePercent,
             PriceSelling: isPS ? Math.abs(parseInt(value)) : prevState[rulesetIndex].pricing.PriceSelling,
-            InsideCommission: isIC ? Math.abs(parseInt(value)) : prevState[rulesetIndex].pricing.InsideCommission,
-            BFAid: prevState[rulesetIndex].pricing.BFAid,
-            BFPid: prevState[rulesetIndex].pricing.BFPid,
-            PSid: prevState[rulesetIndex].pricing.PSid,
-            ICid: prevState[rulesetIndex].pricing.ICid,
+            InsideCommission: isIC ? Math.abs(parseInt(value)) : prevState[rulesetIndex].pricing.InsideCommission
           }
         },
         ...prevState.slice(rulesetIndex + 1),
@@ -326,8 +283,7 @@ export default function App() {
       note: "",
       fields: [
         {
-          id: 0, field: "PerformanceTime", operator: "LessThanOrEqual", value: "",
-          fieldID: 0, operatorID: 0, valueID: 0
+          id: 0, field: "PerformanceTime", operator: "LessThanOrEqual", value: ""
         },
       ],
       offerCode: "",
@@ -335,11 +291,7 @@ export default function App() {
         BookingFeeAbsolute: 0,
         BookingFeePercent: 0,
         PriceSelling: 0,
-        InsideCommission: 0,
-        BFAid: 0,
-        BFPid: 0,
-        PSid: 0,
-        ICid: 0
+        InsideCommission: 0
       }
     });
     setRuleset([...Ruleset]);
@@ -443,6 +395,7 @@ export default function App() {
   function SubmitSave(e: any, Ruleset: any, RulesetPriority: number) {
     e.preventDefault()
     console.log(Ruleset[RulesetPriority - 1])
+    //TODO: check if something isn't empty in Fields...
   }
 
   return (
@@ -452,7 +405,7 @@ export default function App() {
           const {id, priority} = oneRuleset;
           return <form key={priority}
                        className="scale-[70%] sm:scale-100
-                       flex ml-auto mr-auto mt-14 w-fit p-5 outline outline-1
+                       flex ml-auto mr-auto mt-0 md:mt-7 w-fit p-5 outline outline-1
                                  rounded outline-gray-200 shadow-lg">
             <div
               className="w-full mr-auto ml-auto px-5">
@@ -496,12 +449,12 @@ export default function App() {
                 <hr className="mt-5 mb-2"/>
                 <InputField label="note"
                             inputClassName="appearance-none block
-                            w-full bg-gray-200 text-gray-700 border border-gray-200
+                             w-3/4 md:w-full bg-gray-200 text-gray-700 border border-gray-200
                              rounded py-3 px-4 mb-3 leading-tight focus:outline-none
                               focus:bg-white focus:border-gray-500"
 
                             name="note"
-                  //componentID={oneRuleset.id}
+                            componentID={`note-id-${oneRuleset.id}`}
                   //inputValue={undefined}
                             inputType="text"
                             onInputChange={(e: any) =>
@@ -522,16 +475,16 @@ export default function App() {
                                    onSelectChange={(e: any) =>
                                      handleChange(e,
                                        oneRuleset.id,
-                                       oneRuleset.fields[index.id].fieldID,
+                                       index.id,
                                        oneRuleset.priority
                                      )}
-                                   componentID={index.fieldID}
+                                   componentID={`field-id-${index.id}-ruleset-${oneRuleset.id}`}
                                    fieldValue={undefined}
                       />
                       <SelectField label="operator"
                                    name="operator"
                                    selectClassName="w-full md:w-[15rem] pr-5 mb-6 md:mb-6 max-w-[300px]"
-                                   componentID={index.operatorID}
+                                   componentID={`operator-id-${index.id}-ruleset-${oneRuleset.id}`}
                         //because priority cannot be 0
                                    options={mappedOperatorArr[oneRuleset.priority - 1]
                                      .OperatorsPerField[index.id].operators || []}
@@ -542,7 +495,7 @@ export default function App() {
                                      handleChange(
                                      e,
                                      oneRuleset.id,
-                                     oneRuleset.fields[index.id].operatorID,
+                                     index.id,
                                      oneRuleset.priority
                                    )
                                    }} //oneRuleset.fields[index.id].value === "Monday"
@@ -550,18 +503,18 @@ export default function App() {
                       {oneRuleset.fields[index.id].field !== "PerformanceDayOfWeek" ?
                         <InputField label="value"
                                     name="value"
-                                    inputClassName="min-w-[200px] max-w-[200px] appearance-none
+                                    inputClassName="md:min-w-[200px] md:max-w-[200px] max-w-[280px] appearance-none
                                      block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded
                                      py-3 px-4 mb-3 leading-tight focus:outline-none
                                       focus:bg-white focus:border-gray-500"
-                                    componentID={index.valueID}
+                                    componentID={`value-id-${index.id}-ruleset-${oneRuleset.id}`}
                                     inputValue={index.value}
                                     inputType={mappedOperatorArr[oneRuleset.priority - 1]
                                       .OperatorsPerField[index.id].type || "time"}
                                     onInputChange={(e: any) => handleChange(
                                       e,
                                       oneRuleset.id,
-                                      oneRuleset.fields[index.id].valueID,
+                                      index.id,
                                       oneRuleset.priority
                                     )}
                         /> :
@@ -570,7 +523,7 @@ export default function App() {
                                      selectClassName="
                                      w-full md:w-[15rem] mb-6 md:mb-6 max-w-[200px]
                                      "
-                          //componentID={index.operatorID}
+                          componentID={`value-select-id-${index.id}-ruleset-${oneRuleset.id}`}
                           //because priority cannot be 0
                                      options={daysOfWeek}
                                      //fieldValue={undefined}
@@ -578,11 +531,10 @@ export default function App() {
                                      onSelectChange={(e: any) => handleChange(
                                        e,
                                        oneRuleset.id,
-                                       oneRuleset.fields[index.id].operatorID,
+                                       index.id,
                                        oneRuleset.priority
                                      )}
                         />}
-                      {/* oneRuleset.fields[index.id].field === "PerformanceDayOfWeek" ? oneRuleset.fields[index.id].value = "Monday" : "" */}
                       <button type="button"
                               onClick={() => {
                                 deleteFieldHandler(
@@ -590,7 +542,7 @@ export default function App() {
                                   oneRuleset.fields[index.id].id);
                               }}
                               disabled={oneRuleset.fields.length <= 1}
-                              className="disabled:opacity-75 duration-500"
+                              className=" disabled:opacity-75 duration-500"
                       >
                         <AiOutlineMinus
                           size="45"
@@ -604,7 +556,7 @@ export default function App() {
                 })
                 }
                 <button type="button" onClick={() => addFieldHandler(oneRuleset.priority - 1)}
-                        className="float-right mt-0">
+                        className="float-none md:float-right md:mt-0">
                   <AiOutlinePlus size="45"
                                  className="rounded text-white bg-slate-900 duration-200
                                                     hover:text-slate-900 hover:bg-white "/>
@@ -622,7 +574,7 @@ export default function App() {
                            value={oneRuleset.pricing.BookingFeeAbsolute}
                            pattern="[0-9]*"
                            onChange={(e) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
-                           id={`BookingFeeAbsolute-${oneRuleset.pricing.BFAid}`}
+                           id={`BookingFeeAbsolute-id-${oneRuleset.id}`}
                            className="appearance-none text-gray-700 bg-gray-200 border rounded text-center
                                                invalid:border-red-400 invalid:focus:border-red-700 w-2/5
                                                  py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
@@ -636,7 +588,7 @@ export default function App() {
                            value={oneRuleset.pricing.BookingFeePercent}
                            pattern="[0-9]*"
                            onChange={(e) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
-                           id={`BookingFeeAbsolute-${oneRuleset.pricing.BFPid}`}
+                           id={`BookingFeePercent-id-${oneRuleset.id}`}
                            className="appearance-none text-gray-700 bg-gray-200 border rounded text-center
                                                invalid:border-red-400 invalid:focus:border-red-700 w-2/5
                                                 py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
@@ -650,7 +602,7 @@ export default function App() {
                            value={oneRuleset.pricing.PriceSelling}
                            pattern="[0-9]*"
                            onChange={(e) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
-                           id={`BookingFeeAbsolute-${oneRuleset.pricing.PSid}`}
+                           id={`PriceSelling-id-${oneRuleset.id}`}
                            className="appearance-none text-gray-700 bg-gray-200 border text-center
                                                invalid:border-red-400 invalid:focus:border-red-700 w-2/5
                                                 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
@@ -664,7 +616,7 @@ export default function App() {
                            value={oneRuleset.pricing.InsideCommission}
                            pattern="[0-9]*"
                            onChange={(e) => handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
-                           id={`BookingFeeAbsolute-${oneRuleset.pricing.ICid}`}
+                           id={`InsideCommission-id-${oneRuleset.id}`}
                            className="appearance-none text-gray-700 bg-gray-200 border text-center
                                                invalid:border-red-400 invalid:focus:border-red-700 w-2/5
                                                 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
@@ -681,7 +633,7 @@ export default function App() {
                               text-gray-700 border border-gray-200 rounded
                                py-3 px-4 mb-3 leading-tight focus:outline-none
                                 focus:bg-white focus:border-gray-500"
-                    //componentID={oneRuleset.id}
+                              componentID={`offercode-id-${oneRuleset.id}`}
                     //inputValue={undefined}
                               inputType="text"
                               onInputChange={(e: any) =>
@@ -711,7 +663,7 @@ export default function App() {
         })
       }
       <button type="button" onClick={AddRulesetHandler}
-              className="block ml-auto mr-auto mt-5 mb-14 cursor-pointer p-3 uppercase rounded-md
+              className="block ml-auto mr-auto mt-0 md:mt-5 mb-14 cursor-pointer p-3 uppercase rounded-md
                      text-white bg-slate-900 hover:opacity-75 duration-700">
         add ruleset
       </button>
