@@ -170,10 +170,7 @@ export default function App() {
       id: Ruleset[index].fields.length,
       field: "PerformanceTime",
       operator: "LessThanOrEqual",
-      value: "",
-      fieldID: Ruleset[index].fields.length,
-      operatorID: Ruleset[index].fields.length,
-      valueID: Ruleset[index].fields.length,
+      value: ""
     };
     Ruleset[index].fields.push(newField);
     setRuleset([...Ruleset]);
@@ -189,10 +186,7 @@ export default function App() {
     return fields.map((field, index) => {
       return {
         ...field,
-        id: index,
-        fieldID: index,
-        operatorID: index,
-        valueID: index,
+        id: index
       };
     });
   }
@@ -367,10 +361,7 @@ export default function App() {
                 id: 0,
                 field: "PerformanceTime",
                 operator: "LessThanOrEqual",
-                value: "",
-                fieldID: 0,
-                operatorID: 0,
-                valueID: 0
+                value: ""
               },
             ],
             offerCode: "",
@@ -378,11 +369,7 @@ export default function App() {
               BookingFeeAbsolute: 0,
               BookingFeePercent: 0,
               PriceSelling: 0,
-              InsideCommission: 0,
-              BFAid: rulesetPriority - 1,
-              BFPid: rulesetPriority - 1,
-              PSid: rulesetPriority - 1,
-              ICid: rulesetPriority - 1
+              InsideCommission: 0
             }
           }
         }
