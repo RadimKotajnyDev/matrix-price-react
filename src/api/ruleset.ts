@@ -202,8 +202,5 @@ const typeMap: any = {
         { json: "field", js: "field", typ: "" },
         { json: "operator", js: "operator", typ: "" },
         { json: "value", js: "value", typ: "" },
-        { json: "fieldID", js: "fieldID", typ: 0 },
-        { json: "operatorID", js: "operatorID", typ: 0 },
-        { json: "valueID", js: "valueID", typ: 0 },
     ], false),
 };

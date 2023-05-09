@@ -74,17 +74,6 @@ export default function App() {
   // Ruleset
   const [Ruleset, setRuleset] = useState([initialRuleset]);
 
-  //API GET REQUEST
-  /*
-  useEffect(() => {
-      Api.getRuleset(123)
-          .then(function (response: any) {
-              //setRuleset(response)
-            console.log(response)
-          })
-  }, [])
-   */
-
 
   let tmpArray: any = []
   const defaultOperators: any = []
@@ -103,6 +92,17 @@ export default function App() {
   const [mappedOperatorArr, setMappedOperatorArr] = useState(operatorsInRuleset);
 
   // TODO: When is API loaded, load data into mappedOperatorArr
+
+  //API GET REQUEST
+  /*
+  useEffect(() => {
+      Api.getRuleset(123)
+          .then(function (response: any) {
+              //setRuleset(response)
+            console.log(response)
+          })
+  }, [])
+   */
 
   /** Mapping **/
   function mapOperators(name: string, RulesetID: number, Field: number, RulesetPriority: number) {
@@ -206,9 +206,6 @@ export default function App() {
   };
   const handleChange = (event: any, rulesetId: number, fieldId: number, rulesetPriority: number) => {
     const {name, value} = event.target;
-    /* mappedOperatorArr.map((index) => {
-        if (index.OperatorsPerField[indexID].selectedField === )
-    }) */
 
     setRuleset(prevState => {
       const rulesetIndex = prevState.findIndex(item => item.id === rulesetId);
@@ -260,6 +257,7 @@ export default function App() {
       .map((oneOperatorField, index) => ({...oneOperatorField, Ruleset: index}))
     setMappedOperatorArr([...filteredOptions])
     setRuleset([...filteredRulesets]);
+    Api.deleteRuleset(123, Ruleset[priority - 1].id)
   }
   const AddRulesetHandler = () => {
     // check if IDs aren't duplicated
@@ -381,8 +379,15 @@ export default function App() {
 
   function SubmitSave(e: any, Ruleset: any, RulesetPriority: number) {
     e.preventDefault()
-    console.log(Ruleset[RulesetPriority - 1])
-    //TODO: check if something isn't empty in Fields...
+    // checking if value isn't empty
+    const item = Ruleset[RulesetPriority - 1];
+    const emptyValues = item.fields.filter((field: { value: string; }) => field.value === "");
+    if (emptyValues.length > 0) {
+      alert(`Please fill value in Ruleset #${item.id}`);
+    } else {
+      console.log(Ruleset[RulesetPriority - 1])
+      Api.putRuleset(123, Ruleset[RulesetPriority - 1], Ruleset[RulesetPriority - 1].id)
+    }
   }
 
   return (
@@ -442,7 +447,7 @@ export default function App() {
 
                             name="note"
                             componentID={`note-id-${oneRuleset.id}`}
-                  //inputValue={undefined}
+                            inputValue={oneRuleset.note}
                             inputType="text"
                             onInputChange={(e: any) =>
                               handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
@@ -454,6 +459,17 @@ export default function App() {
                               className="grid grid-flow-row md:grid-flow-col"
                   >
                     <React.Fragment key={index.id}>
+                      <hr className="md:hidden block mb-2 border-none h-1/6 bg-black text-black" />
+                      <button type="button"
+                              onClick={() => {
+                                deleteFieldHandler(
+                                  oneRuleset.priority - 1,
+                                  oneRuleset.fields[index.id].id);
+                              }}
+                              disabled={oneRuleset.fields.length <= 1}
+                              className="md:hidden block cursor-pointer p-3 uppercase rounded-md text-white w-fit mb-5 md:mb-0
+                                         bg-slate-900 hover:opacity-75 duration-700 disabled:opacity-75"
+                      >remove field</button>
                       <SelectField label="field"
                                    name="field"
                                    selectClassName="w-full md:w-[15rem] pr-5 mb-6 md:mb-6 max-w-[300px]"
@@ -477,14 +493,13 @@ export default function App() {
                                      .OperatorsPerField[index.id].operators || []}
                                    fieldValue={undefined}
                                    selected={oneRuleset.fields[index.id].operator}
-                                   onSelectChange={(e: any) =>
-                                   {
+                                   onSelectChange={(e: any) => {
                                      handleChange(
-                                     e,
-                                     oneRuleset.id,
-                                     index.id,
-                                     oneRuleset.priority
-                                   )
+                                       e,
+                                       oneRuleset.id,
+                                       index.id,
+                                       oneRuleset.priority
+                                     )
                                    }} //oneRuleset.fields[index.id].value === "Monday"
                       />
                       {oneRuleset.fields[index.id].field !== "PerformanceDayOfWeek" ?
@@ -495,7 +510,7 @@ export default function App() {
                                      py-3 px-4 mb-3 leading-tight focus:outline-none
                                       focus:bg-white focus:border-gray-500"
                                     componentID={`value-id-${index.id}-ruleset-${oneRuleset.id}`}
-                                    inputValue={index.value}
+                                    inputValue={oneRuleset.fields[index.id].value}
                                     inputType={mappedOperatorArr[oneRuleset.priority - 1]
                                       .OperatorsPerField[index.id].type || "time"}
                                     onInputChange={(e: any) => handleChange(
@@ -510,10 +525,8 @@ export default function App() {
                                      selectClassName="
                                      w-full md:w-[15rem] mb-6 md:mb-6 max-w-[200px]
                                      "
-                          componentID={`value-select-id-${index.id}-ruleset-${oneRuleset.id}`}
-                          //because priority cannot be 0
+                                     componentID={`value-select-id-${index.id}-ruleset-${oneRuleset.id}`}
                                      options={daysOfWeek}
-                                     //fieldValue={undefined}
                                      selected={oneRuleset.fields[index.id].value}
                                      onSelectChange={(e: any) => handleChange(
                                        e,
@@ -529,7 +542,7 @@ export default function App() {
                                   oneRuleset.fields[index.id].id);
                               }}
                               disabled={oneRuleset.fields.length <= 1}
-                              className=" disabled:opacity-75 duration-500"
+                              className="hidden md:block disabled:opacity-75 duration-500"
                       >
                         <AiOutlineMinus
                           size="45"
@@ -621,7 +634,7 @@ export default function App() {
                                py-3 px-4 mb-3 leading-tight focus:outline-none
                                 focus:bg-white focus:border-gray-500"
                               componentID={`offercode-id-${oneRuleset.id}`}
-                    //inputValue={undefined}
+                              inputValue={oneRuleset.offerCode}
                               inputType="text"
                               onInputChange={(e: any) =>
                                 handleChange(e, oneRuleset.id, 0, oneRuleset.priority)}
@@ -650,7 +663,7 @@ export default function App() {
         })
       }
       <button type="button" onClick={AddRulesetHandler}
-              className="block ml-auto mr-auto mt-0 md:mt-5 mb-14 cursor-pointer p-3 uppercase rounded-md
+              className="block ml-auto mr-auto mt-0 md:mt-5 mb-36 md:mb-14 cursor-pointer p-3 uppercase rounded-md
                      text-white bg-slate-900 hover:opacity-75 duration-700">
         add ruleset
       </button>
