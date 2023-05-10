@@ -1,12 +1,17 @@
 # Price Matrixy
 
 ## Technologie
-- React
-- Vite
-- TypeScript
+- Vite / React / TypeScript
+- TailwindCSS
+- Axios
+- React Icons
 ## Setup
 - `npm install`
 - `npm run dev`
+
+## Popis
+
+![Screenshot](img.png)
 
 Jedná se o tool pro úpravu tzv Price Matrixů.
 
@@ -14,7 +19,7 @@ Price matrix je sada "ruleSetů", které podle soustavy pravidel (rules) slouž�
 
 Každý ruleset obsahuje následující properties
 
-## Rule[] - kolekce pravidel (rules) viz níže
+## Rule[] (Fields[]) - kolekce pravidel (rules) viz níže
 
 
 
